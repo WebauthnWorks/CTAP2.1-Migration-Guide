@@ -10,7 +10,9 @@ Authenticators that include FIDO_2_1 in versions MUST support the credProtect ex
 Relying party specifies a protection level of the credential to be stored.
 
 ```
-credProtectPolicies = { userVerificationOptional: 0x01, userVerificationOptionalWithCredentialIDList: 0x02, userVerificationRequired: 0x03 }
+credProtectPolicies = { 
+    userVerificationOptional: 0x01, userVerificationOptionalWithCredentialIDList: 0x02, userVerificationRequired: 0x03 
+    }
 extensions = {
 	'credProtect': credProtectPolicies.userVerificationOptional
 }
@@ -32,12 +34,44 @@ Call authenticatorMakeCredential with CBOR map including "extensions" field to a
 e.g.,
 ```
 INPUT:
+-> Make pinUvAuthToken and pinUvAuthProtocol (https://github.com/WebAuthnWorks/CTAP2.1-Migration-Guide/blob/main/Protocol/PinProtocol/2.md#get-pinuvauthtoken---puat)
+
+creds = {
+    clientDataHash: '',
+    rp: '',
+    user: '',
+    pubKeyCredParams: '',
+}
+
 extensions = {
-            'credProtect': credProtectPolicies.userVerificationOptionalWithCredentialIDList
+            'credProtect': credProtectPolicies.userVerificationOptional
         }
--> Generate buffer and make request to authenticator
+options = {
+    rk: true // residential key (discoverable credentials)
+}
+-> Generate Make Credentials using pinUvAuthToken and pinUvAuthProtocol
+-> Generate command buffer using credential fields, extensions and options fields set
 
 RESPONSE:
+(TO-DO ctap2Response) 
+```
+
+```
+Example 2:
+allowList = [{
+                    type: 'public-key',
+                    id: credId
+                }
+options = [{
+                up: false
+            }]
+-> goodAssertion = generateGoodCTAP2GetAssertion
+-> getAssertionBuffer = generateGetAssertionReqCBOR
+
+Send request containing getAssertionBuffer to authenticator
+
+RESPONSE:
+statusCode = CTAP1_ERR_SUCCESS(0x00)
 [to-do]
 ```
 4. Authenticator persists credProtect value with credential. If no extension was included in request, authenticator SHOULD use default value of 1, userVerificationOptional. 
