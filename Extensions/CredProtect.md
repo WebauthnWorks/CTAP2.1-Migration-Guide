@@ -18,11 +18,10 @@ extensions = {
 
 
 2. 
-(a) If extension is not present in authenticatorMakeCredential request, platform may enforce default. 
+= If extension is not present in authenticatorMakeCredential request, platform may enforce default. 
 
-(b)
-(i) Platform checks policy is a string value as specified in 'credProtectPolices' in (1).
-(ii) Platform SHOULD NOT alter policy (unless enterprise policy required, or due to other security requirements) nor create credential in a way that does not implement requested policy.
+- Platform checks policy is a string value as specified in 'credProtectPolices' in (1).
+- Platform SHOULD NOT alter policy (unless enterprise policy required, or due to other security requirements) nor create credential in a way that does not implement requested policy.
 
 For non-discoverable credentials, userVerificationOptional and userVerificationOptionalWithCredentialIDList both have the same authenticator behaviour, as relying party must supply an allowList with credentialIDs.
 
@@ -37,6 +36,7 @@ extensions = {
             'credProtect': credProtectPolicies.userVerificationOptionalWithCredentialIDList
         }
 -> Generate buffer and make request to authenticator
+
 RESPONSE:
 [to-do]
 ```
@@ -46,4 +46,4 @@ RESPONSE:
 { "credProtect": 0x01" } . The error code returned is CTAP_SUCCESS(0x00).
 
 
-CMD: 0x06
+**CMD: 0x06**
