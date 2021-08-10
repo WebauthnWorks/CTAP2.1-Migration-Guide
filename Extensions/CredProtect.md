@@ -31,6 +31,7 @@ For non-discoverable credentials, userVerificationOptional and userVerificationO
 Call authenticatorMakeCredential with CBOR map including "extensions" field to authenticator (0x06)
 ( Authenticators for high security environments may be configured to upgrade credential Protection to level 3, userVerificationRequired -- and respond via credProtect extensions result that is set the policy to 3)
 
+
 **Example 1**
 1. Make pinUvAuthToken and pinUvAuthProtocol (https://github.com/WebAuthnWorks/CTAP2.1-Migration-Guide/blob/main/Protocol/PinProtocol/2.md#get-pinuvauthtoken---puat)
 ```
@@ -54,6 +55,7 @@ options = {
 RESPONSE:
 (TO-DO ctap2Response) 
 ```
+
 
 **Example 2**
 ```
