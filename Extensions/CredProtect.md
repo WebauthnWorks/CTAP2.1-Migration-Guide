@@ -55,7 +55,7 @@ RESPONSE:
 (TO-DO ctap2Response) 
 ```
 
-Example 2:
+**Example 2**
 ```
 allowList = [{
                     type: 'public-key',
@@ -78,7 +78,7 @@ statusCode = CTAP1_ERR_SUCCESS(0x00)
 5. Authenticator returns CBOR output with map entry in "extensions" field of authenticatorData object. I.e
 ```
 authenticatorData: {
-    ...
+    ... // other response fields
     { 
         "credProtect": 0x01" 
     }
