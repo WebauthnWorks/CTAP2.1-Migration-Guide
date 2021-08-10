@@ -31,11 +31,10 @@ For non-discoverable credentials, userVerificationOptional and userVerificationO
 Call authenticatorMakeCredential with CBOR map including "extensions" field to authenticator (0x06)
 ( Authenticators for high security environments may be configured to upgrade credential Protection to level 3, userVerificationRequired -- and respond via credProtect extensions result that is set the policy to 3)
 
-e.g.,
+**Example 1**
+1. Make pinUvAuthToken and pinUvAuthProtocol (https://github.com/WebAuthnWorks/CTAP2.1-Migration-Guide/blob/main/Protocol/PinProtocol/2.md#get-pinuvauthtoken---puat)
 ```
 INPUT:
--> Make pinUvAuthToken and pinUvAuthProtocol (https://github.com/WebAuthnWorks/CTAP2.1-Migration-Guide/blob/main/Protocol/PinProtocol/2.md#get-pinuvauthtoken---puat)
-
 creds = {
     clientDataHash: '',
     rp: '',
@@ -56,8 +55,8 @@ RESPONSE:
 (TO-DO ctap2Response) 
 ```
 
-```
 Example 2:
+```
 allowList = [{
                     type: 'public-key',
                     id: credId
@@ -77,7 +76,15 @@ statusCode = CTAP1_ERR_SUCCESS(0x00)
 4. Authenticator persists credProtect value with credential. If no extension was included in request, authenticator SHOULD use default value of 1, userVerificationOptional. 
 
 5. Authenticator returns CBOR output with map entry in "extensions" field of authenticatorData object. I.e
-{ "credProtect": 0x01" } . The error code returned is CTAP_SUCCESS(0x00).
+```
+authenticatorData: {
+    ...
+    { 
+        "credProtect": 0x01" 
+    }
+}
+```
+The error code returned is CTAP_SUCCESS(0x00).
 
 
 **CMD: 0x06**
