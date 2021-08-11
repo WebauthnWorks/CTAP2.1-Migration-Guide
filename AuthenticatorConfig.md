@@ -97,33 +97,55 @@ CTAP1_ERR_INVALID_PARAMETER.
 2. If the authenticator is not protected by some form of user verification and alwaysUv optionId is present and true:
 	i) Invoke subcommand
 	ii) Return resulting status code as produced by subCommand (either _CTAP2_OK_ or _CTAP2_ERR_OPERATION_DENIED._)
-
-# IGNORE BELOW WIP
-
-# IGNORE:) Example 2 - Setting a Minimum PIN Length (0x03)
-This *setMinPINLength* subcommand is only implemented if *setMinPINLength* option ID is supported
-This command sets the minimum PIN length in unicode code points to be enforced by the authenticator while changing/setting up a ClientPIN.
-
-1. Platform sends the following subCommandParams:
-- newMinPINLength
-- minPinLengthRPIDs
-- forceChangePin
-
-```
-authenticatorConfig: {
-	subCommand: '0x03',
-	subCommandParams: {
-		newMinPINLength: '4'
-		minPinLengthRPIDs: ['rpID_1', 'rpID_2' ],
-		forceChangePin: true
-	}
-```
-
-# IGNORE:) Example 2 - Setting a Minimum PIN Length (0x03)
-2. Authenticator performs following operations upon receiving the request
- 1. If newMinPINLength is absent, then let newMinPINLength be present with the value of current minimum PIN length
- 2. If minPinLengthRPIDs is present and authenticator does not support minPinLength extension -> return CTAP2_ERR_PIN_POLICY_VIOLATION
- 3. 
-
-
 	
+## Example 2 - Enable Enterprise Attestation (0x01)
+Platform:
+```
+pinUvAuthParam = authenticate(sessionPuat, merge(32x0xFF, new UInt8Array([0x0d, 0x01]) ) // note 0x02 now 0x01
+authenticatorConfig: {
+	'0x01': '0x01',
+	'0x03': '0x02',
+    	'0x04': '1879307eb5dd00ab4bac832e9174acbd2e981d04d45436811b533cc822c4a0fe'
+}
+
+ENCODED INPUT MAP:
+a301643078303103643078303204784031383739333037656235646430306162346261633833326539313734616362643265393831643034643435343336383131623533336363383232633461306665
+
+With authenticatorConfig cmd (0x0d):
+0x0da301643078303103643078303204784031383739333037656235646430306162346261633833326539313734616362643265393831643034643435343336383131623533336363383232633461306665
+```
+
+Upon receipt of request, authenticator will either
+a) If the enterprise attestation feature is disabled, then re-enable the enterprise attestation feature and return _CTAP2_OK_.
+	->  Upon re-enabling the enterprise attestation feature, the authenticator will return an ep (enterprise) option id with
+the value of true in the authenticatorGetInfo command response upon receipt of subsequent
+authenticatorGetInfo commands. (todo add example)
+b)  Else (implying the enterprise attestation feature is enabled) take no action and return _CTAP2_OK_.
+
+
+# Example 3 - Setting a Minimum PIN Length (0x03)
+subCommandParams are defined as follows (note in example 1 and 2 there were no subcommandParams). All subcommandParams are optional.
+```
+newMinPINLength: 0x01
+minPinLengthRPIDs: 0x02
+forceChangePin: 0x03
+```
+
+Platform:
+```
+pinUvAuthParam = authenticate(sessionPuat, merge(32x0xFF, new UInt8Array([0x0d, 0x03]) ) // note 0x02 now 0x03
+authenticatorConfig: {
+	'0x01': '0x03',
+	'0x02' : { // note - error in doc ctrl+f 'Platform sends the following subCommandParams (0x03)'  -> 0x02
+		'0x01': 16 // some random number...
+	},
+	'0x03': '0x02',
+    	'0x04': 'f32f7a9217e19775813f1750631af806245a754781e6e322906fe735bfeaa060'
+}
+
+ENCODED INPUT MAP:
+a401643078303302a1011003643078303204784066333266376139323137653139373735383133663137353036333161663830363234356137353437383165366533323239303666653733356266656161303630
+
+With authenticatorConfig cmd (0x0d):
+0x0da401643078303302a1011003643078303204784066333266376139323137653139373735383133663137353036333161663830363234356137353437383165366533323239303666653733356266656161303630
+```
