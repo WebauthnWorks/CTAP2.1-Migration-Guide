@@ -93,7 +93,7 @@ ie. '0x0D' + 'a30164307830320364307830320478403763383661613463656263646430353737
 
 # IGNORE BELOW WIP
 
-# Example 2 - Setting a Minimum PIN Length (0x03)
+# IGNORE:) Example 2 - Setting a Minimum PIN Length (0x03)
 This *setMinPINLength* subcommand is only implemented if *setMinPINLength* option ID is supported
 This command sets the minimum PIN length in unicode code points to be enforced by the authenticator while changing/setting up a ClientPIN.
 
@@ -111,6 +111,8 @@ authenticatorConfig: {
 		forceChangePin: true
 	}
 ```
+
+# IGNORE:) Example 2 - Setting a Minimum PIN Length (0x03)
 2. Authenticator performs following operations upon receiving the request
  1. If newMinPINLength is absent, then let newMinPINLength be present with the value of current minimum PIN length
  2. If minPinLengthRPIDs is present and authenticator does not support minPinLength extension -> return CTAP2_ERR_PIN_POLICY_VIOLATION
