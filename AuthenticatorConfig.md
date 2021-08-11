@@ -101,7 +101,7 @@ CTAP1_ERR_INVALID_PARAMETER.
 ## Example 2 - Enable Enterprise Attestation (0x01)
 Platform:
 ```
-pinUvAuthParam = authenticate(sessionPuat, merge(32x0xFF, new UInt8Array([0x0d, 0x01]) ) // note 0x02 now 0x01
+pinUvAuthParam = authenticate(sessionPuat, merge(32x0xFF, new UInt8Array([0x0d, 0x01]) ) // note 0x02 -> 0x01
 authenticatorConfig: {
 	'0x01': '0x01',
 	'0x03': '0x02',
@@ -133,7 +133,7 @@ forceChangePin: 0x03
 
 Platform:
 ```
-pinUvAuthParam = authenticate(sessionPuat, merge(32x0xFF, new UInt8Array([0x0d, 0x03]) ) // note 0x02 now 0x03
+pinUvAuthParam = authenticate(sessionPuat, merge(32x0xFF, new UInt8Array([0x0d, 0x03]) ) // note 0x02 -> 0x03
 authenticatorConfig: {
 	'0x01': '0x03',
 	'0x02' : { // note - error in doc ctrl+f 'Platform sends the following subCommandParams (0x03)'  -> 0x02
