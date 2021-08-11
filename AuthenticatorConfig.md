@@ -43,7 +43,8 @@ This setMinPINLength subcommand is only implemented if setMinPINLength option ID
 This command sets the minimum PIN length in unicode code points to be enforced by the authenticator while changing/setting up a ClientPIN.
 
 
-# pinUvAuthParam - the result of calling authenticate(pinUvAuthToken, 32x0xff || 0x0d || uint8(subCommand) || subCommandParams)
+# pinUvAuthParam
+The result of calling authenticate(pinUvAuthToken, 32x0xff || 0x0d || uint8(subCommand) || subCommandParams)
 ```
 sessionPuat = 0125fecfd8bf3f679bd9ec221324baa74f3cade0314b4fba8029500a320612ad // key 
 
@@ -57,7 +58,7 @@ pinUvAuthParam = authenticate(sessionPuat, message)
 
 ENCODDED:
 pinUvAuthParam = 7c86aa4cebcdd0577df2e279b4799daf1362a94a0c674f77bc179dc2fc534967
-```'
+```
 
 **Note**
 For pinUvAuthParam, PinUvAuthProtocol 1 returns first 16 bytes of the HMAC output, whereas PinUvAuthProtocol 2 is returning the entire HMAC output (See #HMAC in PinProtocol 2)
