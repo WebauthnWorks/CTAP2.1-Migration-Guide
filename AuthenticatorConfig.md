@@ -91,6 +91,13 @@ ie. '0x0D' + 'a30164307830320364307830320478403763383661613463656263646430353737
 = 0x0da301643078303203643078303204784037633836616134636562636464303537376466326532373962343739396461663133363261393461306336373466373762633137396463326663353334393637
 ```
 
+Upon receipt of request, authenticator will
+1. If the authenticator does not support the subcommand being invoked, per subCommand's value (0x02), return
+CTAP1_ERR_INVALID_PARAMETER.
+2. If the authenticator is not protected by some form of user verification and alwaysUv optionId is present and true:
+	i) Invoke subcommand
+	ii) Return resulting status code as produced by subCommand (either _CTAP2_OK_ or _CTAP2_ERR_OPERATION_DENIED._)
+
 # IGNORE BELOW WIP
 
 # IGNORE:) Example 2 - Setting a Minimum PIN Length (0x03)
