@@ -1,4 +1,4 @@
-## AuthenticatorConfig
+# AuthenticatorConfig
 
 This command is used to configure various authenticator features through the use of its subcommands. It is part of the authenticator API.
 
@@ -25,10 +25,10 @@ authenticatorConfig: {
 
 **The subCommands:**
 ```
-subCommand Name : subCommandNumber
-enableEnterpriseAttestation 0x01
-toggleAlwaysUv 0x02
-setMinPINLength 0x03
+**subCommand Name** : **subCommandNumber**
+enableEnterpriseAttestation: 0x01
+toggleAlwaysUv: 0x02
+setMinPINLength: 0x03
 ```
 
 Enable Enterprise Attestation (0x01)
@@ -73,17 +73,10 @@ authenticatorConfig: {
 	'0x01': '0x02',
 	'0x03': '0x02',
     '0x04': '7c86aa4cebcdd0577df2e279b4799daf1362a94a0c674f77bc179dc2fc534967'
+}
 ```
 
-
-
-
-
-
-
-
-
-
+# IGNORE BELOW WIP
 
 #Example 3 - Setting a Minimum PIN Length (0x03)
 This setMinPINLength subcommand is only implemented if setMinPINLength option ID is supported
