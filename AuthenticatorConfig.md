@@ -123,7 +123,7 @@ authenticatorGetInfo commands. (todo add example)
 b)  Else (implying the enterprise attestation feature is enabled) take no action and return _CTAP2_OK_.
 
 
-# Example 3 - Setting a Minimum PIN Length (0x03)
+## Example 3 - Setting a Minimum PIN Length (0x03)
 subCommandParams are defined as follows (note in example 1 and 2 there were no subcommandParams). All subcommandParams are optional.
 ```
 newMinPINLength: 0x01
