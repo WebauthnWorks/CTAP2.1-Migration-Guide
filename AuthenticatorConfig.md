@@ -14,7 +14,7 @@ sessionPuat = 0125fecfd8bf3f679bd9ec221324baa74f3cade0314b4fba8029500a320612ad
 
 **We use 4 parameters to configure the authenticator:**
 ```
-authenticatorConfig: {
+authenticatorConfig = {
 	subCommand   		: 0x01 // required
 	subCommandParams 	: 0x02 // optional
 	pinUvAuthProtocol       : 0x03 // optional
