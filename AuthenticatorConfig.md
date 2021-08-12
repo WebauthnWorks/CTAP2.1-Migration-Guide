@@ -121,7 +121,9 @@ authenticatorConfig: {
 
 ENCODED INPUT MAP:
 a301643078303203643078303204784037633836616134636562636464303537376466326532373962343739396461663133363261393461306336373466373762633137396463326663353334393637
-// temp = window.navigator.fido.fido2.cbor.JSONToCBORArrayBuffer(authenticatorConfig); hex.encode(temp) // NOTE - remove later
+
+// NOTE - remove comment later
+// temp = window.navigator.fido.fido2.cbor.JSONToCBORArrayBuffer(authenticatorConfig); hex.encode(temp)
 
 Payload = (authenticatorConfig command + input map + options) 
 	= (0x0d + encoded input map + options TODO) // Platform request payload
