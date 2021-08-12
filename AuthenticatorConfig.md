@@ -68,7 +68,8 @@ pinUvAuthParam  = HMAC-SHA-256(sessionPuat, message)
 		== 7c86aa4cebcdd0577df2e279b4799daf1362a94a0c674f77bc179dc2fc534967
 ```
 
-**Note**
+
+**IMPORTANT NOTE**
 For pinUvAuthParam, PinUvAuthProtocol 1 returns first 16 bytes of the HMAC output, whereas PinUvAuthProtocol 2 is returning the full 32 byte HMAC output (See #HMAC in PinProtocol 2)
 
 **!! All examples below use exclusively PinUvAuthProtocol 2 !!**
