@@ -84,7 +84,7 @@ pinUvAuthParam = 1879307eb5dd00ab4bac832e9174acbd2e981d04d45436811b533cc822c4a0f
 
 **Generating and sending request**
 ```
-authenticatorConfig: {
+authenticatorConfig = {
 	'0x01': '0x01',
 	'0x03': '0x02',
     	'0x04': '1879307eb5dd00ab4bac832e9174acbd2e981d04d45436811b533cc822c4a0fe'
@@ -121,7 +121,7 @@ pinUvAuthParam = HMAC-SHA-256(sessionPuat, mergeBuffers(32x0xFF, new UInt8Array(
 
 **Generating and sending request**
 ```     
-authenticatorConfig: {
+authenticatorConfig = {
 	'0x01': '0x02',
 	'0x03': '0x02',
     	'0x04': '7c86aa4cebcdd0577df2e279b4799daf1362a94a0c674f77bc179dc2fc534967'
@@ -157,7 +157,7 @@ b) Else, implying alwaysUv feature is enabled
 		
 	- Disable alwaysUv feature and return ```CTAP2_OK``` 
 		
--  Else disabling feature not supported, return ```CTAP2_ERR_OPERATION_DENIED```
+-  OTHERWISE, disabling feature not supported, return ```CTAP2_ERR_OPERATION_DENIED```
 
 	
 
@@ -185,7 +185,7 @@ pinUvAuthParam = HMAC-SHA-256(sessionPuat, mergeBuffers(32x0xFF, new UInt8Array(
 
 **Generating and send sending request**
 ```
-authenticatorConfig: {
+authenticatorConfig = {
 	'0x01': '0x03',
 	'0x02' : subCommandParams,
 	'0x03': '0x02',
