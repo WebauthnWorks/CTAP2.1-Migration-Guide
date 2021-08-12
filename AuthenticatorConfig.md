@@ -105,7 +105,7 @@ a) If the enterprise attestation feature is disabled, then re-enable the enterpr
 the value of true in the _authenticatorGetInfo_ command response upon receipt of subsequent
 _authenticatorGetInfo_ commands. (todo add example)
 
-OR
+**OR**
 
 b)  Else (implying the enterprise attestation feature is already enabled) take no action and return _CTAP2_OK_.
 
@@ -147,7 +147,7 @@ a) If alwaysUv feature is disabled
 	
 - Enable the alwaysUv feature and return ```CTAP2_OK```.
 	
-	OR
+**OR**
 	
 b) Else, implying alwaysUv feature is enabled
 
