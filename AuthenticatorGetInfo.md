@@ -24,7 +24,9 @@ maxMsgSize (0x05)	Unsigned Integer	Optional
 ## What's changed between CTAP2.0 and CTAP2.1?
 
 ```pinProtocols (0x06)``` -> ```pinUvAuthProtocols (0x06)```.
-Field pinUvAuthProtocols is an Array of Unsigned Integers of supported PIN/UV auth protocols in order of decreasing authenticator preference. MUST NOT contain duplicate values nor be empty if present.
+
+Field pinUvAuthProtocols is an Array of Unsigned Integers of supported PIN/UV auth protocols in order of decreasing authenticator preference. 
+MUST NOT contain duplicate values nor be empty if present.
 
 ## What's new in CTAP2.1?
 All the below new response fields are optional.
