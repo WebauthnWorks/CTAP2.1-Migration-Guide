@@ -103,7 +103,7 @@ Upon receipt of request, authenticator will either:
 a) If the enterprise attestation feature is disabled, then re-enable the enterprise attestation feature and return _CTAP2_OK_.
 - Upon re-enabling the enterprise attestation feature, the authenticator will return an ep (enterprise) option id with
 the value of true in the _authenticatorGetInfo_ command response upon receipt of subsequent
-_authenticatorGetInfo_ commands. (todo add example)
+_authenticatorGetInfo_ commands.
 
 **OR**
 
