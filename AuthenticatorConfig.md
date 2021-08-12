@@ -21,7 +21,7 @@ AuthenticatorConfig keys ENUM:
 ( Usage show in examples ctrl+f authenticatorConfig )
 
 
-## The subCommands:
+## SubCommands:
 
 Sub Commands ENUM:
 
