@@ -6,7 +6,8 @@ You will need pinUvAuthParam. Please make sure you are familiar with pin protoco
 
 Here are some **test vectors**
 
-Do the exchange as specified in PinProtocol. We will use the below value as a pinUserAuthenticationToken test vector for authenticatorConfig
+Do the exchange as specified in PinProtocol. We will use the below value as a pinUser
+icationToken test vector for authenticatorConfig
 ```
 sessionPuat = 0125fecfd8bf3f679bd9ec221324baa74f3cade0314b4fba8029500a320612ad
 ```
@@ -45,36 +46,39 @@ This command sets the minimum PIN length in unicode code points to be enforced b
 ## pinUvAuthParam
 The result of calling 
 ```
-authenticate(pinUvAuthToken, 32x0xff || 0x0d || uint8(subCommand) || subCommandParams)
+HMAC-SHA-256(key, message)
+HMAC-SHA-256(pinUvAuthToken, mergeBuffers(32x0xff || 0x0d || uint8(subCommand) || subCommandParams))
 ```
 
+Where 32x0xff = 32 zero bytes = 00000000000000000000000000000000
 
-Authenticate returns the results of computing HMAC-SHA-256 on key and message.
 
 We merge the arrayBuffers using _0x0D_ as the authenticator cmd, **authenticatorConfig**, and _0x02_ as the subCommand, **toggleAlwaysUV** . SubcommandParams not defined for 0x02 subCommand.
 
 ```
 sessionPuat = 0125fecfd8bf3f679bd9ec221324baa74f3cade0314b4fba8029500a320612ad // key 
 
-pinUvAuthParam = authenticate(key, message)
-pinUvAuthParam = authenticate(key, 32x0xff || 0x0d || uint8(subcommand) || subCommandParams)
+pinUvAuthParam = HMAC-SHA-256(key = sessionPuat, message = message)
+pinUvAuthParam = HMAC-SHA-256(key, mergeBuffers(32x0xff || 0x0d || uint8(subcommand) || subCommandParams)) //
 
-message = merge(32x0xFF, new UInt8Array([0x0d, 0x02]) 
+// 
+message = mergeBuffers(32x0xFF, new UInt8Array([0x0d, 0x02]) 
 
-pinUvAuthParam = authenticate(sessionPuat, message)
 
-ENCODED:
-pinUvAuthParam = 7c86aa4cebcdd0577df2e279b4799daf1362a94a0c674f77bc179dc2fc534967
+pinUvAuthParam  = HMAC-SHA-256(sessionPuat, message)
+		== 7c86aa4cebcdd0577df2e279b4799daf1362a94a0c674f77bc179dc2fc534967
 ```
 
 **Note**
 For pinUvAuthParam, PinUvAuthProtocol 1 returns first 16 bytes of the HMAC output, whereas PinUvAuthProtocol 2 is returning the entire HMAC output (See #HMAC in PinProtocol 2)
 
+**!! All examples use exclusively PinUvAuthProtocol 2 !!**
+
 ## Example 1 - Toggling always UV (0x02)
 Using the above *pinUvAuthParam* which was generated with *0x02 subCommand*, we will generate a request to the authenticator to toggle always UV
 
 ```
-pinUvAuthParam = 7c86aa4cebcdd0577df2e279b4799daf1362a94a0c674f77bc179dc2fc534967
+pinUvAuthParam = 7c86aa4cebcdd0577df2e279b4799daf1362a94a0c674f77bc179dc2fc534967 // taken from above
 
 authenticatorConfig: {
 	'0x01': '0x02',
@@ -86,7 +90,7 @@ ENCODED INPUT MAP:
 a301643078303203643078303204784037633836616134636562636464303537376466326532373962343739396461663133363261393461306336373466373762633137396463326663353334393637
 // temp = window.navigator.fido.fido2.cbor.JSONToCBORArrayBuffer(authenticatorConfig); hex.encode(temp)
 
-Platform sends authenticatorConfig command + input map + options
+Platform sends authenticatorConfig command + input map + options (TODO)
 ie. '0x0D' + 'a301643078303203643078303204784037633836616134636562636464303537376466326532373962343739396461663133363261393461306336373466373762633137396463326663353334393637'
 = 0x0da301643078303203643078303204784037633836616134636562636464303537376466326532373962343739396461663133363261393461306336373466373762633137396463326663353334393637
 ```
@@ -101,7 +105,7 @@ CTAP1_ERR_INVALID_PARAMETER.
 ## Example 2 - Enable Enterprise Attestation (0x01)
 Platform:
 ```
-pinUvAuthParam = authenticate(sessionPuat, merge(32x0xFF, new UInt8Array([0x0d, 0x01]) ) // note 0x02 -> 0x01
+pinUvAuthParam = HMAC-SHA-256(sessionPuat, mergeBuffers(32x0xFF, new UInt8Array([0x0d, 0x01]) ) // note 0x02 -> 0x01
 authenticatorConfig: {
 	'0x01': '0x01',
 	'0x03': '0x02',
@@ -135,15 +139,15 @@ forceChangePin: 0x03
 
 Platform:
 ```
-subCommandParams = { '0x01' : 16 } // setting newMinPin length to some arbitrary number
-**not sure how to convert subCommandParams to uint8array for merging...**
-pinUvAuthParam = authenticate(sessionPuat, merge(32x0xFF, new UInt8Array([0x0d, 0x03]), subCommandParams ??? not  ) // note 0x02 -> 0x03
+subCommandParams = { '0x01' : 16 } // setting newMinPin length to an arbitrary number
+**TODO - not sure how to convert subCommandParams to uint8array for merging...**
+pinUvAuthParam = HMAC-SHA-256(sessionPuat, mergeBuffers(32x0xFF, new UInt8Array([0x0d, 0x03]), subCommandParams ??? not  ) // note 0x02 -> 0x03
 authenticatorConfig: {
 	'0x01': '0x03',
 	'0x02' : subCommandParams,
 	'0x03': '0x02',
     	'0x04': 'f32f7a9217e19775813f1750631af806245a754781e6e322906fe735bfeaa060'
-}
+}1
 
 ENCODED INPUT MAP:
 a401643078303302a1011003643078303204784061306634313964633732633931326533663038623066346430663235333732613065396562323831633534303334656364383632376562643030616363646661
