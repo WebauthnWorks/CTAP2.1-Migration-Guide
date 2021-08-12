@@ -135,7 +135,7 @@ forceChangePin: 0x03
 
 Platform:
 ```
-subCommandParams = { '0x01' : 16 } // some random number
+subCommandParams = { '0x01' : 16 } // setting newMinPin length to some arbitrary number
 **not sure how to convert subCommandParams to uint8array for merging...**
 pinUvAuthParam = authenticate(sessionPuat, merge(32x0xFF, new UInt8Array([0x0d, 0x03]), subCommandParams ??? not  ) // note 0x02 -> 0x03
 authenticatorConfig: {
