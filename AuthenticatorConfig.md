@@ -145,10 +145,10 @@ a) If alwaysUv feature is disabled
 	
 	
 b) Else, implying alwaysUv feature is enabled
-	a) If disabling feature supported, 
+	- If disabling feature supported,
 		- Set the makeCredUvNotRqd option ID to its default.
 		- Disable alwaysUv feature and return ```CTAP2_OK``` 
-	b) Else disabling feature not supported, return ```CTAP2_ERR_OPERATION_DENIED```
+	-  Else disabling feature not supported, return ```CTAP2_ERR_OPERATION_DENIED```
 
 	
 
