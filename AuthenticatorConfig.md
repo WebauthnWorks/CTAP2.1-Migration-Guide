@@ -83,7 +83,7 @@ Using the above *pinUvAuthParam* which was generated with *0x01 subCommand*, pla
 pinUvAuthParam = 1879307eb5dd00ab4bac832e9174acbd2e981d04d45436811b533cc822c4a0fe
 ```
 
-**Generating and send sending request**
+**Generating and sending request**
 ```
 authenticatorConfig: {
 	'0x01': '0x01',
