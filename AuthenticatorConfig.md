@@ -157,7 +157,9 @@ b) Else, implying alwaysUv feature is enabled
 		
 	- Disable alwaysUv feature and return ```CTAP2_OK``` 
 		
--  OTHERWISE, disabling feature not supported, return ```CTAP2_ERR_OPERATION_DENIED```
+-  OTHERWISE, disabling feature not supported, 
+	
+	-  return ```CTAP2_ERR_OPERATION_DENIED```
 
 	
 
