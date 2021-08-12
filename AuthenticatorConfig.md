@@ -4,7 +4,7 @@ This command is used to configure various authenticator features through the use
 
 You will need pinUvAuthParam. Please make sure you are familiar with pin protocols. Read **Obtaining pinUvAuthParam** at https://github.com/WebAuthnWorks/CTAP2.1-Migration-Guide/blob/main/Protocol/PinProtocol/2.md
 
-Do the exchange as specified in PinProtocol. We will use the below value as a pinUserVerificationToken test vector for authenticatorConfig
+Do the exchange as specified in PinProtocol. We use the below value from PinProtocol as a pinUserVerificationToken test vector for authenticatorConfig in **Example 2**
 ```
 sessionPuat = 0125fecfd8bf3f679bd9ec221324baa74f3cade0314b4fba8029500a320612ad
 ```
@@ -78,6 +78,7 @@ For pinUvAuthParam, PinUvAuthProtocol 1 returns first 16 bytes of the HMAC outpu
 Platform:
 ```
 pinUvAuthParam = HMAC-SHA-256(sessionPuat, mergeBuffers(32x0xFF, new UInt8Array([0x0d, 0x01]) ) // emphasis on subcommand=0x01
+	       == 1879307eb5dd00ab4bac832e9174acbd2e981d04d45436811b533cc822c4a0fe
 authenticatorConfig: {
 	'0x01': '0x01',
 	'0x03': '0x02',
@@ -108,8 +109,8 @@ b)  Else (implying the enterprise attestation feature is enabled) take no action
 Using the original *pinUvAuthParam* which was generated with *0x02 subCommand*, we will generate a request to the authenticator to toggle always UV
 
 ```
-pinUvAuthParam = 7c86aa4cebcdd0577df2e279b4799daf1362a94a0c674f77bc179dc2fc534967 // taken from pinUvAuthParam example
-
+pinUvAuthParam = 7c86aa4cebcdd0577df2e279b4799daf1362a94a0c674f77bc179dc2fc534967
+	       == 7c86aa4cebcdd0577df2e279b4799daf1362a94a0c674f77bc179dc2fc534967
 authenticatorConfig: {
 	'0x01': '0x02',
 	'0x03': '0x02',
@@ -150,7 +151,8 @@ Platform:
 ```
 subCommandParams = { '0x01' : 16 } // setting newMinPin length to an arbitrary number
 **TODO - not sure how to convert subCommandParams to uint8array for merging...**
-pinUvAuthParam = HMAC-SHA-256(sessionPuat, mergeBuffers(32x0xFF, new UInt8Array([0x0d, 0x03]), subCommandParams ??? not  ) // note 0x02 -> 0x03
+pinUvAuthParam = HMAC-SHA-256(sessionPuat, mergeBuffers(32x0xFF, new UInt8Array([0x0d, 0x03]), subCommandParams ??? not  ) // emphasis on subcommand = 0x03
+	       == f32f7a9217e19775813f1750631af806245a754781e6e322906fe735bfeaa060
 authenticatorConfig: {
 	'0x01': '0x03',
 	'0x02' : subCommandParams,
