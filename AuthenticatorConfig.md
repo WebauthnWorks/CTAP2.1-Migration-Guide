@@ -33,7 +33,6 @@ setMinPINLength			: 0x03
 
 #### Enable Enterprise Attestation (0x01):
 This *enableEnterpriseAttestation* subcommand is only implemented if the enterprise attestation feature is supported. No *subcommandParams* are used.
-If enterprise attestation, re-enables attestation feature and returns ```CTAP2_OK```. Else, no action occurs and ```CTAP2_OK``` returned. _**Example 1**_.
 
 #### Always Require User Verification (0x02):
 This *toggleAlwaysUV* subcommand is only implemented if the Always Require User Verification feature is supported. No *subcommandParams* are used. _**Example 2**_.
@@ -106,7 +105,7 @@ a) If the enterprise attestation feature is disabled, then re-enable the enterpr
 the value of true in the _authenticatorGetInfo_ command response upon receipt of subsequent
 _authenticatorGetInfo_ commands. (todo add example)
 
-b)  Else (implying the enterprise attestation feature is enabled) take no action and return _CTAP2_OK_.
+b)  Else (implying the enterprise attestation feature is already enabled) take no action and return _CTAP2_OK_.
 
 
 ## Example 2 - Toggling always UV (0x02)
@@ -138,12 +137,16 @@ CMD: 0x0D
 REQUEST: 0x0da301643078303203643078303204784037633836616134636562636464303537376466326532373962343739396461663133363261393461306336373466373762633137396463326663353334393637
 ```
 
-Upon receipt of request, authenticator will
-1. If the authenticator does not support the subcommand being invoked, per subCommand's value (0x02), return
-```CTAP1_ERR_INVALID_PARAMETER```.
-2. If the authenticator is not protected by some form of user verification and alwaysUv optionId is present and true:
-	i) Invoke subcommand
-	ii) Return resulting status code as produced by subCommand (either ```CTAP2_OK``` if disabling alwaysUv IS supported otherwise ```CTAP2_ERR_OPERATION_DENIED```  if not).
+Upon receipt of request, authenticator will either 
+a) If alwaysUv feature is disabled
+	i) If the makeCredUvNotRqd option ID is present and true, then disable the makeCredUvNotRqd feature and set the makeCredUvNotRqd option ID to false or absent.
+	ii) Enable the alwaysUv feature and return ```CTAP2_OK```.
+b) Else, implying alwaysUv feature is enabled
+	a) If disabling feature supported, 
+		i) Set the makeCredUvNotRqd option ID to its default.
+		ii) disable alwaysUv feature and return ```CTAP2_OK``` 
+	b) Else disabling feature not supported, return ```CTAP2_ERR_OPERATION_DENIED```
+
 	
 
 ## Example 3 - Setting a Minimum PIN Length (0x03)
