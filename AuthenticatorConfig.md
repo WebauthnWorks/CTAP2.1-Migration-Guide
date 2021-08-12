@@ -107,7 +107,7 @@ CTAP1_ERR_INVALID_PARAMETER.
 	ii) Return resulting status code as produced by subCommand (either _CTAP2_OK_ or _CTAP2_ERR_OPERATION_DENIED._)
 	
 ## Example 2 - Enable Enterprise Attestation (0x01)
-Platform:
+Platform request:
 ```
 pinUvAuthParam = HMAC-SHA-256(sessionPuat, mergeBuffers(32x0xFF, new UInt8Array([0x0d, 0x01]) ) // emphasis on subcommand=0x01
 	       == 1879307eb5dd00ab4bac832e9174acbd2e981d04d45436811b533cc822c4a0fe
@@ -146,7 +146,7 @@ minPinLengthRPIDs: 0x02
 forceChangePin: 0x03
 ```
 
-Platform:
+Platform request:
 ```
 subCommandParams = { '0x01' : 16 } // setting newMinPin length to an arbitrary number
 **TODO - not sure how to convert subCommandParams to uint8array for merging...**
