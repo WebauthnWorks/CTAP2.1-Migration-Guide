@@ -1,6 +1,6 @@
 # authenticatorGetInfo (0x04)
 
-TODO : ADD examples
+TODO : link or copy and paste example
 
 Using this method, platforms can request that the authenticator report a list of its supported protocol versions and extensions, its AAGUID, and other aspects of its overall capabilities. Platforms should use this information to tailor their command parameters choices.
 
