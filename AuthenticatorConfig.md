@@ -77,38 +77,10 @@ For pinUvAuthParam, PinUvAuthProtocol 1 returns first 16 bytes of the HMAC outpu
 
 **!! All examples use exclusively PinUvAuthProtocol 2 !!**
 
-## Example 1 - Toggling always UV (0x02)
-Using the above *pinUvAuthParam* which was generated with *0x02 subCommand*, we will generate a request to the authenticator to toggle always UV
-
-```
-pinUvAuthParam = 7c86aa4cebcdd0577df2e279b4799daf1362a94a0c674f77bc179dc2fc534967 // taken from above
-
-authenticatorConfig: {
-	'0x01': '0x02',
-	'0x03': '0x02',
-    	'0x04': '7c86aa4cebcdd0577df2e279b4799daf1362a94a0c674f77bc179dc2fc534967'
-}
-
-ENCODED INPUT MAP:
-a301643078303203643078303204784037633836616134636562636464303537376466326532373962343739396461663133363261393461306336373466373762633137396463326663353334393637
-// temp = window.navigator.fido.fido2.cbor.JSONToCBORArrayBuffer(authenticatorConfig); hex.encode(temp)
-
-Platform sends authenticatorConfig command + input map + options (TODO)
-ie. '0x0D' + 'a301643078303203643078303204784037633836616134636562636464303537376466326532373962343739396461663133363261393461306336373466373762633137396463326663353334393637'
-= 0x0da301643078303203643078303204784037633836616134636562636464303537376466326532373962343739396461663133363261393461306336373466373762633137396463326663353334393637
-```
-
-Upon receipt of request, authenticator will
-1. If the authenticator does not support the subcommand being invoked, per subCommand's value (0x02), return
-CTAP1_ERR_INVALID_PARAMETER.
-2. If the authenticator is not protected by some form of user verification and alwaysUv optionId is present and true:
-	i) Invoke subcommand
-	ii) Return resulting status code as produced by subCommand (either _CTAP2_OK_ or _CTAP2_ERR_OPERATION_DENIED._)
-	
-## Example 2 - Enable Enterprise Attestation (0x01)
+## Example 1 - Enable Enterprise Attestation (0x01)
 Platform:
 ```
-pinUvAuthParam = HMAC-SHA-256(sessionPuat, mergeBuffers(32x0xFF, new UInt8Array([0x0d, 0x01]) ) // note 0x02 -> 0x01
+pinUvAuthParam = HMAC-SHA-256(sessionPuat, mergeBuffers(32x0xFF, new UInt8Array([0x0d, 0x01]) ) // emphasis on subcommand=0x01
 authenticatorConfig: {
 	'0x01': '0x01',
 	'0x03': '0x02',
@@ -118,7 +90,9 @@ authenticatorConfig: {
 ENCODED INPUT MAP:
 a301643078303103643078303204784031383739333037656235646430306162346261633833326539313734616362643265393831643034643435343336383131623533336363383232633461306665
 
-With authenticatorConfig cmd (0x0d):
+Platform request payload = (authenticatorConfig command + input map + options) = (0x0d + encoded input map + options TODO)
+
+PAYLOAD:
 0x0da301643078303103643078303204784031383739333037656235646430306162346261633833326539313734616362643265393831643034643435343336383131623533336363383232633461306665
 ```
 
@@ -130,6 +104,37 @@ the value of true in the _authenticatorGetInfo_ command response upon receipt of
 _authenticatorGetInfo_ commands. (todo add example)
 
 b)  Else (implying the enterprise attestation feature is enabled) take no action and return _CTAP2_OK_.
+
+
+## Example 2 - Toggling always UV (0x02)
+Using the original *pinUvAuthParam* which was generated with *0x02 subCommand*, we will generate a request to the authenticator to toggle always UV
+
+```
+pinUvAuthParam = 7c86aa4cebcdd0577df2e279b4799daf1362a94a0c674f77bc179dc2fc534967 // taken from pinUvAuthParam example
+
+authenticatorConfig: {
+	'0x01': '0x02',
+	'0x03': '0x02',
+    	'0x04': '7c86aa4cebcdd0577df2e279b4799daf1362a94a0c674f77bc179dc2fc534967'
+}
+
+ENCODED INPUT MAP:
+a301643078303203643078303204784037633836616134636562636464303537376466326532373962343739396461663133363261393461306336373466373762633137396463326663353334393637
+// temp = window.navigator.fido.fido2.cbor.JSONToCBORArrayBuffer(authenticatorConfig); hex.encode(temp) // NOTE - remove later
+
+Platform request payload = (authenticatorConfig command + input map + options) = (0x0d + encoded input map + options TODO)
+
+PAYLOAD:
+0x0da301643078303203643078303204784037633836616134636562636464303537376466326532373962343739396461663133363261393461306336373466373762633137396463326663353334393637
+```
+
+Upon receipt of request, authenticator will
+1. If the authenticator does not support the subcommand being invoked, per subCommand's value (0x02), return
+CTAP1_ERR_INVALID_PARAMETER.
+2. If the authenticator is not protected by some form of user verification and alwaysUv optionId is present and true:
+	i) Invoke subcommand
+	ii) Return resulting status code as produced by subCommand (either _CTAP2_OK_ or _CTAP2_ERR_OPERATION_DENIED._)
+	
 
 
 ## Example 3 - Setting a Minimum PIN Length (0x03)
@@ -155,6 +160,8 @@ authenticatorConfig: {
 ENCODED INPUT MAP:
 a401643078303302a1011003643078303204784061306634313964633732633931326533663038623066346430663235333732613065396562323831633534303334656364383632376562643030616363646661
 
-With authenticatorConfig cmd (0x0d):
+Platform request payload = (authenticatorConfig command + input map + options) = (0x0d + encoded input map + options TODO)
+
+PAYLOAD:
 0x0da401643078303302a1011003643078303204784061306634313964633732633931326533663038623066346430663235333732613065396562323831633534303334656364383632376562643030616363646661
 ```
