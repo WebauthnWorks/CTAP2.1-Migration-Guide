@@ -21,7 +21,7 @@ AuthenticatorConfig keys ENUM:
 	pinUvAuthProtocol       : 0x03 // optional
 	pinUvAuthParam       	: 0x04 // optional
 ```
-(Usage show in examples ctrl+f authenticatorConfig )
+( Usage show in examples ctrl+f authenticatorConfig )
 
 
 ## The subCommands:
