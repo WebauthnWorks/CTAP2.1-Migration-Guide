@@ -61,7 +61,6 @@ sessionPuat = 0125fecfd8bf3f679bd9ec221324baa74f3cade0314b4fba8029500a320612ad /
 pinUvAuthParam = HMAC-SHA-256(key = sessionPuat, message = message)
 pinUvAuthParam = HMAC-SHA-256(key, mergeBuffers(32x0xff || 0x0d || uint8(subcommand) || subCommandParams)) //
 
-// 
 message = mergeBuffers(32x0xFF, new UInt8Array([0x0d, 0x02]) 
 
 
