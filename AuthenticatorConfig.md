@@ -76,13 +76,11 @@ For pinUvAuthParam, PinUvAuthProtocol 1 returns first 16 bytes of the HMAC outpu
 **!! All examples below use exclusively PinUvAuthProtocol 2 !!**
 
 ## Example 1 - Enable Enterprise Attestation (0x01)
-Platform request:
-
+Using the above *pinUvAuthParam* which was generated with *0x01 subCommand*, platform will generate a request to the authenticator to toggle always UV
 
 **Generating pinUvAuthParam**
 ```
 pinUvAuthParam = 1879307eb5dd00ab4bac832e9174acbd2e981d04d45436811b533cc822c4a0fe
-	       == 1879307eb5dd00ab4bac832e9174acbd2e981d04d45436811b533cc822c4a0fe
 ```
 
 **Generating and send sending request**
@@ -112,11 +110,11 @@ b)  Else (implying the enterprise attestation feature is enabled) take no action
 
 
 ## Example 2 - Toggling always UV (0x02)
-Using the above *pinUvAuthParam* which was generated with *0x02 subCommand*, platform will generate a request to the authenticator to toggle always UV
+Platform request:
 
 **Generating pinUvAuthParam**
 ```
-pinUvAuthParam = HMAC-SHA-256(sessionPuat, mergeBuffers(32x0xFF, new UInt8Array([0x0d, 0x01]) ) // emphasis on subcommand=0x01
+pinUvAuthParam = HMAC-SHA-256(sessionPuat, mergeBuffers(32x0xFF, new UInt8Array([0x0d, 0x02]) ) // emphasis on subcommand=0x02
 	       == 7c86aa4cebcdd0577df2e279b4799daf1362a94a0c674f77bc179dc2fc534967
 ```
 
