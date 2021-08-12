@@ -140,7 +140,7 @@ REQUEST: 0x0da301643078303203643078303204784037633836616134636562636464303537376
 
 Upon receipt of request, authenticator will
 1. If the authenticator does not support the subcommand being invoked, per subCommand's value (0x02), return
-CTAP1_ERR_INVALID_PARAMETER.
+```CTAP1_ERR_INVALID_PARAMETER```.
 2. If the authenticator is not protected by some form of user verification and alwaysUv optionId is present and true:
 	i) Invoke subcommand
 	ii) Return resulting status code as produced by subCommand (either ```CTAP2_OK``` if disabling alwaysUv IS supported otherwise ```CTAP2_ERR_OPERATION_DENIED```  if not).
