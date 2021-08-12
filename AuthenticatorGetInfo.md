@@ -58,8 +58,8 @@ All options are in the form key-value pairs with string IDs and boolean values. 
 
 ## What's the same in options?
 ```
-Option ID	                  Default		
-====================================================
+Option ID	        Default		
+==============================================
 
 plat			false
 rk			false
@@ -70,8 +70,8 @@ uv			Not supported
 
 ## What's new in options?
 ```
-Option ID	                  Default		
-====================================================
+Option ID	                Default		
+==============================================
 
 pinUvAuthToken			false
 noMcGaPermissionsWithClientPin	false
