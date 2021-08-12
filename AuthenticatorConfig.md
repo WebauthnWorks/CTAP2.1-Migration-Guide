@@ -98,7 +98,7 @@ CMD: 0x0D
 REQUEST: 0x0da301643078303103643078303204784031383739333037656235646430306162346261633833326539313734616362643265393831643034643435343336383131623533336363383232633461306665
 ```
 
-Upon receipt of request, authenticator will either
+Upon receipt of request, authenticator will either:
 
 a) If the enterprise attestation feature is disabled, then re-enable the enterprise attestation feature and return _CTAP2_OK_.
 - Upon re-enabling the enterprise attestation feature, the authenticator will return an ep (enterprise) option id with
@@ -139,7 +139,7 @@ CMD: 0x0D
 REQUEST: 0x0da301643078303203643078303204784037633836616134636562636464303537376466326532373962343739396461663133363261393461306336373466373762633137396463326663353334393637
 ```
 
-Upon receipt of request, authenticator will either 
+Upon receipt of request, authenticator will either:
 
 a) If alwaysUv feature is disabled
 
