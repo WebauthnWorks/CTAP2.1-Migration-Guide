@@ -4,10 +4,7 @@ This command is used to configure various authenticator features through the use
 
 You will need pinUvAuthParam. Please make sure you are familiar with pin protocols. Read **Obtaining pinUvAuthParam** at https://github.com/WebAuthnWorks/CTAP2.1-Migration-Guide/blob/main/Protocol/PinProtocol/2.md
 
-Here are some **test vectors**
-
-Do the exchange as specified in PinProtocol. We will use the below value as a pinUser
-icationToken test vector for authenticatorConfig
+Do the exchange as specified in PinProtocol. We will use the below value as a pinUserVerificationToken test vector for authenticatorConfig
 ```
 sessionPuat = 0125fecfd8bf3f679bd9ec221324baa74f3cade0314b4fba8029500a320612ad
 ```
