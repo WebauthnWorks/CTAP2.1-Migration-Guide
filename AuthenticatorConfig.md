@@ -140,15 +140,21 @@ REQUEST: 0x0da301643078303203643078303204784037633836616134636562636464303537376
 Upon receipt of request, authenticator will either 
 
 a) If alwaysUv feature is disabled
-	- If the makeCredUvNotRqd option ID is present and true, then disable the makeCredUvNotRqd feature and set the makeCredUvNotRqd option ID to false or absent.
-	- Enable the alwaysUv feature and return ```CTAP2_OK```.
+
+- If the makeCredUvNotRqd option ID is present and true, then disable the makeCredUvNotRqd feature and set the makeCredUvNotRqd option ID to false or absent.
+	
+- Enable the alwaysUv feature and return ```CTAP2_OK```.
 	
 	
 b) Else, implying alwaysUv feature is enabled
-	- If disabling feature supported,
-		- Set the makeCredUvNotRqd option ID to its default.
-		- Disable alwaysUv feature and return ```CTAP2_OK``` 
-	-  Else disabling feature not supported, return ```CTAP2_ERR_OPERATION_DENIED```
+
+- If disabling feature supported,
+	
+	- Set the makeCredUvNotRqd option ID to its default.
+		
+	- Disable alwaysUv feature and return ```CTAP2_OK``` 
+		
+-  Else disabling feature not supported, return ```CTAP2_ERR_OPERATION_DENIED```
 
 	
 
