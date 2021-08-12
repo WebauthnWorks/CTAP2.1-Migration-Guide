@@ -33,10 +33,10 @@ setMinPINLength			: 0x03
 
 #### Enable Enterprise Attestation (0x01):
 This *enableEnterpriseAttestation* subcommand is only implemented if the enterprise attestation feature is supported. No *subcommandParams* are used.
-If enterprise attestation, re-enables attestation feature and returns _CTAP2_OK_. Else, no action occurs and _CTAP2_OK_ returned. _**Example 2**_.
+If enterprise attestation, re-enables attestation feature and returns _CTAP2_OK_. Else, no action occurs and _CTAP2_OK_ returned. _**Example 1**_.
 
 #### Always Require User Verification (0x02):
-This *toggleAlwaysUV* subcommand is only implemented if the Always Require User Verification feature is supported. No *subcommandParams* are used. _**Example 1**_.
+This *toggleAlwaysUV* subcommand is only implemented if the Always Require User Verification feature is supported. No *subcommandParams* are used. _**Example 2**_.
 
 #### Setting a Minimum PIN Length (0x03):
 This *setMinPINLength* subcommand is only implemented if _setMinPINLength_ option ID is supported
@@ -53,7 +53,7 @@ HMAC-SHA-256(pinUvAuthToken, mergeBuffers(32x0xFF || 0x0d || uint8(subCommand) |
 Where 32x0xFF = 32 zero bytes = 0000000000000000000000000000000000000000000000000000000000000000
 
 
-We merge the arrayBuffers using _0x0D_ as the authenticator cmd, **authenticatorConfig**, and _0x02_ as the subCommand, **toggleAlwaysUV** . SubcommandParams not defined for 0x02 subCommand.
+We merge the arrayBuffers using _0x0D_ as the authenticator cmd, **authenticatorConfig**, and _0x01_ as the subCommand, **toggleAlwaysUV** . SubcommandParams not defined for 0x01 subCommand.
 
 ```
 sessionPuat = 0125fecfd8bf3f679bd9ec221324baa74f3cade0314b4fba8029500a320612ad // key 
@@ -61,11 +61,11 @@ sessionPuat = 0125fecfd8bf3f679bd9ec221324baa74f3cade0314b4fba8029500a320612ad /
 pinUvAuthParam = HMAC-SHA-256(key = sessionPuat, message = message)
 pinUvAuthParam = HMAC-SHA-256(key, mergeBuffers(32x0xff || 0x0d || uint8(subcommand) || subCommandParams)) //
 
-message = mergeBuffers(32x0xFF, new UInt8Array([0x0d, 0x02]) 
+message = mergeBuffers(32x0xFF, new UInt8Array([0x0d, 0x01]) 
 
 
 pinUvAuthParam  = HMAC-SHA-256(sessionPuat, message)
-		== 7c86aa4cebcdd0577df2e279b4799daf1362a94a0c674f77bc179dc2fc534967
+		== 1879307eb5dd00ab4bac832e9174acbd2e981d04d45436811b533cc822c4a0fe
 ```
 
 
@@ -75,12 +75,48 @@ For pinUvAuthParam, PinUvAuthProtocol 1 returns first 16 bytes of the HMAC outpu
 
 **!! All examples below use exclusively PinUvAuthProtocol 2 !!**
 
-## Example 1 - Toggling always UV (0x02)
+## Example 1 - Enable Enterprise Attestation (0x01)
+Platform request:
+
+
+**Generating pinUvAuthParam**
+```
+pinUvAuthParam = 1879307eb5dd00ab4bac832e9174acbd2e981d04d45436811b533cc822c4a0fe
+	       == 1879307eb5dd00ab4bac832e9174acbd2e981d04d45436811b533cc822c4a0fe
+```
+
+**Generating and send sending request**
+```
+authenticatorConfig: {
+	'0x01': '0x01',
+	'0x03': '0x02',
+    	'0x04': '1879307eb5dd00ab4bac832e9174acbd2e981d04d45436811b533cc822c4a0fe'
+}
+
+PAYLOAD: a301643078303103643078303204784031383739333037656235646430306162346261633833326539313734616362643265393831643034643435343336383131623533336363383232633461306665
+
+REQUEST = (authenticatorConfig command + input map + options)
+
+CMD: 0x0D
+REQUEST: 0x0da301643078303103643078303204784031383739333037656235646430306162346261633833326539313734616362643265393831643034643435343336383131623533336363383232633461306665
+```
+
+Upon receipt of request, authenticator will either
+
+a) If the enterprise attestation feature is disabled, then re-enable the enterprise attestation feature and return _CTAP2_OK_.
+- Upon re-enabling the enterprise attestation feature, the authenticator will return an ep (enterprise) option id with
+the value of true in the _authenticatorGetInfo_ command response upon receipt of subsequent
+_authenticatorGetInfo_ commands. (todo add example)
+
+b)  Else (implying the enterprise attestation feature is enabled) take no action and return _CTAP2_OK_.
+
+
+## Example 2 - Toggling always UV (0x02)
 Using the above *pinUvAuthParam* which was generated with *0x02 subCommand*, platform will generate a request to the authenticator to toggle always UV
 
 **Generating pinUvAuthParam**
 ```
-pinUvAuthParam = 7c86aa4cebcdd0577df2e279b4799daf1362a94a0c674f77bc179dc2fc534967
+pinUvAuthParam = HMAC-SHA-256(sessionPuat, mergeBuffers(32x0xFF, new UInt8Array([0x0d, 0x01]) ) // emphasis on subcommand=0x01
 	       == 7c86aa4cebcdd0577df2e279b4799daf1362a94a0c674f77bc179dc2fc534967
 ```
 
@@ -111,40 +147,6 @@ CTAP1_ERR_INVALID_PARAMETER.
 	i) Invoke subcommand
 	ii) Return resulting status code as produced by subCommand (either _CTAP2_OK_ or _CTAP2_ERR_OPERATION_DENIED._)
 	
-## Example 2 - Enable Enterprise Attestation (0x01)
-Platform request:
-
-**Generating pinUvAuthParam**
-```
-pinUvAuthParam = HMAC-SHA-256(sessionPuat, mergeBuffers(32x0xFF, new UInt8Array([0x0d, 0x01]) ) // emphasis on subcommand=0x01
-	       == 1879307eb5dd00ab4bac832e9174acbd2e981d04d45436811b533cc822c4a0fe
-```
-
-**Generating and send sending request**
-```
-authenticatorConfig: {
-	'0x01': '0x01',
-	'0x03': '0x02',
-    	'0x04': '1879307eb5dd00ab4bac832e9174acbd2e981d04d45436811b533cc822c4a0fe'
-}
-
-PAYLOAD: a301643078303103643078303204784031383739333037656235646430306162346261633833326539313734616362643265393831643034643435343336383131623533336363383232633461306665
-
-REQUEST = (authenticatorConfig command + input map + options)
-
-CMD: 0x0D
-REQUEST: 0x0da301643078303103643078303204784031383739333037656235646430306162346261633833326539313734616362643265393831643034643435343336383131623533336363383232633461306665
-```
-
-Upon receipt of request, authenticator will either
-
-a) If the enterprise attestation feature is disabled, then re-enable the enterprise attestation feature and return _CTAP2_OK_.
-- Upon re-enabling the enterprise attestation feature, the authenticator will return an ep (enterprise) option id with
-the value of true in the _authenticatorGetInfo_ command response upon receipt of subsequent
-_authenticatorGetInfo_ commands. (todo add example)
-
-b)  Else (implying the enterprise attestation feature is enabled) take no action and return _CTAP2_OK_.
-
 
 ## Example 3 - Setting a Minimum PIN Length (0x03)
 subCommandParams are defined as follows (note in example 1 and 2 there were no subcommandParams). All subcommandParams are optional.
