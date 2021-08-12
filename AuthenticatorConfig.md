@@ -13,6 +13,8 @@ sessionPuat = 0125fecfd8bf3f679bd9ec221324baa74f3cade0314b4fba8029500a320612ad
 ```
 
 **We use 4 parameters to configure the authenticator:**
+
+Request keys ENUM:
 ```
 authenticatorConfig = {
 	subCommand   		: 0x01 // required
@@ -24,7 +26,8 @@ authenticatorConfig = {
 
 ## The subCommands:
 
-**subCommand Name** : **subCommand Number**
+Sub Commands ENUM:
+
 ```
 enableEnterpriseAttestation	: 0x01
 toggleAlwaysUv			: 0x02
