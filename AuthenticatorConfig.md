@@ -143,7 +143,7 @@ Upon receipt of request, authenticator will
 CTAP1_ERR_INVALID_PARAMETER.
 2. If the authenticator is not protected by some form of user verification and alwaysUv optionId is present and true:
 	i) Invoke subcommand
-	ii) Return resulting status code as produced by subCommand (either ```CTAP2_OK``` if disabling alwaysUv IS supported other```CTAP2_ERR_OPERATION_DENIED.```)
+	ii) Return resulting status code as produced by subCommand (either ```CTAP2_OK``` if disabling alwaysUv IS supported otherwise ```CTAP2_ERR_OPERATION_DENIED```  if not).
 	
 
 ## Example 3 - Setting a Minimum PIN Length (0x03)
@@ -159,7 +159,7 @@ forceChangePin: 0x03
 subCommandParams = { '0x01' : 16 } 
 ```
 We have set newMinPINLength to an arbitrary number >= 4, in this example we have picked 16
-Setting newMinPINLength value < 4 will result in error ```CTAP2_ERR_PIN_POLICY_VIOLATION```
+Setting newMinPINLength value < 4 will result in error ```CTAP2_ERR_PIN_POLICY_VIOLATION```.
 
 **Generating pinUvAuthParam**
 ```
@@ -185,4 +185,4 @@ CMD: 0x0D
 REQUEST: 0x0da401643078303302a1011003643078303204784061306634313964633732633931326533663038623066346430663235333732613065396562323831633534303334656364383632376562643030616363646661
 ```
 
-Authenticator will store newMinPINLength = 16 and return ```CTAP2_OK.```
+Authenticator will store newMinPINLength = 16 and return ```CTAP2_OK```.
