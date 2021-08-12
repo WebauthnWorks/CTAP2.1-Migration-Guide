@@ -50,10 +50,10 @@ This command sets the minimum PIN length in unicode code points to be enforced b
 The result of calling 
 ```
 HMAC-SHA-256(key, message)
-HMAC-SHA-256(pinUvAuthToken, mergeBuffers(32x0xff || 0x0d || uint8(subCommand) || subCommandParams))
+HMAC-SHA-256(pinUvAuthToken, mergeBuffers(32x0xFF || 0x0d || uint8(subCommand) || subCommandParams))
 ```
 
-Where 32x0xff = 32 zero bytes = 00000000000000000000000000000000
+Where 32x0xFF = 32 zero bytes = 0000000000000000000000000000000000000000000000000000000000000000
 
 
 We merge the arrayBuffers using _0x0D_ as the authenticator cmd, **authenticatorConfig**, and _0x02_ as the subCommand, **toggleAlwaysUV** . SubcommandParams not defined for 0x02 subCommand.
