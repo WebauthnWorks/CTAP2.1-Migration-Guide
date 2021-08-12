@@ -33,14 +33,14 @@ setMinPINLength			: 0x03
 
 #### Enable Enterprise Attestation (0x01):
 This *enableEnterpriseAttestation* subcommand is only implemented if the enterprise attestation feature is supported. No *subcommandParams* are used.
-If enterprise attestation, re-enables attestation feature and returns _CTAP2_OK_. Else, no action occurs and _CTAP2_OK_ returned.
+If enterprise attestation, re-enables attestation feature and returns _CTAP2_OK_. Else, no action occurs and _CTAP2_OK_ returned. Example 2.
 
 #### Always Require User Verification (0x02):
-This *toggleAlwaysUV* subcommand is only implemented if the Always Require User Verification feature is supported. No *subcommandParams* are used.
+This *toggleAlwaysUV* subcommand is only implemented if the Always Require User Verification feature is supported. No *subcommandParams* are used. Example 1.
 
 #### Setting a Minimum PIN Length (0x03):
 This *setMinPINLength* subcommand is only implemented if _setMinPINLength_ option ID is supported
-This command sets the minimum PIN length in unicode code points to be enforced by the authenticator while changing/setting up a ClientPIN.
+This command sets the minimum PIN length in unicode code points to be enforced by the authenticator while changing/setting up a ClientPIN. Example 3.
 
 
 ## pinUvAuthParam
@@ -74,39 +74,7 @@ For pinUvAuthParam, PinUvAuthProtocol 1 returns first 16 bytes of the HMAC outpu
 
 **!! All examples below use exclusively PinUvAuthProtocol 2 !!**
 
-## Example 1 - Enable Enterprise Attestation (0x01)
-Platform:
-```
-pinUvAuthParam = HMAC-SHA-256(sessionPuat, mergeBuffers(32x0xFF, new UInt8Array([0x0d, 0x01]) ) // emphasis on subcommand=0x01
-	       == 1879307eb5dd00ab4bac832e9174acbd2e981d04d45436811b533cc822c4a0fe
-	       
-authenticatorConfig: {
-	'0x01': '0x01',
-	'0x03': '0x02',
-    	'0x04': '1879307eb5dd00ab4bac832e9174acbd2e981d04d45436811b533cc822c4a0fe'
-}
-
-ENCODED INPUT MAP:
-a301643078303103643078303204784031383739333037656235646430306162346261633833326539313734616362643265393831643034643435343336383131623533336363383232633461306665
-
-Payload = (authenticatorConfig command + input map + options) 
-	= (0x0d + encoded input map + options TODO) // Platform request payload
-
-PAYLOAD:
-0x0da301643078303103643078303204784031383739333037656235646430306162346261633833326539313734616362643265393831643034643435343336383131623533336363383232633461306665
-```
-
-Upon receipt of request, authenticator will either
-
-a) If the enterprise attestation feature is disabled, then re-enable the enterprise attestation feature and return _CTAP2_OK_.
-- Upon re-enabling the enterprise attestation feature, the authenticator will return an ep (enterprise) option id with
-the value of true in the _authenticatorGetInfo_ command response upon receipt of subsequent
-_authenticatorGetInfo_ commands. (todo add example)
-
-b)  Else (implying the enterprise attestation feature is enabled) take no action and return _CTAP2_OK_.
-
-
-## Example 2 - Toggling always UV (0x02)
+## Example 1 - Toggling always UV (0x02)
 Using the original *pinUvAuthParam* which was generated with *0x02 subCommand*, we will generate a request to the authenticator to toggle always UV
 
 ```
@@ -139,6 +107,36 @@ CTAP1_ERR_INVALID_PARAMETER.
 	i) Invoke subcommand
 	ii) Return resulting status code as produced by subCommand (either _CTAP2_OK_ or _CTAP2_ERR_OPERATION_DENIED._)
 	
+## Example 2 - Enable Enterprise Attestation (0x01)
+Platform:
+```
+pinUvAuthParam = HMAC-SHA-256(sessionPuat, mergeBuffers(32x0xFF, new UInt8Array([0x0d, 0x01]) ) // emphasis on subcommand=0x01
+	       == 1879307eb5dd00ab4bac832e9174acbd2e981d04d45436811b533cc822c4a0fe
+	       
+authenticatorConfig: {
+	'0x01': '0x01',
+	'0x03': '0x02',
+    	'0x04': '1879307eb5dd00ab4bac832e9174acbd2e981d04d45436811b533cc822c4a0fe'
+}
+
+ENCODED INPUT MAP:
+a301643078303103643078303204784031383739333037656235646430306162346261633833326539313734616362643265393831643034643435343336383131623533336363383232633461306665
+
+Payload = (authenticatorConfig command + input map + options) 
+	= (0x0d + encoded input map + options TODO) // Platform request payload
+
+PAYLOAD:
+0x0da301643078303103643078303204784031383739333037656235646430306162346261633833326539313734616362643265393831643034643435343336383131623533336363383232633461306665
+```
+
+Upon receipt of request, authenticator will either
+
+a) If the enterprise attestation feature is disabled, then re-enable the enterprise attestation feature and return _CTAP2_OK_.
+- Upon re-enabling the enterprise attestation feature, the authenticator will return an ep (enterprise) option id with
+the value of true in the _authenticatorGetInfo_ command response upon receipt of subsequent
+_authenticatorGetInfo_ commands. (todo add example)
+
+b)  Else (implying the enterprise attestation feature is enabled) take no action and return _CTAP2_OK_.
 
 
 ## Example 3 - Setting a Minimum PIN Length (0x03)
