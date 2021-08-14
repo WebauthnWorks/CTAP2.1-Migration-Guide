@@ -6,7 +6,9 @@ You will need pinUvAuthParam. Please make sure you are familiar with pin protoco
 
 Do the exchange as specified in PinProtocol. We use the below value as a PinUvAuthToken test vector for authenticatorConfig in **Example 1**
 ```
-sessionPuat = 0125fecfd8bf3f679bd9ec221324baa74f3cade0314b4fba8029500a320612ad
+puat = '0125fecfd8bf3f679bd9ec221324baa74f3cade0314b4fba8029500a320612ad'
+sessionPuat = puat.slice(0,32)
+sessionPuat = 0125fecfd8bf3f679bd9ec221324baa7
 ```
 
 **We use 4 parameters to configure the authenticator:**
@@ -55,7 +57,7 @@ Where 32x0xFF = 32 zero bytes = 000000000000000000000000000000000000000000000000
 We merge the arrayBuffers using _0x0D_ as the authenticator cmd, **authenticatorConfig**, and _0x01_ as the subCommand, **toggleAlwaysUV** . SubcommandParams not defined for 0x01 subCommand.
 
 ```
-sessionPuat = 0125fecfd8bf3f679bd9ec221324baa74f3cade0314b4fba8029500a320612ad // key 
+sessionPuat = 0125fecfd8bf3f679bd9ec221324baa7 // key 
 
 pinUvAuthParam = HMAC-SHA-256(key = sessionPuat, message = message)
 pinUvAuthParam = HMAC-SHA-256(key, mergeBuffers(32x0xff || 0x0d || uint8(subcommand) || subCommandParams)) //
@@ -177,7 +179,6 @@ Setting newMinPINLength value < 4 will result in error ```CTAP2_ERR_PIN_POLICY_V
 
 **Generating pinUvAuthParam**
 ```
-**TODO - not sure how to convert subCommandParams to uint8array for merging...**
 pinUvAuthParam = HMAC-SHA-256(sessionPuat, mergeBuffers(32x0xFF, new UInt8Array([0x0d, 0x03]), subCommandParams) // emphasis on subcommand = 0x03
 	       == 5996822955053057056c7a7572f3d84d60d1bea4e4c6d512146090a343d1a264
 ```
