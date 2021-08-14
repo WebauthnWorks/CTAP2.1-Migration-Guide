@@ -34,14 +34,14 @@ setMinPINLength			: 0x03
 ```
 
 #### Enable Enterprise Attestation (0x01):
-This *enableEnterpriseAttestation* subcommand is only implemented if the enterprise attestation feature is supported. No *subcommandParams* are used.
+This *enableEnterpriseAttestation* subcommand is only implemented if the enterprise attestation feature is supported. No *subcommandParams* are used. **[Example 1](#example-1---enable-enterprise-attestation-0x01)**.
 
 #### Always Require User Verification (0x02):
-This *toggleAlwaysUV* subcommand is only implemented if the Always Require User Verification feature is supported. No *subcommandParams* are used. _**Example 2**_.
+This *toggleAlwaysUV* subcommand is only implemented if the Always Require User Verification feature is supported. No *subcommandParams* are used. _**[Example 2](#example-2---toggling-always-uv-0x02)**_.
 
 #### Setting a Minimum PIN Length (0x03):
 This *setMinPINLength* subcommand is only implemented if _setMinPINLength_ option ID is supported
-This command sets the minimum PIN length in unicode code points to be enforced by the authenticator while changing/setting up a ClientPIN. **_Example 3_**.
+This command sets the minimum PIN length in unicode code points to be enforced by the authenticator while changing/setting up a ClientPIN. **[_Example 3_](#example-3---setting-a-minimum-pin-length-0x03)**.
 
 
 ## pinUvAuthParam
