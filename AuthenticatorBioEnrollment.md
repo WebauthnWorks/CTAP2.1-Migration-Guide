@@ -75,14 +75,13 @@ templateFriendlyName	: 0x02 // optional
 end
 
 #### Enable Enterprise Attestation (0x01):
-This *enableEnterpriseAttestation* subcommand is only implemented if the enterprise attestation feature is supported. No *subcommandParams* are used.
+This 
 
 #### Always Require User Verification (0x02):
-This *toggleAlwaysUV* subcommand is only implemented if the Always Require User Verification feature is supported. No *subcommandParams* are used. _**Example 2**_.
+This _**Example 2**_.
 
 #### Setting a Minimum PIN Length (0x03):
-This *setMinPINLength* subcommand is only implemented if _setMinPINLength_ option ID is supported
-This command sets the minimum PIN length in unicode code points to be enforced by the authenticator while changing/setting up a ClientPIN. **_Example 3_**.
+This  **_Example 3_**.
 
 
 ## pinUvAuthParam
