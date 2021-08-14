@@ -1,8 +1,8 @@
-# AuthenticatorBioEnrollment
+# AuthenticatorBioEnrollment (0x09)
 
 
   This command is used by the platform to provision/enumerate/delete bio enrollments in the authenticator. It is part of the authenticator API and is new to CTAP2.1. 
-
+- Authenticator MUST? return true in getInfo.option.bioEnroll when platform makes authenticatorGetInfo request to authenticator (fact check this)
 You will need pinUvAuthParam. Please make sure you are familiar with pin protocols. Read **Obtaining pinUvAuthParam** at https://github.com/WebAuthnWorks/CTAP2.1-Migration-Guide/blob/main/Protocol/PinProtocol/2.md
 
 Do the exchange as specified in PinProtocol. We use the below value as a PinUvAuthToken test vector for authenticatorConfig in **[Example 1](example-1)**
@@ -15,13 +15,16 @@ sessionPuat = 0125fecfd8bf3f679bd9ec221324baa7
 ## Platform Request
 
 AuthenticatorBioEnrollment keys ENUM: 
+
 ```
-	modality   		: 0x01 // optional
-	subCommand  		: 0x02 // optional
-	subCommandParams       	: 0x03 // optional
-	pinUvAuthProtocol       : 0x04 // optional
-	pinUvAuthParam 		: 0x05 // optional
-	getModality      	: 0x06 // optional
+	// All fields are optional
+
+	modality   		: 0x01 
+	subCommand  		: 0x02 
+	subCommandParams       	: 0x03 
+	pinUvAuthProtocol       : 0x04 
+	pinUvAuthParam 		: 0x05 
+	getModality      	: 0x06 
 ```
 
 The type of modalities supported are as under:
@@ -51,8 +54,23 @@ templateFriendlyName	: 0x02
 timeoutMilliseconds 	: 0x03
 ```
 
-## Platform Request
+## Authenticator Response
+```
+// All response fields are optional
+modality 				: 0x01
+fingerprintKind 			: 0x02
+maxCaptureSamplesRequiredForEnroll	: 0x03
+templateId				: 0x04
+lastEnrollSampleStatus			: 0x05
+remainingSamples			: 0x06
+templateInfos				: 0x07
+maxTemplateFriendlyName			: 0x08
+```
 
+```
+templateId		: 0x01 // required
+templateFriendlyName	: 0x02 // optional
+```
 
 end
 
@@ -100,127 +118,52 @@ For pinUvAuthParam, PinUvAuthProtocol 1 returns first 16 bytes of the HMAC outpu
 **!! All examples below use exclusively PinUvAuthProtocol 2 !!**
 
 ## Example 1 - Enable Enterprise Attestation (0x01)
-Using the above *pinUvAuthParam* which was generated with *0x01 subCommand*, platform will generate a request to the authenticator to toggle always UV
 
-**Generating pinUvAuthParam**
-```
-pinUvAuthParam = 66e4e667922def036d0cc065fa6429f8d94910a7848a6853c01db49d50a4c48a
-```
+Platform checks if authenticator supports BioEnrollment API, then sends authenticatorBioEnrollment(0x09) with enrollBegin(0x01) with supported modality, and check that response contains:
+            (a) templateId(0x04) - byte string, at least one byte long
+            (b) remainingSamples(0x06) - number, and above zero
+            (c) lastEnrollSampleStatus(0x05) - number, a valid BE status code
 
-**Generating and sending request**
+1. Platform sends authenticatorGetInfo (0x04) CMD to authenticator 
+2. Authenticator responds cborResponseStruct containing field (improve? remove?)
 ```
-authenticatorConfig = {
-	0x01: 0x01,
-	0x02: [], // platform default to [] if not set
-	0x03: 0x02,
-    	0x04': '66e4e667922def036d0cc065fa6429f8d94910a7848a6853c01db49d50a4c48a'
+0x04: {
+... // present options
+'bioEnrollment': true
 }
-
-PAYLOAD: 0da401010280030204784036366534653636373932326465663033366430636330363566613634323966386439343931306137383438613638353363303164623439643530613463343861
-
-REQUEST = authenticatorConfig command + input map
-
-CMD: 0x0D
-REQUEST: 0x0da401010280030204784036366534653636373932326465663033366430636330363566613634323966386439343931306137383438613638353363303164623439643530613463343861
 ```
 
-Upon receipt of request, authenticator will either:
-
-a) If the enterprise attestation feature is disabled, then re-enable the enterprise attestation feature and return _CTAP2_OK_.
-- Upon re-enabling the enterprise attestation feature, the authenticator will return an ep (enterprise) option id with
-the value of true in the _authenticatorGetInfo_ command response upon receipt of subsequent
-_authenticatorGetInfo_ commands.
-
-**OR**
-
-b)  Else (implying the enterprise attestation feature is already enabled) take no action and return _CTAP2_OK_.
-
-
-## Example 2 - Toggling always UV (0x02)
-Platform request:
-
-**Generating pinUvAuthParam**
+3. Platform checks that bioEnrollment is true
+4. Platform generates pinUVAuthParam:
 ```
-pinUvAuthParam = HMAC-SHA-256(sessionPuat, mergeBuffers(32x0xFF, new UInt8Array([0x0d, 0x02]) ) // emphasis on subcommand=0x02
-	       == bd303acf547f2fd391b8f39e719c2f14bd7e71f7b1c710f862832c74b9569d15
-```
-
-**Generating and sending request**
-```     
-authenticatorConfig = {
-	0x01: 0x02,
-	0x03: 0x02,
-    	0x04: 'bd303acf547f2fd391b8f39e719c2f14bd7e71f7b1c710f862832c74b9569d15'
+puat = '0125fecfd8bf3f679bd9ec221324baa7'
+modality: 0x01 // fingerprint
+subCommand: 0x01 // enroll begin
+subCommandParams = {
+	0x03: 10000 // subCommandParam_bytes = CBOR encoding of subCommandParams ??????????? 
 }
+ENCODED: "a103192710" 
 
-PAYLOAD: 0da4010202f4030204784062643330336163663534376632666433393162386633396537313963326631346264376537316637623163373130663836323833326337346239353639643135
+pinUvAuthParam = generateHMACSHA256(key=puat, msg)
 
-REQUEST = authenticatorConfig command + input map
+msg = mergeBuffers( UInt8Array[modality, subCommand], subCommandParam_bytes );	
+msg = mergeBuffers( UInt8Array[0x01, 0x01], subCommandParamBytes ); // 0101a103192710
 
-CMD: 0x0D
-REQUEST: 0x0da4010202f4030204784062643330336163663534376632666433393162386633396537313963326631346264376537316637623163373130663836323833326337346239353639643135
+pinUvAuthParam = 'd16e35ea553d0c93a4a7cac7ef3801ce1ba386e38ad557fb29b63d0bee8be79c'
 ```
 
-Upon receipt of request, authenticator will either:
-
-a) If alwaysUv feature is disabled
-
-- If the makeCredUvNotRqd option ID is present and true, then disable the makeCredUvNotRqd feature and set the makeCredUvNotRqd option ID to false or absent.
-	
-- Enable the alwaysUv feature and return ```CTAP2_OK```.
-	
-**OR**
-	
-b) Else, implying alwaysUv feature is enabled
-
-- If disabling feature supported,
-	
-	- Set the makeCredUvNotRqd option ID to its default.
-		
-	- Disable alwaysUv feature and return ```CTAP2_OK``` 
-		
--  OTHERWISE, disabling feature not supported, 
-	
-	-  return ```CTAP2_ERR_OPERATION_DENIED```
-
-	
-
-## Example 3 - Setting a Minimum PIN Length (0x03)
-subCommandParams are defined as follows (note in example 1 and 2 there were no subcommandParams). All subcommandParams are optional.
+5. Platform generates request
 ```
-newMinPINLength: 0x01
-minPinLengthRPIDs: 0x02
-forceChangePin: 0x03
+payload = { modality, subCommand, subCommandParams, pinUvAuthProtocol=2, pinUvAuthParam }
+payload = { 0x01: 0x01, 0x02: 0x01, 0x03: subCommandParams, 0x04: 0x02, 0x05: pinUvAuthParam }
+
+PAYLOAD:
+a50101020103a103192710040205784064313665333565613535336430633933613461376361633765663338303163653162613338366533386164353537666232396236336430626565386265373963
+
+CMD: 0x09
+
+REQUEST: 0x09a50101020103a103192710040205784064313665333565613535336430633933613461376361633765663338303163653162613338366533386164353537666232396236336430626565386265373963
 ```
 
-**Define subCommandParams**
-```
-subCommandParams = { '0x01' : 16 } 
-```
-We have set newMinPINLength to an arbitrary number >= 4, in this example we have picked 16
-Setting newMinPINLength value < 4 will result in error ```CTAP2_ERR_PIN_POLICY_VIOLATION```.
 
-**Generating pinUvAuthParam**
-```
-pinUvAuthParam = HMAC-SHA-256(sessionPuat, mergeBuffers(32x0xFF, new UInt8Array([0x0d, 0x03]), subCommandParams) // emphasis on subcommand = 0x03
-	       == 5996822955053057056c7a7572f3d84d60d1bea4e4c6d512146090a343d1a264
-```
 
-**Generating and send sending request**
-```
-authenticatorConfig = {
-	0x01 : 0x03,
-	0x02 : subCommandParams,
-	0x03 : 0x02,
-    	0x04 : '5996822955053057056c7a7572f3d84d60d1bea4e4c6d512146090a343d1a264'
-}
-
-PAYLOAD: 0da4010202a10110030204784035393936383232393535303533303537303536633761373537326633643834643630643162656134653463366435313231343630393061333433643161323634
-
-REQUEST = authenticatorConfig command + input map
-
-CMD: 0x0D
-REQUEST: 0x0da4010202a10110030204784035393936383232393535303533303537303536633761373537326633643834643630643162656134653463366435313231343630393061333433643161323634
-```
-
-Authenticator will store newMinPINLength = 16 and return ```CTAP2_OK```.
