@@ -1,6 +1,7 @@
 # AuthenticatorBioEnrollment
 
-This command is used to configure various authenticator features through the use of its subcommands. It is part of the authenticator API and is new to CTAP2.1. 
+
+  This command is used by the platform to provision/enumerate/delete bio enrollments in the authenticator. It is part of the authenticator API and is new to CTAP2.1. 
 
 You will need pinUvAuthParam. Please make sure you are familiar with pin protocols. Read **Obtaining pinUvAuthParam** at https://github.com/WebAuthnWorks/CTAP2.1-Migration-Guide/blob/main/Protocol/PinProtocol/2.md
 
@@ -11,27 +12,49 @@ sessionPuat = puat.slice(0,32)
 sessionPuat = 0125fecfd8bf3f679bd9ec221324baa7
 ```
 
-**We use 4 parameters to configure the authenticator:**
+## Platform Request
 
-AuthenticatorConfig keys ENUM: 
+AuthenticatorBioEnrollment keys ENUM: 
 ```
-	subCommand   		: 0x01 // required
-	subCommandParams 	: 0x02 // optional
-	pinUvAuthProtocol       : 0x03 // optional
-	pinUvAuthParam       	: 0x04 // optional
+	modality   		: 0x01 // optional
+	subCommand  		: 0x02 // optional
+	subCommandParams       	: 0x03 // optional
+	pinUvAuthProtocol       : 0x04 // optional
+	pinUvAuthParam 		: 0x05 // optional
+	getModality      	: 0x06 // optional
 ```
-( Usage show in examples ctrl+f authenticatorConfig )
+
+The type of modalities supported are as under:
+```
+	fingerprint   		: 0x01 // optional
+```
 
 
-## SubCommands:
+### SubCommands:
 
 Sub Commands ENUM:
 
 ```
-enableEnterpriseAttestation	: 0x01
-toggleAlwaysUv			: 0x02
-setMinPINLength			: 0x03
+enrollBegin			: 0x01
+enrollCaptureNextSample		: 0x02
+cancelCurrentEnrollment		: 0x03
+enumerateEnrollments		: 0x04
+setFriendlyName			: 0x05
+removeEnrollment		: 0x06
+getFingerprintSensorInfo	: 0x07
 ```
+
+SubCommandParams Fields:
+```
+templateId 		: 0x01
+templateFriendlyName	: 0x02
+timeoutMilliseconds 	: 0x03
+```
+
+## Platform Request
+
+
+end
 
 #### Enable Enterprise Attestation (0x01):
 This *enableEnterpriseAttestation* subcommand is only implemented if the enterprise attestation feature is supported. No *subcommandParams* are used.
