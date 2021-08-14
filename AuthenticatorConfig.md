@@ -1,8 +1,8 @@
 # AuthenticatorConfig 0x06
 
-This command is used to configure various authenticator features through the use of its subcommands. It is part of the authenticator API and is new to CTAP2.1. 
+This command is used to configure various authenticator features using its subcommands. It is part of the authenticator API and is new to CTAP2.1. 
 
-You will need pinUvAuthParam. Please make sure you are familiar with pin protocols. Read **Obtaining pinUvAuthParam** at https://github.com/WebAuthnWorks/CTAP2.1-Migration-Guide/blob/main/Protocol/PinProtocol/2.md
+- You will need pinUvAuthParam. Please make sure you are familiar with pin protocols. Read **Obtaining pinUvAuthParam** at https://github.com/WebAuthnWorks/CTAP2.1-Migration-Guide/blob/main/Protocol/PinProtocol/2.md
 
 Do the exchange as specified in PinProtocol. We use the below value as a PinUvAuthToken test vector for authenticatorConfig in **Example 1**
 ```
@@ -77,6 +77,7 @@ For pinUvAuthParam, PinUvAuthProtocol 1 returns first 16 bytes of the HMAC outpu
 **!! All examples below use exclusively PinUvAuthProtocol 2 !!**
 
 ## Example 1 - Enable Enterprise Attestation (0x01)
+
 Using the above *pinUvAuthParam* which was generated with *0x01 subCommand*, platform will generate a request to the authenticator to toggle always UV
 
 **Generating pinUvAuthParam**
@@ -114,6 +115,7 @@ b)  Else (implying the enterprise attestation feature is already enabled) take n
 
 
 ## Example 2 - Toggling always UV (0x02)
+
 Platform request:
 
 **Generating pinUvAuthParam**
@@ -163,6 +165,7 @@ b) Else, implying alwaysUv feature is enabled
 	
 
 ## Example 3 - Setting a Minimum PIN Length (0x03)
+
 subCommandParams are defined as follows (note in example 1 and 2 there were no subcommandParams). All subcommandParams are optional.
 ```
 newMinPINLength: 0x01
