@@ -1,4 +1,4 @@
-# AuthenticatorConfig
+# AuthenticatorConfig 0x06
 
 This command is used to configure various authenticator features through the use of its subcommands. It is part of the authenticator API and is new to CTAP2.1. 
 
