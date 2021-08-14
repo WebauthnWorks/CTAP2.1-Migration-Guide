@@ -119,10 +119,15 @@ For pinUvAuthParam, PinUvAuthProtocol 1 returns first 16 bytes of the HMAC outpu
 ## Example 1 - Enrolling a fingerprint (0x01)
 
 - Platform checks if authenticator supports BioEnrollment API,
+
 - Platform gets pinUvAuthToken from the authenticator with the be permission.
+
 - Platform sends authenticatorBioEnrollment command with payload to begin enrollment
-- Authenticator on receiving such request performs procedures described in (4)
+
+- Authenticator on receiving such request performs procedures described in step 4 below
+
 - Platform sends authenticatorBioEnrollment command with different payload to capture next sample, continuing enrollment in a loop till remaining samples to capture is zero or authenticator errors out with unrecoverable error or platform wants to cancel current enrollment:
+
 - Authenticator on receiving such request performs following procedures.
 
 Platform checks if authenticator supports BioEnrollment API, then sends authenticatorBioEnrollment(0x09) with enrollBegin(0x01) with supported modality, and check that response contains:
