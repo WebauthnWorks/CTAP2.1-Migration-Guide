@@ -151,7 +151,7 @@ For pinUvAuthParam, PinUvAuthProtocol 1 returns first 16 bytes of the HMAC outpu
 - Platform sends authenticatorBioEnrollment command with different payload to capture next sample, continuing enrollment in a loop till remaining samples to capture is zero or authenticator errors out with unrecoverable error or platform wants to cancel current enrollment:
 
 - Authenticator on receiving such request performs following procedures.
-
+<br/><br/>
 1. Platform checks if authenticator supports BioEnrollment API, then sends authenticatorBioEnrollment(0x09) with enrollBegin(0x01) with supported modality, and check that response contains:
 	1. **templateId(0x04)** - byte string, at least one byte long
 
@@ -159,7 +159,7 @@ For pinUvAuthParam, PinUvAuthProtocol 1 returns first 16 bytes of the HMAC outpu
 
 	3. **lastEnrollSampleStatus(0x05)** - number, a valid BE status code
 
-2. Platform sends authenticatorGetInfo (0x04) CMD to authenticator 
+2. Platform sends **authenticatorGetInfo (0x04)** CMD to authenticator 
 3. Authenticator responds cborResponseStruct containing field (improve? remove?)
 ```
 0x04: {
@@ -169,6 +169,7 @@ For pinUvAuthParam, PinUvAuthProtocol 1 returns first 16 bytes of the HMAC outpu
 ```
 
 4. Platform checks that bioEnrollment is true
+
 5. Platform generates pinUVAuthParam:
 ```
 puat = '0125fecfd8bf3f679bd9ec221324baa7'
