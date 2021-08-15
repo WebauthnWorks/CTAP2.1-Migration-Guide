@@ -85,20 +85,22 @@ Indicates the type of fingerprint sensor. For touch type sensor, its value is 1.
 Indicates the maximum good samples required for enrollment
 
 **templateId:**
-Template Identifier. Map defined as: 
-```
-templateId		: 0x01 // required
-templateFriendlyName	: 0x02 // optional
-```
+Template Identifier. 
 
 **lastEnrollSampleStatus:**
-Last enrollment sample status
+Last enrollment sample status. Values between 0x00 and 0x0E.
+See manual for full reference.
 
 **remainingSamples:**
 Number of more sample required for enrollment to complete
 
 **templateInfos:**
-Array of templateInfo’s
+Array of templateInfos. 
+templateInfo:
+```
+templateId		: 0x01 // required
+templateFriendlyName	: 0x02 // optional
+```
 
 **maxTemplateFriendlyName:**
 Indicates the maximum number of bytes the authenticator will accept as a templateFriendlyName.
@@ -146,7 +148,7 @@ For pinUvAuthParam, PinUvAuthProtocol 1 returns first 16 bytes of the HMAC outpu
 
 - Platform sends authenticatorBioEnrollment command with payload to begin enrollment
 
-- Authenticator on receiving such request performs procedures described in step 4 below
+- Authenticator on receiving such request performs procedures described in step 5 below
 
 - Platform sends authenticatorBioEnrollment command with different payload to capture next sample, continuing enrollment in a loop till remaining samples to capture is zero or authenticator errors out with unrecoverable error or platform wants to cancel current enrollment:
 
@@ -172,7 +174,7 @@ puat = '0125fecfd8bf3f679bd9ec221324baa7'
 modality: 0x01 // fingerprint
 subCommand: 0x01 // enroll begin
 subCommandParams = {
-	0x03: 10000 // subCommandParam_bytes = CBOR encoding of subCommandParams ??????????? 
+	0x03: 10000 // 10000ms timeout subCommandParam_bytes = CBOR encoding of subCommandParams ??????????? 
 }
 ENCODED: "a103192710" 
 
@@ -187,7 +189,13 @@ pinUvAuthParam = 'd16e35ea553d0c93a4a7cac7ef3801ce1ba386e38ad557fb29b63d0bee8be7
 4. Platform generates bioEnrollment request
 ```
 payload = { modality, subCommand, subCommandParams, pinUvAuthProtocol=2, pinUvAuthParam }
-payload = { 0x01: 0x01, 0x02: 0x01, 0x03: subCommandParams, 0x04: 0x02, 0x05: pinUvAuthParam }
+payload = { 
+	0x01: 0x01, 
+	0x02: 0x01, 
+	0x03: subCommandParams, 
+	0x04: 0x02, 
+	0x05: pinUvAuthParam 
+}
 
 PAYLOAD:
 a50101020103a103192710040205784064313665333565613535336430633933613461376361633765663338303163653162613338366533386164353537666232396236336430626565386265373963
@@ -210,5 +218,33 @@ templateId 		: 0x04 // template identifier of the new template being enrolled.
 lastEnrollSampleStatus	: 0x05 // Status of enrollment of last sample.
 remainingSamples 	: 0x06 // Number of sample remaining to complete the enrollment.
 ```
+
+e.g.,
+```
+response = {
+	0x04	:	0x01 // arbitrary value for example
+	0x05	:	0x00 // CTAP2_ENROLL_FEEDBACK_FP_GOOD -- good fingerprint capture
+	0x06	:	0x01 // arbitrary value for example
+}
+ENCODED: a3040105000601
+```
+
+6. Platform sends authenticatorBioEnrollment command with following parameters to continue enrollment in a loop till remainingSamples is zero or authenticator errors out with unrecoverable error or platform wants to cancel current enrollment:
+
+	1. Platform sends authenticatorBioEnrollment command with following parameters
+	```
+	modality: 0x01 // fingerprint
+	subCommand: 0x02 // subCommand is now enrollCaptureNextSample
+	subCommandParams = {
+		0x01: 0x01 // taken from templatedId in response
+		0x03: 10000 // 10000ms timeout subCommandParam_bytes = CBOR encoding of subCommandParams ??????????? 
+	}
+	subCommandParamBytes (encoded) = a2010103192710
+	
+	pinUvAuthParam = generateHMACSHA256(key=puat, msg) // puat=0125fecfd8bf3f679bd9ec221324baa7
+		   msg = mergeBuffers( UInt8Array[0x01, 0x02], subCommandParamBytes );
+	pinUvAuthParam (encoded) = 0102a2010103192710 
+	
+	payload = { 0x01: 0x01, 0x02: 0x02, 0x03: subCommandParams, 0x04: 0x02, 0x05: pinUvAuthParam }
 
 
