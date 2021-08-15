@@ -154,7 +154,7 @@ For pinUvAuthParam, PinUvAuthProtocol 1 returns first 16 bytes of the HMAC outpu
 <br/><br/>
 1. 
 	1.  Platform checks if authenticator supports BioEnrollment API by sending **authenticatorGetInfo (0x04)** CMD. See [authenticatorGetInfo guide]
-	- Authenticator responds with cborResponseStruct containing field ```bioEnrollment: true```. 
+		- Authenticator responds with cborResponseStruct containing field ```bioEnrollment: true```. 
 
 	2. Platform then sends **authenticatorBioEnrollment(0x09)** with **enrollBegin(0x01)** with supported modality, and check that response contains:
 ```
@@ -164,8 +164,9 @@ For pinUvAuthParam, PinUvAuthProtocol 1 returns first 16 bytes of the HMAC outpu
 
 	3. **lastEnrollSampleStatus(0x05)** - number, a valid BE status code
 ```
+2. Platform gets pinUvAuthToken from the authenticator with the be permission. TODO
 
-2. Platform generates pinUVAuthParam:
+3. Platform generates pinUVAuthParam:
 ```
 puat = '0125fecfd8bf3f679bd9ec221324baa7'
 modality: 0x01 // fingerprint
@@ -183,7 +184,7 @@ msg = mergeBuffers( UInt8Array[0x01, 0x01], subCommandParamBytes ); // 0101a1031
 pinUvAuthParam = 'd16e35ea553d0c93a4a7cac7ef3801ce1ba386e38ad557fb29b63d0bee8be79c'
 ```
 
-3. Platform generates bioEnrollment request
+4. Platform generates bioEnrollment request
 ```
 payload = { modality, subCommand, subCommandParams, pinUvAuthProtocol=2, pinUvAuthParam }
 payload = { 0x01: 0x01, 0x02: 0x01, 0x03: subCommandParams, 0x04: 0x02, 0x05: pinUvAuthParam }
@@ -195,7 +196,7 @@ CMD: 0x09
 
 REQUEST: 0x09a50101020103a103192710040205784064313665333565613535336430633933613461376361633765663338303163653162613338366533386164353537666232396236336430626565386265373963
 ```
-4. Authenticator follows process:
+5. Authenticator follows process:
 	1. Authenticator cancels any unfinished ongoing enrollment.
 	
 	2. Authenticator generates templateId for new enrollment.
