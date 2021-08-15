@@ -163,7 +163,7 @@ msg = mergeBuffers( UInt8Array[0x01, 0x01], subCommandParamBytes ); // 0101a1031
 pinUvAuthParam = 'd16e35ea553d0c93a4a7cac7ef3801ce1ba386e38ad557fb29b63d0bee8be79c'
 ```
 
-5. Platform generates request
+5. Platform generates bioEnrollment request
 ```
 payload = { modality, subCommand, subCommandParams, pinUvAuthProtocol=2, pinUvAuthParam }
 payload = { 0x01: 0x01, 0x02: 0x01, 0x03: subCommandParams, 0x04: 0x02, 0x05: pinUvAuthParam }
@@ -175,6 +175,19 @@ CMD: 0x09
 
 REQUEST: 0x09a50101020103a103192710040205784064313665333565613535336430633933613461376361633765663338303163653162613338366533386164353537666232396236336430626565386265373963
 ```
+6. 
+- Authenticator cancels any unfinished ongoing enrollment.
 
+- Authenticator generates templateId for new enrollment.
+
+- Authenticator sends the command to the sensor to capture the sample.
+
+- Authenticator returns authenticatorBioEnrollment response with following parameters
+
+```
+templateId (0x04): template identifier of the new template being enrolled.
+lastEnrollSampleStatus (0x05) : Status of enrollment of last sample.
+remainingSamples (0x06) : Number of sample remaining to complete the enrollment.
+```
 
 
