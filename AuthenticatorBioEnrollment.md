@@ -5,6 +5,12 @@
 - Authenticator MUST? return true in getInfo.option.bioEnroll when platform makes authenticatorGetInfo request to authenticator (fact check this)
 You will need pinUvAuthParam. Please make sure you are familiar with pin protocols. Read **Obtaining pinUvAuthParam** at https://github.com/WebAuthnWorks/CTAP2.1-Migration-Guide/blob/main/Protocol/PinProtocol/2.md
 
+- Platform Request
+	- SubCommands
+- Authenticator Response
+- Obtaining pinUvAuthParam
+- Examples
+
 Do the exchange as specified in PinProtocol. We use the below value as a PinUvAuthToken test vector for authenticatorConfig in **[Example 1](example-1)**
 ```
 puat = '0125fecfd8bf3f679bd9ec221324baa74f3cade0314b4fba8029500a320612ad'
@@ -54,6 +60,8 @@ templateFriendlyName	: 0x02
 timeoutMilliseconds 	: 0x03
 ```
 
+
+
 ## Authenticator Response
 ```
 // All response fields are optional
@@ -66,25 +74,38 @@ remainingSamples			: 0x06
 templateInfos				: 0x07
 maxTemplateFriendlyName			: 0x08
 ```
+**modality:**
+The user verification modality.
 
+**fingerprintKind:**
+Indicates the type of fingerprint sensor. For touch type sensor, its value is 1. For swipe type sensor its value is 2.
+
+**maxCaptureSamplesRequiredForEnroll:**
+Indicates the maximum good samples required for enrollment
+
+**templateId:**
+Template Identifier. Map defined as: 
 ```
 templateId		: 0x01 // required
 templateFriendlyName	: 0x02 // optional
 ```
 
-end
+**lastEnrollSampleStatus:**
+Last enrollment sample status
 
-#### Enable Enterprise Attestation (0x01):
-This 
+**remainingSamples:**
+Number of more sample required for enrollment to complete
 
-#### Always Require User Verification (0x02):
-This _**Example 2**_.
+**templateInfos:**
+Array of templateInfo’s
 
-#### Setting a Minimum PIN Length (0x03):
-This  **_Example 3_**.
+**maxTemplateFriendlyName:**
+Indicates the maximum number of bytes the authenticator will accept as a templateFriendlyName.
 
 
-## pinUvAuthParam
+
+
+## Obtaining pinUvAuthParam
 The result of calling 
 ```
 HMAC-SHA-256(key, message)
@@ -185,9 +206,9 @@ REQUEST: 0x09a50101020103a103192710040205784064313665333565613535336430633933613
 - Authenticator returns authenticatorBioEnrollment response with following parameters
 
 ```
-templateId (0x04): template identifier of the new template being enrolled.
-lastEnrollSampleStatus (0x05) : Status of enrollment of last sample.
-remainingSamples (0x06) : Number of sample remaining to complete the enrollment.
+templateId 		: 0x04 // template identifier of the new template being enrolled.
+lastEnrollSampleStatus	: 0x05 // Status of enrollment of last sample.
+remainingSamples 	: 0x06 // Number of sample remaining to complete the enrollment.
 ```
 
 
