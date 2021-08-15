@@ -152,25 +152,20 @@ For pinUvAuthParam, PinUvAuthProtocol 1 returns first 16 bytes of the HMAC outpu
 
 - Authenticator on receiving such request performs following procedures.
 <br/><br/>
-1. Platform checks if authenticator supports BioEnrollment API, then sends authenticatorBioEnrollment(0x09) with enrollBegin(0x01) with supported modality, and check that response contains:
+1. 
+	1.  Platform checks if authenticator supports BioEnrollment API by sending **authenticatorGetInfo (0x04)** CMD. See [authenticatorGetInfo guide]
+	- Authenticator responds with cborResponseStruct containing field ```bioEnrollment: true```. 
+
+	2. Platform then sends **authenticatorBioEnrollment(0x09)** with **enrollBegin(0x01)** with supported modality, and check that response contains:
+```
 	1. **templateId(0x04)** - byte string, at least one byte long
 
 	2. **remainingSamples(0x06)** - number, and above zero
 
 	3. **lastEnrollSampleStatus(0x05)** - number, a valid BE status code
-
-2. Platform sends **authenticatorGetInfo (0x04)** CMD to authenticator 
-3. Authenticator responds cborResponseStruct containing field (improve? remove?)
-```
-0x04: {
-... // present options
-'bioEnrollment': true
-}
 ```
 
-4. Platform checks that bioEnrollment is true
-
-5. Platform generates pinUVAuthParam:
+2. Platform generates pinUVAuthParam:
 ```
 puat = '0125fecfd8bf3f679bd9ec221324baa7'
 modality: 0x01 // fingerprint
@@ -188,7 +183,7 @@ msg = mergeBuffers( UInt8Array[0x01, 0x01], subCommandParamBytes ); // 0101a1031
 pinUvAuthParam = 'd16e35ea553d0c93a4a7cac7ef3801ce1ba386e38ad557fb29b63d0bee8be79c'
 ```
 
-6. Platform generates bioEnrollment request
+3. Platform generates bioEnrollment request
 ```
 payload = { modality, subCommand, subCommandParams, pinUvAuthProtocol=2, pinUvAuthParam }
 payload = { 0x01: 0x01, 0x02: 0x01, 0x03: subCommandParams, 0x04: 0x02, 0x05: pinUvAuthParam }
@@ -200,7 +195,7 @@ CMD: 0x09
 
 REQUEST: 0x09a50101020103a103192710040205784064313665333565613535336430633933613461376361633765663338303163653162613338366533386164353537666232396236336430626565386265373963
 ```
-7. Authenticator follows process:
+4. Authenticator follows process:
 	1. Authenticator cancels any unfinished ongoing enrollment.
 	
 	2. Authenticator generates templateId for new enrollment.
