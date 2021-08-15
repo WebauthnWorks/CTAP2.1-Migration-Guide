@@ -10,8 +10,8 @@ You will need pinUvAuthParam. Please make sure you are familiar with pin protoco
 - [Platform Request](#platform-request)
 	- [SubCommands](#subcommands)
 - [Authenticator Response](#authenticator-response)
-- [Obtaining pinUvAuthParam](#example-1---enrolling-a-fingerprint-0x01)
-- [Examples](#example-1)
+- [Obtaining pinUvAuthParam](#obtaining-pinuvauthparam)
+- [Examples](#example-1---enrolling-a-fingerprint-0x01)
 
 Do the exchange as specified in PinProtocol. We use the below value as a PinUvAuthToken test vector for authenticatorConfig in **[Example 1](#example-1---enrolling-a-fingerprint-0x01)**
 ```
