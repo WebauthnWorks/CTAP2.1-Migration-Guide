@@ -7,11 +7,11 @@ Authenticator MUST? return true in getInfo.option.bioEnroll when platform makes 
 You will need pinUvAuthParam. Please make sure you are familiar with pin protocols. Read **Obtaining pinUvAuthParam** at https://github.com/WebAuthnWorks/CTAP2.1-Migration-Guide/blob/main/Protocol/PinProtocol/2.md
 
 
-- Platform Request
-	- SubCommands
-- Authenticator Response
-- Obtaining pinUvAuthParam
-- Examples
+- [Platform Request](platform-request)
+	- [SubCommands](subcommands)
+- [Authenticator Response](authenticator-response)
+- [Obtaining pinUvAuthParam](obtaining-pinuvauthparam)
+- [Examples](example-1)
 
 Do the exchange as specified in PinProtocol. We use the below value as a PinUvAuthToken test vector for authenticatorConfig in **[Example 1](example-1)**
 ```
