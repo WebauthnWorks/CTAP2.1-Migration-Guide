@@ -256,7 +256,7 @@ ENCODED: a3040105000601
 	```
 	response = {
 		0x05: 0x00 // good fingerprint capture
-		0x06: 0x00 // in step 5. the response contained 0x05: 0x01. As have captured the next sample, remaining samples has gone from 0 -> 1
+		0x06: 0x00 // in step 5. the response contained 0x05: 0x01. As authenticator captured the next sample, remaining samples has gone from 0 -> 1
 	}
 	ENCODED: a205000600
 	```
