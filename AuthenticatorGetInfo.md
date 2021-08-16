@@ -1,6 +1,5 @@
 # authenticatorGetInfo (0x04)
 
-TODO : link or copy and paste example
 
 Using this method, platforms can request that the authenticator report a list of its supported protocol versions and extensions, its AAGUID, and other aspects of its overall capabilities. Platforms should use this information to tailor their command parameters choices.
 
@@ -203,3 +202,4 @@ All options are in the form key-value pairs with string IDs and boolean values. 
 ```
 
 Note: You can also use the MDS3 Generator Tool to convert or build your Metadata statements.
+**TODO -- insert link**
