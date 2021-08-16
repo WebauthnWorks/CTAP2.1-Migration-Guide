@@ -36,7 +36,7 @@ getModality      	: 0x06
 
 The type of modalities supported are as under:
 ```
-	fingerprint   		: 0x01 // optional
+fingerprint   		: 0x01 // optional
 ```
 
 
