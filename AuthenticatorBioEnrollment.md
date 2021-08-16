@@ -13,7 +13,7 @@ You will need pinUvAuthParam. Please make sure you are familiar with pin protoco
 - [Obtaining pinUvAuthParam](#obtaining-pinuvauthparam)
 - [Examples](#example-1---enrolling-a-fingerprint-0x01)
 
-Do the exchange as specified in PinProtocol. We use the below value as a PinUvAuthToken test vector for authenticatorConfig in **[Example 1](#example-1---enrolling-a-fingerprint-0x01)**
+Do the exchange as specified in PinProtocol. We will use the below value as a PinUvAuthToken test vector for authenticatorConfig in **[Example 1](#example-1---enrolling-a-fingerprint-0x01)**
 ```
 puat = '0125fecfd8bf3f679bd9ec221324baa74f3cade0314b4fba8029500a320612ad'
 sessionPuat = puat.slice(0,32)
