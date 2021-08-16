@@ -4,7 +4,7 @@ This command is used to configure various authenticator features using its subco
 
 - You will need pinUvAuthParam. Please make sure you are familiar with pin protocols. Read **Obtaining pinUvAuthParam** at https://github.com/WebAuthnWorks/CTAP2.1-Migration-Guide/blob/main/Protocol/PinProtocol/2.md
 
-Do the exchange as specified in PinProtocol. We use the below value as a PinUvAuthToken test vector for authenticatorConfig in **[Example 1](#example-1---enable-enterprise-attestation-0x01)**
+Do the exchange as specified in PinProtocol. We use the bezlow value as a PinUvAuthToken test vector for authenticatorConfig in **[Example 1](#example-1---enable-enterprise-attestation-0x01)**
 ```
 puat = '0125fecfd8bf3f679bd9ec221324baa74f3cade0314b4fba8029500a320612ad'
 sessionPuat = puat[0:32]
@@ -15,10 +15,10 @@ sessionPuat = 0125fecfd8bf3f679bd9ec221324baa7
 
 AuthenticatorConfig keys ENUM: 
 ```
-	subCommand   		: 0x01 // required
-	subCommandParams 	: 0x02 // optional
-	pinUvAuthProtocol       : 0x03 // optional
-	pinUvAuthParam       	: 0x04 // optional
+subCommand   		: 0x01 // required
+subCommandParams 	: 0x02 // optional
+pinUvAuthProtocol       : 0x03 // optional
+pinUvAuthParam       	: 0x04 // optional
 ```
 ( Usage show in examples ctrl+f authenticatorConfig )
 
@@ -96,10 +96,10 @@ authenticatorConfig = {
 
 PAYLOAD: 0da401010280030204784036366534653636373932326465663033366430636330363566613634323966386439343931306137383438613638353363303164623439643530613463343861
 
-REQUEST = authenticatorConfig command + input map
+REQ = authenticatorConfig command + input map
 
 CMD: 0x0D
-REQUEST: 0x0da401010280030204784036366534653636373932326465663033366430636330363566613634323966386439343931306137383438613638353363303164623439643530613463343861
+REQ: 0x0da401010280030204784036366534653636373932326465663033366430636330363566613634323966386439343931306137383438613638353363303164623439643530613463343861
 ```
 
 Upon receipt of request, authenticator will either:
@@ -134,10 +134,10 @@ authenticatorConfig = {
 
 PAYLOAD: 0da4010202f4030204784062643330336163663534376632666433393162386633396537313963326631346264376537316637623163373130663836323833326337346239353639643135
 
-REQUEST = authenticatorConfig command + input map
+REQ = authenticatorConfig command + input map
 
 CMD: 0x0D
-REQUEST: 0x0da4010202f4030204784062643330336163663534376632666433393162386633396537313963326631346264376537316637623163373130663836323833326337346239353639643135
+REQ: 0x0da4010202f4030204784062643330336163663534376632666433393162386633396537313963326631346264376537316637623163373130663836323833326337346239353639643135
 ```
 
 Upon receipt of request, authenticator will either:
@@ -197,10 +197,10 @@ authenticatorConfig = {
 
 PAYLOAD: 0da4010202a10110030204784035393936383232393535303533303537303536633761373537326633643834643630643162656134653463366435313231343630393061333433643161323634
 
-REQUEST = authenticatorConfig command + input map
+REQ = authenticatorConfig command + input map
 
 CMD: 0x0D
-REQUEST: 0x0da4010202a10110030204784035393936383232393535303533303537303536633761373537326633643834643630643162656134653463366435313231343630393061333433643161323634
+REQ: 0x0da4010202a10110030204784035393936383232393535303533303537303536633761373537326633643834643630643162656134653463366435313231343630393061333433643161323634
 ```
 
 Authenticator will store newMinPINLength = 16 and return ```CTAP2_OK```.
