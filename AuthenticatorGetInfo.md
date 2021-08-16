@@ -11,14 +11,15 @@ The response for the following fields in authenticatorGetInfo are the same:
 
 
 ```
-Member Name		Data type		Required?
-===========================================================
-
-versions (0x01)		Array of strings	Required
-extensions (0x02)	Array of strings	Optional
-aaguid (0x03)		Byte String		Required
-options (0x04)		Map			Optional
-maxMsgSize (0x05)	Unsigned Integer	Optional
++-------------------------+------------------+-----------+
+|   Member Name    Value  |    Data type     | Required? |
++-------------------------+------------------+-----------+
+| versions         0x01   | Array of strings | Required  |
+| extensions       0x02   | Array of strings | Optional  |
+| aaguid           0x03   | Byte String      | Required  |
+| options          0x04   | Map              | Optional  |
+| maxMsgSize       0x05   | Unsigned Integer | Optional  |
++-------------------------+------------------+-----------+
 ```
 
 ## What's changed between CTAP2.0 and CTAP2.1?
@@ -32,24 +33,25 @@ MUST NOT contain duplicate values nor be empty if present.
 All the below new response fields are optional.
 
 ```
-Member Name		                  Data type		
-=========================================================
-
-maxCredentialCountInList (0x07)		  Unsigned Integer
-maxCredentialIdLength (0x08)		  Unsigned Integer
-transports (0x09)			  Array of strings
-algorithms (0x0A)			  Array of PublicKeyCredentialParameters
-maxSerializedLargeBlobArray (0x0B)	  Unsigned Integer
-forcePINChange (0x0C)			  Boolean
-minPINLength (0x0D)			  Unsigned Integer
-firmwareVersion (0x0E)			  Unsigned Integer
-maxCredBlobLength (0x0F)		  Unsigned Integer
-maxRPIDsForSetMinPINLength (0x10)	  Unsigned Integer
-preferredPlatformUvAttempts (0x11)	  Unsigned Integer. (CBOR major type 0)
-uvModality (0x12)			  Unsigned Integer. (CBOR major type 0)
-certifications (0x13)			  Map
-remainingDiscoverableCredentials (0x14)	  Unsigned Integer
-vendorPrototypeConfigCommands (0x15)	  Array of Unsigned Integers
++-----------------------------------------+------------------------------------------+
+|               Member Name               |                Required?                 |
++-----------------------------------------+------------------------------------------+
+| maxCredentialCountInList (0x07)         |   Unsigned Integer                       |
+| maxCredentialIdLength (0x08)            |   Unsigned Integer                       |
+| transports (0x09)                       |   Array of strings                       |
+| algorithms (0x0A)                       |   Array of PublicKeyCredentialParameters |
+| maxSerializedLargeBlobArray (0x0B)      |   Unsigned Integer                       |
+| forcePINChange (0x0C)                   |   Boolean                                |
+| minPINLength (0x0D)                     |   Unsigned Integer                       |
+| firmwareVersion (0x0E)                  |   Unsigned Integer                       |
+| maxCredBlobLength (0x0F)                |   Unsigned Integer                       |
+| maxRPIDsForSetMinPINLength (0x10)       |   Unsigned Integer                       |
+| preferredPlatformUvAttempts (0x11)      |   Unsigned Integer (CBOR major type 0)   |
+| uvModality (0x12)                       |   Unsigned Integer (CBOR major type 0)   |
+| certifications (0x13)                   |   Map                                    |
+| remainingDiscoverableCredentials (0x14) |   Unsigned Integer                       |
+| vendorPrototypeConfigCommands (0x15)    |   Array of Unsigned Integers             |
++-----------------------------------------+------------------------------------------+
 ```
 
 ## Options
