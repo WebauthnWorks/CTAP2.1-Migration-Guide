@@ -25,13 +25,13 @@ sessionPuat = 0125fecfd8bf3f679bd9ec221324baa7
 AuthenticatorBioEnrollment keys ENUM: 
 
 ```
-	// All fields are optional
-	modality   		: 0x01 
-	subCommand  		: 0x02 
-	subCommandParams       	: 0x03 
-	pinUvAuthProtocol       : 0x04 
-	pinUvAuthParam 		: 0x05 
-	getModality      	: 0x06 
+// All fields are optional
+modality   		: 0x01 
+subCommand  		: 0x02 
+subCommandParams       	: 0x03 
+pinUvAuthProtocol       : 0x04 
+pinUvAuthParam 		: 0x05 
+getModality      	: 0x06 
 ```
 
 The type of modalities supported are as under:
