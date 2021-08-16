@@ -34,7 +34,7 @@ pinUvAuthParam 		: 0x05
 getModality      	: 0x06 
 ```
 
-The type of modalities supported are as under:
+The modalities supported are:
 ```
 fingerprint   		: 0x01 // optional
 ```
@@ -79,7 +79,7 @@ maxTemplateFriendlyName			: 0x08
 The user verification modality.
 
 **fingerprintKind:**
-Indicates the type of fingerprint sensor. For touch type sensor, its value is 1. For swipe type sensor its value is 2.
+Indicates the type of fingerprint sensor. For touch type sensor, its value = 1. For swipe type sensor its value = 2.
 
 **maxCaptureSamplesRequiredForEnroll:**
 Indicates the maximum good samples required for enrollment
