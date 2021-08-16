@@ -246,5 +246,18 @@ ENCODED: a3040105000601
 	pinUvAuthParam (encoded) = 0102a2010103192710 
 	
 	payload = { 0x01: 0x01, 0x02: 0x02, 0x03: subCommandParams, 0x04: 0x02, 0x05: pinUvAuthParam }
-
+	encoded =
+	```
+	2. Authenticator on receiving such request performs following procedures.
+		- Validates parameters and pinUvAuthParam (see specs for full reference) -- if parameter is is invalid -- return error status code
+		- If fingerprint is already present on the sensor, authenticator waits for user to lift finger from the sensor.
+		- Authenticator sends the command to the sensor to capture the sample.
+		- Authenticator returns authenticatorBioEnrollment response with following parameters:
+	```
+	response = {
+		0x05: 0x00 // good fingerprint capture
+		0x06: 0x00 // in step 5. the response contained 0x05: 0x01. As have captured the next sample, remaining samples has gone from 0 -> 1
+	}
+	ENCODED: a205000600
+	```
 
