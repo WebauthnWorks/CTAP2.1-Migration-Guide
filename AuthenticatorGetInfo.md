@@ -12,7 +12,7 @@ The response for the following fields in authenticatorGetInfo are the same:
 
 ```
 +-------------------------+------------------+-----------+
-|   Member Name    Value  |    Data type     | Required? |
+|        Member Name      |    Data type     | Required? |
 +-------------------------+------------------+-----------+
 | versions         0x01   | Array of strings | Required  |
 | extensions       0x02   | Array of strings | Optional  |
