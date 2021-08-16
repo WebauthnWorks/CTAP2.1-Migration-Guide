@@ -60,34 +60,36 @@ All options are in the form key-value pairs with string IDs and boolean values. 
 
 ## What's the same in options?
 ```
-Option ID	        Default		
-==============================================
-
-plat			false
-rk			false
-clientPin		Not supported
-up			true
-uv			Not supported
++-----------+---------------+
+| Option ID |    Default    |
++-----------+---------------+
+| plat      | false         |
+| rk        | false         |
+| clientPin | Not supported |
+| up        | true          |
+| uv        | Not supported |
++-----------+---------------+
 ```
 
 ## What's new in options?
 ```
-Option ID	                Default		
-==============================================
-
-pinUvAuthToken			false
-noMcGaPermissionsWithClientPin	false
-largeBlobs			Not supported
-ep				true
-bioEnroll			Not Supported
-userVerificationMgmtPreview	Not Supported
-uvBioEnroll			false
-authnrCfg			Not supported
-uvAcfgNot			supported
-credMgmtNot			supported
-credentialMgmtPreview		Not supported
-setMinPINLengthNot 		supported
-makeCredUvNotRqdNot 		supported
-alwaysUvNot 			supported
++--------------------------------+---------------+
+|           Option ID            |    Default    |
++--------------------------------+---------------+
+| pinUvAuthToken                 | false         |
+| noMcGaPermissionsWithClientPin | false         |
+| largeBlobs                     | Not supported |
+| ep                             | true          |
+| bioEnroll                      | Not Supported |
+| userVerificationMgmtPreview    | Not Supported |
+| uvBioEnroll                    | false         |
+| authnrCfg                      | Not supported |
+| uvAcfgNot                      | supported     |
+| credMgmtNot                    | supported     |
+| credentialMgmtPreview          | Not supported |
+| setMinPINLengthNot             | supported     |
+| makeCredUvNotRqdNot            | supported     |
+| alwaysUvNot                    | supported     |
++--------------------------------+---------------+
 ```
 
