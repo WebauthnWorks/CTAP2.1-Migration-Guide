@@ -2,7 +2,7 @@
 
 This command is used to configure various authenticator features using its subcommands. It is part of the authenticator API and is new to CTAP2.1. 
 
-- You will need pinUvAuthParam. Please make sure you are familiar with pin protocols. Read **Obtaining pinUvAuthParam** at https://github.com/WebAuthnWorks/CTAP2.1-Migration-Guide/blob/main/Protocol/PinProtocol/2.md
+- You will need pinUvAuthParam. Please make sure you are familiar with pin protocols. Read the [obtaining pinUvAuthParam](../Protocol/PinProtocol/2.md) guide.
 
 Do the exchange as specified in PinProtocol. We use the bezlow value as a PinUvAuthToken test vector for authenticatorConfig in **[Example 1](#example-1---enable-enterprise-attestation-0x01)**
 ```
