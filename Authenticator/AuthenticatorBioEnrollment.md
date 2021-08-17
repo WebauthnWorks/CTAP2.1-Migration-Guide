@@ -4,8 +4,10 @@
 This command is used by the platform to provision/enumerate/delete bio enrollments in the authenticator. It is part of the authenticator API and is new to CTAP2.1. 
 
 Authenticator must return ```bioEnroll: true``` in options object field, when platform makes authenticatorGetInfo request to authenticator. See the [authenticatorGetInfo intro](AuthenticatorGetInfo.md).
-You will need pinUvAuthParam. Please make sure you are familiar with pin protocols. Read the [obtaining pinUvAuthParam](../Protocol/PinProtocol/2.md) guide.
 
+Please make sure you are familiar with pin protocols as it is needed for pinUvAuthParam. Read the [obtaining pinUvAuthParam](../Protocol/PinProtocol/2.md) guide.
+
+<br/>
 
 - [Platform Request](#platform-request)
 	- [SubCommands](#subcommands)
@@ -13,13 +15,8 @@ You will need pinUvAuthParam. Please make sure you are familiar with pin protoco
 - [Obtaining pinUvAuthParam](#obtaining-pinuvauthparam)
 - [Examples](#example-1---enrolling-a-fingerprint-0x01)
 
-Do the exchange as specified in PinProtocol. We will use the below value as a PinUvAuthToken test vector for authenticatorConfig in **[Example 1](#example-1---enrolling-a-fingerprint-0x01)**
-```
-puat = '0125fecfd8bf3f679bd9ec221324baa74f3cade0314b4fba8029500a320612ad'
-sessionPuat = puat[0:32]
-sessionPuat = 0125fecfd8bf3f679bd9ec221324baa7
-```
-<br/><br/>
+<br/>
+
 ## Platform Request
 
 AuthenticatorBioEnrollment keys ENUM: 
@@ -89,7 +86,7 @@ Template Identifier.
 
 **lastEnrollSampleStatus:**
 Last enrollment sample status. Values between 0x00 and 0x0E.
-[View authenticatorBioEnrollment specs for full reference.](https://fidoalliance.org/specs/fido-v2.1-ps-20210615/fido-client-to-authenticator-protocol-v2.1-ps-20210615.html#authenticatorBioEnrollment)
+[View authenticatorBioEnrollment specs](https://fidoalliance.org/specs/fido-v2.1-ps-20210615/fido-client-to-authenticator-protocol-v2.1-ps-20210615.html#authenticatorBioEnrollment) for reference.
 
 **remainingSamples:**
 Number of more sample required for enrollment to complete
@@ -109,6 +106,14 @@ Indicates the maximum number of bytes the authenticator will accept as a templat
 
 <br/><br/>
 ## Obtaining pinUvAuthParam
+
+Do the exchange as specified in PinProtocol. We will use the below value as a PinUvAuthToken test vector for authenticatorConfig in **[Example 1](#example-1---enrolling-a-fingerprint-0x01)**
+```
+puat = '0125fecfd8bf3f679bd9ec221324baa74f3cade0314b4fba8029500a320612ad'
+sessionPuat = puat[0:32]
+sessionPuat = 0125fecfd8bf3f679bd9ec221324baa7
+```
+
 The result of calling 
 ```
 HMAC-SHA-256(key, message)
@@ -144,7 +149,7 @@ For pinUvAuthParam, PinUvAuthProtocol 1 returns first 16 bytes of the HMAC outpu
 
 - Platform checks if authenticator supports BioEnrollment API,
 
-- Platform gets pinUvAuthToken from the authenticator with the be permission.
+- Platform gets pinUvAuthToken from the authenticator with the [be permission](../Protocol/PinProtocol/2.md/#get-pinuvauthtoken-with-permissions)
 
 - Platform sends authenticatorBioEnrollment command with payload to begin enrollment
 
@@ -155,7 +160,7 @@ For pinUvAuthParam, PinUvAuthProtocol 1 returns first 16 bytes of the HMAC outpu
 - Authenticator on receiving such request performs following procedures.
 <br/><br/>
 1. 
-	1.  Platform checks if authenticator supports BioEnrollment API by sending **authenticatorGetInfo (0x04)** CMD. See [authenticatorGetInfo guide]
+	1.  Platform checks if authenticator supports BioEnrollment API by sending **authenticatorGetInfo (0x04)** CMD. See [authenticatorGetInfo intro](AuthenticatorGetInfo.md).
 		- Authenticator responds with cborResponseStruct containing field ```bioEnrollment: true```. 
 
 2. Platform gets pinUvAuthToken from the authenticator with the _**be**_ permission. TODO
