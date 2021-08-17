@@ -112,7 +112,7 @@ Indicates the maximum number of bytes the authenticator will accept as a templat
 The result of calling 
 ```
 HMAC-SHA-256(key, message)
-HMAC-SHA-256(pinUvAuthToken, mergeBuffers(32x0xFF || 0x0d || (subCommand) || subCommandParams))
+HMAC-SHA-256(pinUvAuthToken, mergeBuffers(32x0xFF || 0x0D || (subCommand) || subCommandParams))
 ```
 
 Where 32x0xFF = 32 zero bytes = 0000000000000000000000000000000000000000000000000000000000000000
@@ -124,9 +124,9 @@ We merge the arrayBuffers using _0x0D_ as the authenticator cmd, **authenticator
 sessionPuat = 0125fecfd8bf3f679bd9ec221324baa7 // key 
 
 pinUvAuthParam = HMAC-SHA-256(key = sessionPuat, message = message)
-pinUvAuthParam = HMAC-SHA-256(key, mergeBuffers(32x0xff || 0x0d || (subcommand) || subCommandParams)) //
+pinUvAuthParam = HMAC-SHA-256(key, mergeBuffers(32x0xFF || 0x0D || (subcommand) || subCommandParams)) //
 
-message = mergeBuffers(32x0xFF, ([0x0d, 0x01]) )
+message = mergeBuffers(32x0xFF || ([0x0D, 0x01]) )
 
 
 pinUvAuthParam  = HMAC-SHA-256(sessionPuat, message)
@@ -172,8 +172,8 @@ ENCODED: "a103192710"
 
 pinUvAuthParam = generateHMACSHA256(key=puat, msg)
 
-msg = mergeBuffers( [modality, subCommand], subCommandParam_bytes );	
-msg = mergeBuffers( [0x01, 0x01], subCommandParamBytes ); // 0101a103192710
+msg = mergeBuffers( [modality, subCommand] || subCommandParam_bytes );	
+msg = mergeBuffers( [0x01, 0x01] || subCommandParamBytes ); // 0101a103192710
 
 pinUvAuthParam = 'd16e35ea553d0c93a4a7cac7ef3801ce1ba386e38ad557fb29b63d0bee8be79c'
 ```
@@ -234,7 +234,7 @@ ENCODED: a3040105000601
 	subCommandParamBytes (encoded) = a2010103192710
 	
 	pinUvAuthParam = generateHMACSHA256(key=puat, msg) // puat=0125fecfd8bf3f679bd9ec221324baa7
-		   msg = mergeBuffers( [0x01, 0x02], subCommandParamBytes );
+		   msg = mergeBuffers( [0x01, 0x02] || subCommandParamBytes );
 	pinUvAuthParam (encoded) = 0102a2010103192710 
 	
 	payload = { 0x01: 0x01, 0x02: 0x02, 0x03: subCommandParams, 0x04: 0x02, 0x05: pinUvAuthParam }
