@@ -11,10 +11,10 @@ sessionPuat = 0125fecfd8bf3f679bd9ec221324baa7
 
 See:
 
-- [Example 1 - Getting Credentials Metadata]
-- [Example 2 - Enumerating RPs]
-- [Example 3 - Enumerating Credentials for an RP]
-- [Example 4 - DeleteCredential]
+- [Example 1 - Getting Credentials Metadata](#example-1---getting-credentials-metadata)
+- [Example 2 - Enumerating RPs](#example-2---enumerating-rps)
+- [Example 3 - Enumerating Credentials for an RP](#example-3---enumerating-credentials-for-an-rp)
+- [Example 4 - DeleteCredential](#example-4---deletecredential)
 
 It takes the following input parameters:
 
