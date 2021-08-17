@@ -3,8 +3,8 @@
 
 This command is used by the platform to provision/enumerate/delete bio enrollments in the authenticator. It is part of the authenticator API and is new to CTAP2.1. 
 
-Authenticator must return ```bioEnroll: true``` in options object field, when platform makes authenticatorGetInfo request to authenticator. See [authenticatorGetInfo](https://github.com/WebAuthnWorks/CTAP2.1-Migration-Guide/blob/stefan-auth/AuthenticatorGetInfo.md) section.
-You will need pinUvAuthParam. Please make sure you are familiar with pin protocols. Read **Obtaining pinUvAuthParam** at https://github.com/WebAuthnWorks/CTAP2.1-Migration-Guide/blob/main/Protocol/PinProtocol/2.md
+Authenticator must return ```bioEnroll: true``` in options object field, when platform makes authenticatorGetInfo request to authenticator. See the [authenticatorGetInfo intro](AuthenticatorGetInfo.md).
+You will need pinUvAuthParam. Please make sure you are familiar with pin protocols. Read the [obtaining pinUvAuthParam](../Protocol/PinProtocol/2.md) guide.
 
 
 - [Platform Request](#platform-request)
