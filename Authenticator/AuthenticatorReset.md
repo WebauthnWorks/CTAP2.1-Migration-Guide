@@ -1,5 +1,8 @@
 # AuthenticatorReset (0x07)
 
+This command is part of the authenticator API and is new to CTAP2.1. The following has been taken directly from the [original specs](https://fidoalliance.org/specs/fido-v2.1-ps-20210615/fido-client-to-authenticator-protocol-v2.1-ps-20210615.html#authenticatorReset).
+<br></br>
+
 Resetting an authenticator is a potentially destructive operation. Authenticators MAY thus choose, for each transport they support, whether this command will be supported when received on that transport. For example, an authenticator may choose not to support this command over NFC, fearing that coincidentally nearby readers may send malicious reset commands.
 
 However this command MUST be supported on at least one transport. If the USB HID transport is supported then this command MUST be supported on that transport.
@@ -29,5 +32,5 @@ Additionally:
 
 - In case of authenticators with no display, request MUST have come to the authenticator within 10 seconds of powering up of the authenticator.
 
-If all conditions are met, authenticator returns CTAP2_OK. If this command is disabled for the transport used, the authenticator returns CTAP2_ERR_OPERATION_DENIED. If user presence is explicitly denied, the authenticator returns CTAP2_ERR_OPERATION_DENIED. If a user action timeout occurs, the authenticator returns CTAP2_ERR_USER_ACTION_TIMEOUT. If the request comes after 10 seconds of powering up, the authenticator returns CTAP2_ERR_NOT_ALLOWED.
+If all conditions are met, authenticator returns CTAP2_OK. If this command is disabled for the transport used, the authenticator returns **CTAP2_ERR_OPERATION_DENIED**. If user presence is explicitly denied, the authenticator returns **CTAP2_ERR_OPERATION_DENIED**. If a user action timeout occurs, the authenticator returns **CTAP2_ERR_USER_ACTION_TIMEOUT**. If the request comes after 10 seconds of powering up, the authenticator returns **CTAP2_ERR_NOT_ALLOWED**.
 
