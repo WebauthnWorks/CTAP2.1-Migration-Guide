@@ -89,7 +89,7 @@ Template Identifier.
 
 **lastEnrollSampleStatus:**
 Last enrollment sample status. Values between 0x00 and 0x0E.
-See manual for full reference.
+[View authenticatorBioEnrollment specs for full reference.](https://fidoalliance.org/specs/fido-v2.1-ps-20210615/fido-client-to-authenticator-protocol-v2.1-ps-20210615.html#authenticatorBioEnrollment)
 
 **remainingSamples:**
 Number of more sample required for enrollment to complete
