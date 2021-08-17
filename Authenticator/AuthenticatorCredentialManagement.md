@@ -31,13 +31,13 @@ It takes the following input parameters:
 
 The subcommands for credential management is 
 ```
-getCredsMetadata				          		: 0x01
-enumerateRPsBegin				          		: 0x02
-enumerateRPsGetNextRP					        : 0x03
-enumerateCredentialsBegin				      : 0x04
-enumerateCredentialsGetNextCredential	: 0x05
-deleteCredential					          	: 0x06
-updateUserInformation				        	: 0x07
+getCredsMetadata                       : 0x01
+enumerateRPsBegin                      : 0x02
+enumerateRPsGetNextRP                  : 0x03
+enumerateCredentialsBegin              : 0x04
+enumerateCredentialsGetNextCredential  : 0x05
+deleteCredential                       : 0x06
+updateUserInformation                  : 0x07
 ```
 
 subCommandParam Fields:
@@ -73,6 +73,8 @@ On success, authenticator returns the following structure in its response:
 
 ```
 
+**!! All examples below use exclusively PinUvAuthProtocol 2 !!**
+
 ## Example 1 - Getting Credentials Metadata
 
 1. Platform gets PinUvAuthToken from the authenticator with the cm (Credential Management) permission
@@ -82,11 +84,13 @@ On success, authenticator returns the following structure in its response:
 pinUvAuthParam = generateHMACSHA256(key=puat, msg)
                = generateHMACSHA256(puat, subCommands={0x01: 0x01} )
                = 185690876fbc2637e93a4971089308e3f6381a36fcf74eb3860b13ace1a7a2c1
+               
 REQ = {
   0x01: 0x01, // getCredsMetadata 
   0x03: 2,
   0x04: 185690876fbc2637e93a4971089308e3f6381a36fcf74eb3860b13ace1a7a2c1
 }
+
 CMD: 0x0A
 REQ: 0x0aa30101030204784031383536393038373666626332363337653933613439373130383933303865336636333831613336666366373465623338363062313361636531613761326331
 ```
@@ -99,6 +103,7 @@ RESP = {
   0x01: 8, // 8 is an abritrary value for example saying that 8 discoverable credentials exist on the authenticator.
   0x02: 56 // 56 is an abritrary value for example. Maximum number of possible remaining discoverable credentials that can be created on the authenticator. 
 }
+
 ENC: a20108021838
 ```
  
@@ -109,3 +114,28 @@ ENC: a20108021838
 
 
 ## Example 4 - DeleteCredential
+
+1. Platform gets pinUvAuthToken from the authenticator with the cm permission.
+2. Platform sends authenticatorCredentialManagement command with following parameters:
+```
+subCommand: 0x06
+subCommandParams: credentialId = {
+ type = 'public-key'
+ id = credentialId
+ transports = ["usb"]
+};
+pinUvAuthParam = generateHMACSHA256(key=puat, msg)
+               = generateHMACSHA256(puat, mergeBuffers(puat || 0x06 || subCommandParams )
+               = 
+               
+REQ = {
+  0x01: 0x06, // getCredsMetadata 
+  0x02: subCommandParams,
+  0x03: 0x02
+  0x04: 
+}
+
+CMD: 0x0A
+REQ: 
+```
+
