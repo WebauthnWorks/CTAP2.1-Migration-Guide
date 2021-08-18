@@ -1,12 +1,15 @@
 #  Feature-Specific Descriptions and Actions New to CTAP2.1
 
-Listed below are feature-specific platform and authenticator actions, which are new to CTAP2.1.
+Listed below are feature-specific platform and authenticator actions, which are new to CTAP2.1. The summaries below are taken from the specs.
 <br />
 
 ## Enterprise Attestation
 
-Reference: [Enterprise Attestation](https://fidoalliance.org/specs/fido-v2.1-ps-20210615/fido-client-to-authenticator-protocol-v2.1-ps-20210615.html#sctn-feature-descriptions-enterp-attstn)
+An enterprise is some form of organization, often a business entity. An enterprise context is in effect when a device, e.g., a computer, an authenticator, etc., is controlled by an enterprise.
 
+An enterprise attestation is an attestation that may include uniquely identifying information. This is intended for controlled deployments within an enterprise where the organization wishes to tie registrations to specific authenticators.
+
+See details: [Enterprise Attestation](https://fidoalliance.org/specs/fido-v2.1-ps-20210615/fido-client-to-authenticator-protocol-v2.1-ps-20210615.html#sctn-feature-descriptions-enterp-attstn)
 <br />
 
 ## Always Require User Verification (AlwaysUV)
@@ -19,7 +22,7 @@ Reference: [Always Require User Verification](https://fidoalliance.org/specs/fid
 
 ## Authenticator Certifications
 
-The certifications member provides a hint to the platform with additional information about certifications that the authenticator has received
+The certifications member provides a hint to the platform with additional information about certifications that the authenticator has received.
 
 Reference: [Authenticator Certifications](https://fidoalliance.org/specs/fido-v2.1-ps-20210615/fido-client-to-authenticator-protocol-v2.1-ps-20210615.html#sctn-feature-descriptions-certifications)
 <br />
