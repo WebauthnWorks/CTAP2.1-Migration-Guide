@@ -60,7 +60,9 @@ https://www.youtube.com/watch?v=g_eY7JXOc8U&t=715s
 
 We define a large blob key. We will use a randomly generated value as the test vector. It can also be derived from a different key.
 
-LargeBlobKey: 1ba29187dcf75af33734357f9a71670a0244d2b714216f423099a2dc8da0727c
+```
+largeBlobKey = 1ba29187dcf75af33734357f9a71670a0244d2b714216f423099a2dc8da0727c
+```
 
 We can store a large-blob map in a large-blob array. 
 It must contain the ciphertext (0x01), nonce (0x02) and origSize (0x03) -> INPUT map (large blob map) to byte string for value of set (0x02)  ??
@@ -74,6 +76,7 @@ user = {
 	username: 'SuaveBond',
 	displayName: 'James Bond'
 }
+// compressed?
 ENC: a46269645820ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff6469636f6e781968747470733a2f2f696d6775722e636f6d2f626f6e6430303768757365726e616d65695375617665426f6e646b646973706c61794e616d656a4a616d657320426f6e64
 ```
 
@@ -89,9 +92,9 @@ nonce = 000000000000000000000000
 Plaintext will be encoded user. 
 Next we want defined associated data.
 ```
-user length (bytes) = 371
+user length (bytes) = 371 // the length, in bytes, of the uncompressed data.
 associatedData = 0x626c6f62 || uint64LittleEndian[size(originalData=user)] // ????
-		= 0x626c6f62 || 371 ???
+		= 0x626c6f62 || 371 
 
  = 00626c6f62371 ?
 ```
