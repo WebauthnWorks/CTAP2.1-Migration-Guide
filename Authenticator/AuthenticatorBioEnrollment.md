@@ -117,7 +117,7 @@ sessionPuat = 0125fecfd8bf3f679bd9ec221324baa7
 The result of calling 
 ```
 HMAC-SHA-256(key, message)
-HMAC-SHA-256(pinUvAuthToken, mergeBuffers(32x0xFF || 0x0D || (subCommand) || subCommandParams))
+HMAC-SHA-256(pinUvAuthToken, mergeBuffers(32x0xFF || 0x0D || subCommand || subCommandParams))
 ```
 
 Where 32x0xFF = 32 zero bytes = 0000000000000000000000000000000000000000000000000000000000000000
@@ -129,9 +129,9 @@ We merge the arrayBuffers using _0x0D_ as the authenticator cmd, **authenticator
 sessionPuat = 0125fecfd8bf3f679bd9ec221324baa7 // key 
 
 pinUvAuthParam = HMAC-SHA-256(key = sessionPuat, message = message)
-pinUvAuthParam = HMAC-SHA-256(key, mergeBuffers(32x0xFF || 0x0D || (subcommand) || subCommandParams)) //
+pinUvAuthParam = HMAC-SHA-256(key, mergeBuffers(32x0xFF || 0x0D || subcommand || subCommandParams))
 
-message = mergeBuffers(32x0xFF || ([0x0D, 0x01]) )
+message = mergeBuffers(32x0xFF || [0x0D, 0x01] )
 
 
 pinUvAuthParam  = HMAC-SHA-256(sessionPuat, message)
@@ -246,7 +246,7 @@ ENCODED: a3040105000601
 	encoded =
 	```
 	2. Authenticator on receiving such request performs following procedures.
-		- Validates parameters and pinUvAuthParam (see specs for full reference) -- if parameter is is invalid -- return error status code
+		- Validates parameters and pinUvAuthParam [(see specs for full reference)](https://fidoalliance.org/specs/fido-v2.1-ps-20210615/fido-client-to-authenticator-protocol-v2.1-ps-20210615.html#authenticatorBioEnrollment) -- if parameter is is invalid -- return error status code
 		- If fingerprint is already present on the sensor, authenticator waits for user to lift finger from the sensor.
 		- Authenticator sends the command to the sensor to capture the sample.
 		- Authenticator returns authenticatorBioEnrollment response with following parameters:
