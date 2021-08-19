@@ -67,6 +67,7 @@ It must contain the ciphertext (0x01), nonce (0x02) and origSize (0x03) -> INPUT
 
 First we will define the data we want to store. This will be relying part specific nature. Here is an example
 
+```
 user = {
 	id: 32x0xFF, // using 32 zero bytes as test vector
 	icon: 'https://imgur.com/bond007,
@@ -74,6 +75,7 @@ user = {
 	displayName: 'James Bond'
 }
 ENC: a46269645820ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff6469636f6e781968747470733a2f2f696d6775722e636f6d2f626f6e6430303768757365726e616d65695375617665426f6e646b646973706c61794e616d656a4a616d657320426f6e64
+```
 
 We will get the cipher text:
 ```
