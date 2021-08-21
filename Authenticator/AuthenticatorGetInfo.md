@@ -1,7 +1,7 @@
 # authenticatorGetInfo (0x04)
 
 
-Using this method, platforms can request that the authenticator report a list of its supported protocol versions and extensions, its AAGUID, and other aspects of its overall capabilities. Platforms should use this information to tailor their command parameters choices.
+Using this method, platforms can request that the authenticator report a list of its supported protocol versions and extensions, its AAGUID, and other aspects of its overall capabilities.
 
 
 ## What's stayed the same between CTAP2.0 and CTAP2.1?
@@ -55,7 +55,7 @@ All the below new response fields are optional.
 
 ## Options
 
-All options are in the form key-value pairs with string IDs and boolean values. When an option is not present, the default is applied per table below. The following is a list of supported options:
+All options are in the form key-value pairs with string IDs and boolean values. When an option is not present, platform assumes default as per table below. The following is a list of supported options:
 
 ## What's the same in options?
 ```
@@ -83,12 +83,12 @@ All options are in the form key-value pairs with string IDs and boolean values. 
 | userVerificationMgmtPreview    | Not Supported |
 | uvBioEnroll                    | false         |
 | authnrCfg                      | Not supported |
-| uvAcfgNot                      | supported     |
+| uvAcfg                         | Not supported |
 | credMgmtNot                    | supported     |
 | credentialMgmtPreview          | Not supported |
-| setMinPINLengthNot             | supported     |
-| makeCredUvNotRqdNot            | supported     |
-| alwaysUvNot                    | supported     |
+| setMinPINLength                | Not supported |
+| makeCredUvNotRqd               | Not supported |
+| alwaysUv                       | Not supported |
 +--------------------------------+---------------+
 ```
 
