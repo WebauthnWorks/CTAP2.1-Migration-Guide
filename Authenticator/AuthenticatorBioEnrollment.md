@@ -5,7 +5,7 @@ This command is used by the platform to provision/enumerate/delete bio enrollmen
 
 Authenticator must return ```bioEnroll: true``` in options object field, when platform makes authenticatorGetInfo request to authenticator. See the [authenticatorGetInfo intro](AuthenticatorGetInfo.md).
 
-Please make sure you are familiar with pin protocols as it is needed for pinUvAuthParam. Read the [obtaining pinUvAuthParam](../Protocol/PinProtocol/2.md) guide.
+ Make sure you are familiar with pin protocols. Familiarise yourself with [obtaining pinUvAuthParam](../Protocol/PinProtocol/2.md) guide first.
 
 <br/>
 
@@ -23,17 +23,17 @@ AuthenticatorBioEnrollment keys ENUM:
 
 ```
 // All fields are optional
-modality   		: 0x01 
-subCommand  		: 0x02 
-subCommandParams       	: 0x03 
-pinUvAuthProtocol       : 0x04 
-pinUvAuthParam 		: 0x05 
-getModality      	: 0x06 
+modality             : 0x01 
+subCommand           : 0x02 
+subCommandParams     : 0x03 
+pinUvAuthProtocol    : 0x04 
+pinUvAuthParam       : 0x05 
+getModality          : 0x06 
 ```
 
 The modalities supported are:
 ```
-fingerprint   		: 0x01 // optional
+fingerprint          : 0x01 // optional
 ```
 
 
@@ -42,13 +42,13 @@ fingerprint   		: 0x01 // optional
 Sub Commands ENUM:
 
 ```
-enrollBegin			: 0x01
-enrollCaptureNextSample		: 0x02
-cancelCurrentEnrollment		: 0x03
-enumerateEnrollments		: 0x04
-setFriendlyName			: 0x05
-removeEnrollment		: 0x06
-getFingerprintSensorInfo	: 0x07
+enrollBegin                : 0x01
+enrollCaptureNextSample    : 0x02
+cancelCurrentEnrollment    : 0x03
+enumerateEnrollments       : 0x04
+setFriendlyName            : 0x05
+removeEnrollment           : 0x06
+getFingerprintSensorInfo   : 0x07
 ```
 
 SubCommandParams Fields:
@@ -63,14 +63,14 @@ timeoutMilliseconds 	: 0x03
 ## Authenticator Response
 ```
 // All response fields are optional
-modality 				: 0x01
-fingerprintKind 			: 0x02
-maxCaptureSamplesRequiredForEnroll	: 0x03
-templateId				: 0x04
-lastEnrollSampleStatus			: 0x05
-remainingSamples			: 0x06
-templateInfos				: 0x07
-maxTemplateFriendlyName			: 0x08
+modality                                : 0x01
+fingerprintKind                         : 0x02
+maxCaptureSamplesRequiredForEnroll      : 0x03
+templateId                              : 0x04
+lastEnrollSampleStatus                  : 0x05
+remainingSamples                        : 0x06
+templateInfos                           : 0x07
+maxTemplateFriendlyName                 : 0x08
 ```
 **modality:**
 The user verification modality.
@@ -95,8 +95,8 @@ Number of more sample required for enrollment to complete
 Array of templateInfos. 
 templateInfo:
 ```
-templateId		: 0x01 // required
-templateFriendlyName	: 0x02 // optional
+templateId              : 0x01 // required
+templateFriendlyName    : 0x02 // optional
 ```
 
 **maxTemplateFriendlyName:**
@@ -107,31 +107,29 @@ Indicates the maximum number of bytes the authenticator will accept as a templat
 <br/><br/>
 ## Obtaining pinUvAuthParam
 
-Do the exchange as specified in PinProtocol. We will use the below value as a PinUvAuthToken test vector for authenticatorConfig in **[Example 1](#example-1---enrolling-a-fingerprint-0x01)**
+Based on exchange as specified in PinProtocol, we use the below value as a PinUvAuthToken test vector for authenticatorBioEnrollment in **[Example 1](#example-1---enrolling-a-fingerprint-0x01)**
 ```
-puat = '0125fecfd8bf3f679bd9ec221324baa74f3cade0314b4fba8029500a320612ad'
-sessionPuat = puat[0:32]
-sessionPuat = 0125fecfd8bf3f679bd9ec221324baa7
+puat = 0125fecfd8bf3f679bd9ec221324baa74f3cade0314b4fba8029500a320612ad
 ```
 
 The result of calling 
 ```
 HMAC-SHA-256(key, message)
-HMAC-SHA-256(pinUvAuthToken, mergeBuffers(32x0xFF || 0x0D || subCommand || subCommandParams))
+HMAC-SHA-256(pinUvAuthToken, 32x0xFF || 0x0d || subCommand || subCommandParams)
 ```
 
-Where 32x0xFF = 32 zero bytes = 0000000000000000000000000000000000000000000000000000000000000000
+Where 32 x 0xff = 32 zero bytes = ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
 
 
-We merge the arrayBuffers using _0x0D_ as the authenticator cmd, **authenticatorConfig**, and _0x01_ as the subCommand, **toggleAlwaysUV** . SubcommandParams not defined for 0x01 subCommand.
+We merge the arrayBuffers using _0x0D_ as the authenticator cmd, **authenticatorBioEnrollment**, and _0x01_ as the subCommand, **toggleAlwaysUV** . SubcommandParams not defined for 0x01 subCommand.
 
 ```
 sessionPuat = 0125fecfd8bf3f679bd9ec221324baa7 // key 
 
 pinUvAuthParam = HMAC-SHA-256(key = sessionPuat, message = message)
-pinUvAuthParam = HMAC-SHA-256(key, mergeBuffers(32x0xFF || 0x0D || subcommand || subCommandParams))
+pinUvAuthParam = HMAC-SHA-256(key, 32 x 0xff || 0x0D || subcommand || subCommandParams)
 
-message = mergeBuffers(32x0xFF || [0x0D, 0x01] )
+message = 32 x 0xff || 0x0D || 0x01
 
 
 pinUvAuthParam  = HMAC-SHA-256(sessionPuat, message)
@@ -177,8 +175,8 @@ ENCODED: "a103192710"
 
 pinUvAuthParam = generateHMACSHA256(key=puat, msg)
 
-msg = mergeBuffers( [modality, subCommand] || subCommandParam_bytes );	
-msg = mergeBuffers( [0x01, 0x01] || subCommandParamBytes ); // 0101a103192710
+msg = modality || subCommand || subCommandParam_bytes;	
+msg = 0x01 || 0x01 || subCommandParamBytes ); // 0101a103192710
 
 pinUvAuthParam = 'd16e35ea553d0c93a4a7cac7ef3801ce1ba386e38ad557fb29b63d0bee8be79c'
 ```
@@ -211,17 +209,17 @@ REQUEST: 0x09a50101020103a103192710040205784064313665333565613535336430633933613
 	4. Authenticator returns authenticatorBioEnrollment response with following parameters
 
 ```
-templateId 		: 0x04 // template identifier of the new template being enrolled.
-lastEnrollSampleStatus	: 0x05 // Status of enrollment of last sample.
-remainingSamples 	: 0x06 // Number of sample remaining to complete the enrollment.
+templateId                : 0x04 // template identifier of the new template being enrolled.
+lastEnrollSampleStatus    : 0x05 // Status of enrollment of last sample.
+remainingSamples          : 0x06 // Number of sample remaining to complete the enrollment.
 ```
 
 e.g.,
 ```
 response = {
-	0x04	:	0x01 // arbitrary value for example
-	0x05	:	0x00 // CTAP2_ENROLL_FEEDBACK_FP_GOOD -- good fingerprint capture
-	0x06	:	0x01 // arbitrary value for example
+	0x04    :    0x01 // arbitrary value for example
+	0x05    :    0x00 // CTAP2_ENROLL_FEEDBACK_FP_GOOD -- good fingerprint capture
+	0x06    :    0x01 // arbitrary value for example
 }
 ENCODED: a3040105000601
 ```
@@ -239,7 +237,7 @@ ENCODED: a3040105000601
 	subCommandParamBytes (encoded) = a2010103192710
 	
 	pinUvAuthParam = generateHMACSHA256(key=puat, msg) // puat=0125fecfd8bf3f679bd9ec221324baa7
-		   msg = mergeBuffers( [0x01, 0x02] || subCommandParamBytes );
+		   msg = 0x01 || 0x02 || subCommandParamBytes
 	pinUvAuthParam (encoded) = 0102a2010103192710 
 	
 	payload = { 0x01: 0x01, 0x02: 0x02, 0x03: subCommandParams, 0x04: 0x02, 0x05: pinUvAuthParam }
