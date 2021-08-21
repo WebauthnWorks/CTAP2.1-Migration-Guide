@@ -32,7 +32,7 @@ Additionally:
 
 - In case of authenticators with no display, request MUST have come to the authenticator within 10 seconds of powering up of the authenticator.
 
-If all conditions are met, authenticator returns **CTAP2_OK**. If this command is disabled for the transport used, the authenticator returns **CTAP2_ERR_OPERATION_DENIED**. If user presence is explicitly denied, the authenticator returns **CTAP2_ERR_OPERATION_DENIED**. If a user action timeout occurs, the authenticator returns **0x2F CTAP2_ERR_USER_ACTION_TIMEOUT**. If the request comes after 10 seconds of powering up, the authenticator returns **CTAP2_ERR_NOT_ALLOWED**.
+If all conditions are met, authenticator returns **CTAP2_OK**. If this command is disabled for the transport used, the authenticator returns **CTAP2_ERR_OPERATION_DENIED**. If user presence is explicitly denied, the authenticator returns **CTAP2_ERR_OPERATION_DENIED**. If a user action timeout occurs, the authenticator returns **CTAP2_ERR_USER_ACTION_TIMEOUT**. If the request comes after 10 seconds of powering up, the authenticator returns **CTAP2_ERR_NOT_ALLOWED**.
 
 [Status codes](https://fidoalliance.org/specs/fido-v2.1-ps-20210615/fido-client-to-authenticator-protocol-v2.1-ps-20210615.html#error-responses)
 
