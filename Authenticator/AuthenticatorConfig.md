@@ -4,7 +4,7 @@ The FIDO2 authenticatorConfig is a command used to configure various authenticat
 
 - Make sure you are familiar with pin protocols. Familiarise yourself with [obtaining pinUvAuthParam](../Protocol/PinProtocol/2.md) guide first.
 
-Do the exchange as specified in PinProtocol. We use the below value as a PinUvAuthToken test vector for authenticatorConfig in **[Example 1](#example-1---enable-enterprise-attestation-0x01)**
+Based on exchange as specified in PinProtocol, we use the below value as a PinUvAuthToken test vector for authenticatorConfig in **[Example 1](#example-1---enable-enterprise-attestation-0x01)**
 ```
 sessionPuat = 0125fecfd8bf3f679bd9ec221324baa74f3cade0314b4fba8029500a320612ad
 ```
@@ -41,6 +41,10 @@ This *setMinPINLength* subcommand is only implemented if _setMinPINLength_ optio
 This command sets the minimum PIN length in unicode code points to be enforced by the authenticator while changing/setting up a ClientPIN. **[_Example 3_](#example-3---setting-a-minimum-pin-length-0x03)**.
 
 
+## Authenticator Response
+Only [status codes](https://fidoalliance.org/specs/fido-v2.1-ps-20210615/fido-client-to-authenticator-protocol-v2.1-ps-20210615.html#error-responses) are returned (i.e. no response map is defined).
+
+
 ## pinUvAuthParam
 The result of calling 
 ```
@@ -51,7 +55,7 @@ HMAC-SHA-256(sessionPuat, 32 x 0xff || 0x0d || subCommand || subCommandParams)
 Where 32 x 0xff = 32 zero bytes = ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
 
 
-We merge the arrayBuffers using _0x0d_ as the authenticator cmd, **authenticatorConfig**, and _0x01_ as the subCommand, **toggleAlwaysUV** . SubcommandParams not defined for 0x01 subCommand.
+We merge the arrayBuffers using _0x0d_ as the authenticator cmd, **authenticatorConfig**, and _0x01_ as the subCommand, **toggleAlwaysUV** . SubcommandParams not defined for _0x01_ subCommand.
 
 ```
 message = 32 x 0xff || 0x0d || 0x01
