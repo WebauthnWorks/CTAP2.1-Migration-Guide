@@ -2,11 +2,9 @@
 
 This command is used by the platform to manage discoverable credentials on the authenticator. It is part of the authenticator API and is **new** to CTAP2.1. 
 
-Do the exchange as specified in PinProtocol. We will use the below value as a PinUvAuthToken test vector for authenticatorCredentialManagement.
+Based on exchange as specified in PinProtocol, we use the below value as a PinUvAuthToken test vector for authenticatorCredentialManagement.
 ```
-puat = '0125fecfd8bf3f679bd9ec221324baa74f3cade0314b4fba8029500a320612ad'
-sessionPuat = puat[0:32]
-sessionPuat = 0125fecfd8bf3f679bd9ec221324baa7
+sessionPuat = 0125fecfd8bf3f679bd9ec221324baa74f3cade0314b4fba8029500a320612ad
 ```
 
 See:
@@ -31,13 +29,13 @@ It takes the following input parameters:
 
 The subcommands for credential management is 
 ```
-getCredsMetadata                       : 0x01
-enumerateRPsBegin                      : 0x02
-enumerateRPsGetNextRP                  : 0x03
-enumerateCredentialsBegin              : 0x04
-enumerateCredentialsGetNextCredential  : 0x05
-deleteCredential                       : 0x06
-updateUserInformation                  : 0x07
+getCredsMetadata                         : 0x01
+enumerateRPsBegin                        : 0x02
+enumerateRPsGetNextRP                    : 0x03
+enumerateCredentialsBegin                : 0x04
+enumerateCredentialsGetNextCredential    : 0x05
+deleteCredential                         : 0x06
+updateUserInformation                    : 0x07
 ```
 
 subCommandParam Fields:
@@ -77,17 +75,18 @@ On success, authenticator returns the following structure in its response:
 
 ## Example 1 - Getting Credentials Metadata
 
-1. Platform gets PinUvAuthToken from the authenticator with the cm (Credential Management) permission
+1. Platform gets PinUvAuthToken from the authenticator with the cm, [Credential Management Permission](https://github.com/WebAuthnWorks/CTAP2.1-Migration-Guide/blob/main/Protocol/PinProtocol/2.md#get-pinuvauthtoken-with-permissions).
  
 2. Platform sends authenticatorCredentialManagement command with following parameters:
 ```
-pinUvAuthParam = generateHMACSHA256(key=puat, msg)
-               = generateHMACSHA256(puat, subCommands={0x01: 0x01} )
-               = 185690876fbc2637e93a4971089308e3f6381a36fcf74eb3860b13ace1a7a2c1
+message = subCommands = { 0x01: 0x01 }
+
+pinUvAuthParam = generateHMACSHA256(key=sessionPuat, message)
+               == 185690876fbc2637e93a4971089308e3f6381a36fcf74eb3860b13ace1a7a2c1
                
 REQ = {
   0x01: 0x01, // getCredsMetadata 
-  0x03: 2,
+  0x03: 2, //  pinUvAuthProtocol - 2
   0x04: 185690876fbc2637e93a4971089308e3f6381a36fcf74eb3860b13ace1a7a2c1
 }
 
@@ -96,12 +95,12 @@ REQ: 0x0aa3010103020478403138353639303837366662633236333765393361343937313038393
 ```
 
 3. Authenticator on receiving such request performs following procedures.
-  - Validates parameters and pinUvAuthParam (see specs for full reference) -- if parameter is is invalid -- return error status code
+  - Validates parameters and pinUvAuthParam (see specs for full reference) -- if parameter is is invalid -- return [error status code](https://fidoalliance.org/specs/fido-v2.1-ps-20210615/fido-client-to-authenticator-protocol-v2.1-ps-20210615.html#error-responses)
   - Authenticator returns authenticatorCredentialManagement response with following parameters:
 ```
 RESP = {
-  0x01: 8, // 8 is an abritrary value for example saying that 8 discoverable credentials exist on the authenticator.
-  0x02: 56 // 56 is an abritrary value for example. Maximum number of possible remaining discoverable credentials that can be created on the authenticator. 
+  0x01: 8, // 8 is an arbitrary value for example saying that 8 discoverable credentials exist on the authenticator.
+  0x02: 56 // 56 is an arbitrary value for example. Maximum number of possible remaining discoverable credentials that can be created on the authenticator. 
 }
 
 ENC: a20108021838
@@ -120,9 +119,9 @@ ENC: a20108021838
 ```
 subCommand: 0x06
 subCommandParams: credentialId = {
- type : public-key
+ type : 'public-key'
  id: : 73a8ed4bebf8a76095e4d6855acf6cb8d702d15a9ebe25641ae2d097b4314f3700603030 // arbitrary example of credential ID 
-};
+}
 
 pinUvAuthParam = generateHMACSHA256(key=puat, msg)
                = generateHMACSHA256(puat, mergeBuffers(puat || 0x06 || subCommandParams )
@@ -131,7 +130,7 @@ pinUvAuthParam = generateHMACSHA256(key=puat, msg)
 REQ = {
   0x01: 0x06, // getCredsMetadata 
   0x02: subCommandParams,
-  0x03: 0x02,
+  0x03: 2, //  pinUvAuthProtocol - 2
   0x04: 7ff1ef5ae1dc084206401d009f3563f88568f71bd1e101263dc2101bf195a085
 }
 
@@ -142,6 +141,6 @@ REQ: 0x0aa4010602a102a2626964784837336138656434626562663861373630393565346436383
 ```
 
 3. Authenticator on receiving such request performs following procedures.
-  - Validates parameters and pinUvAuthParam (see specs for full reference) -- if parameter is is invalid -- return error status code
-  - Authenticator deletes the credential and returns **CTAP2_OK**.
+  - Validates parameters and pinUvAuthParam (see specs for full reference) -- if parameter is is invalid -- return [error status code](https://fidoalliance.org/specs/fido-v2.1-ps-20210615/fido-client-to-authenticator-protocol-v2.1-ps-20210615.html#error-responses)
+  - Authenticator deletes the credential and returns **0x00 CTAP2_OK**.
 
