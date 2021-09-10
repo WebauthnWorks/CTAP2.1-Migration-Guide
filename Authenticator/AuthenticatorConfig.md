@@ -1,206 +1,185 @@
-# AuthenticatorConfig 0x06
+# AuthenticatorConfig 0x0D
 
-This command is used to configure various authenticator features using its subcommands. It is part of the authenticator API and is new to CTAP2.1. 
+This command is used to configure various authenticator features using its subcommands.
 
-- You will need pinUvAuthParam. Please make sure you are familiar with pin protocols. Read the [obtaining pinUvAuthParam](../Protocol/PinProtocol/2.md) guide.
+The supported configuration options as now are:
 
-Do the exchange as specified in PinProtocol. We use the bezlow value as a PinUvAuthToken test vector for authenticatorConfig in **[Example 1](#example-1---enable-enterprise-attestation-0x01)**
+- EnableEnterpriseAttestation(0x01) - enables Enterprise Attestation
+- ToggleAlwaysUv(0x02) - "Always UV" is a features that forces authenticator to fail any authenticated request unless explicit user verification, via pin or biometrics is done.
+- SetMinPINLength(0x03) - sets minimum pin length for the authenticator
+
+This command requires support of [PinUvAuthProtocol 2](../Protocol/PinProtocol/2.md).
+
+
+The specified PinUvAuthToken will be used in all future examples:
+
 ```
-puat = '0125fecfd8bf3f679bd9ec221324baa74f3cade0314b4fba8029500a320612ad'
-sessionPuat = puat[0:32]
-sessionPuat = 0125fecfd8bf3f679bd9ec221324baa7
+SessionPUAT = 0125fecfd8bf3f679bd9ec221324baa74f3cade0314b4fba8029500a320612ad
 ```
 
-**We use 4 parameters to configure the authenticator:**
+## Common
 
-AuthenticatorConfig keys ENUM: 
+Request keys ENUM: 
+
 ```
-subCommand   		: 0x01 // required
-subCommandParams 	: 0x02 // optional
-pinUvAuthProtocol       : 0x03 // optional
-pinUvAuthParam       	: 0x04 // optional
+subCommand        : 0x01
+subCommandParams  : 0x02
+pinUvAuthProtocol : 0x03
+pinUvAuthParam    : 0x04
 ```
-( Usage show in examples ctrl+f authenticatorConfig )
-
-
-## SubCommands:
 
 Sub Commands ENUM:
 
 ```
-enableEnterpriseAttestation	: 0x01
-toggleAlwaysUv			: 0x02
-setMinPINLength			: 0x03
+enableEnterpriseAttestation : 0x01
+toggleAlwaysUv              : 0x02
+setMinPINLength             : 0x03
 ```
 
-#### Enable Enterprise Attestation (0x01):
-This *enableEnterpriseAttestation* subcommand is only implemented if the enterprise attestation feature is supported. No *subcommandParams* are used. **[Example 1](#example-1---enable-enterprise-attestation-0x01)**.
-
-#### Always Require User Verification (0x02):
-This *toggleAlwaysUV* subcommand is only implemented if the Always Require User Verification feature is supported. No *subcommandParams* are used. _**[Example 2](#example-2---toggling-always-uv-0x02)**_.
-
-#### Setting a Minimum PIN Length (0x03):
-This *setMinPINLength* subcommand is only implemented if _setMinPINLength_ option ID is supported
-This command sets the minimum PIN length in unicode code points to be enforced by the authenticator while changing/setting up a ClientPIN. **[_Example 3_](#example-3---setting-a-minimum-pin-length-0x03)**.
+Response only made of an status code.
 
 
-## pinUvAuthParam
-The result of calling 
-```
-HMAC-SHA-256(key, message)
-HMAC-SHA-256(pinUvAuthToken, mergeBuffers(32x0xFF || 0x0d || (subCommand) || subCommandParams))
-```
+## Computing PinUvAuthParam
 
-Where 32x0xFF = 32 zero bytes = 0000000000000000000000000000000000000000000000000000000000000000
-
-
-We merge the arrayBuffers using _0x0D_ as the authenticator cmd, **authenticatorConfig**, and _0x01_ as the subCommand, **toggleAlwaysUV** . SubcommandParams not defined for 0x01 subCommand.
+Authenticator config specifies the following structure to compute PinUvAuthParam:
 
 ```
-sessionPuat = 0125fecfd8bf3f679bd9ec221324baa7 // key 
+message         = 0xff{32} || 0x0d || subCommand || subCommandParams
 
-pinUvAuthParam = HMAC-SHA-256(key = sessionPuat, message = message)
-pinUvAuthParam = HMAC-SHA-256(key, mergeBuffers(32x0xff || 0x0d || (subcommand) || subCommandParams)) //
-
-message = mergeBuffers(32x0xFF, ([0x0d, 0x01] ) 
-
-
-pinUvAuthParam  = HMAC-SHA-256(sessionPuat, message)
-		== 66e4e667922def036d0cc065fa6429f8d94910a7848a6853c01db49d50a4c48a
+pinUvAuthParam  = HMAC-SHA-256(key = puat, message = message)
 ```
 
+Where 0xff{32} is 32 byte set 0xff:
 
-**IMPORTANT NOTE:**
+`ffffffffffffffffffffffffffffffff`
 
-For pinUvAuthParam, PinUvAuthProtocol 1 returns first 16 bytes of the HMAC output, whereas PinUvAuthProtocol 2 is returning the full 32 byte HMAC output (See #HMAC in PinProtocol 2)
+Example PinUvAuthParam for ToggleAlwaysUv(0x02)
 
-**!! All examples below use exclusively PinUvAuthProtocol 2 !!**
-
-## Example 1 - Enable Enterprise Attestation (0x01)
-
-Using the above *pinUvAuthParam* which was generated with *0x01 subCommand*, platform will generate a request to the authenticator to toggle always UV
-
-**Generating pinUvAuthParam**
 ```
-pinUvAuthParam = 66e4e667922def036d0cc065fa6429f8d94910a7848a6853c01db49d50a4c48a
+pinUvAuthParam  = HMAC-SHA-256(key = puat, message = 0xff{32} || 0x0d || 0x02)
+                => 40d0d64f5030fa46d8e27c1bb358d5eb7b0da88fd4955b83ed19335bb35d886c
 ```
 
-**Generating and sending request**
+## Enable Enterprise Attestation (0x01)
+
+To enable enterprise attestation platform sends AuthenticatorConfig with EnableEnterpriseAttestation(0x01) sub command:
+
 ```
-authenticatorConfig = {
-	0x01: 0x01,
-	0x02: [], // platform default to [] if not set
-	0x03: 0x02,
-    	0x04': '66e4e667922def036d0cc065fa6429f8d94910a7848a6853c01db49d50a4c48a'
+PinUvAuthParam = HMAC-SHA-256(key = puat, message = 0xff{32} || 0x0d || 0x01)
+               => 4e724bc8af8776d0e92a3961c28bf9980b7b3962c610ba7abf07c74a0972b074
+```
+
+**Generating request**
+```
+REQ: 0da3010103020458204e724bc8af8776d0e92a3961c28bf9980b7b3962c610ba7abf07c74a0972b074
+
+CMD: 0x0d
+PAYLOAD: a3010103020458204e724bc8af8776d0e92a3961c28bf9980b7b3962c610ba7abf07c74a0972b074
+
+DECODED:
+{
+    1: 1, // SubCommand - EnableEnterpriseAttestation(0x01)
+    3: 2, // PinUvAuthProtocol 2
+    4: 4e724bc8af8776d0e92a3961c28bf9980b7b3962c610ba7abf07c74a0972b074 // PinUvAuthParam
 }
-
-PAYLOAD: 0da401010280030204784036366534653636373932326465663033366430636330363566613634323966386439343931306137383438613638353363303164623439643530613463343861
-
-REQ = authenticatorConfig command + input map
-
-CMD: 0x0D
-REQ: 0x0da401010280030204784036366534653636373932326465663033366430636330363566613634323966386439343931306137383438613638353363303164623439643530613463343861
 ```
 
-Upon receipt of request, authenticator will either:
+On success the authenticator will return `CTAP_SUCCESS(0x00)`
 
-a) If the enterprise attestation feature is disabled, then re-enable the enterprise attestation feature and return _CTAP2_OK_.
-- Upon re-enabling the enterprise attestation feature, the authenticator will return an ep (enterprise) option id with
-the value of true in the _authenticatorGetInfo_ command response upon receipt of subsequent
-_authenticatorGetInfo_ commands.
+To check if enterprise attestation was activated, you can check authenticator GetInfo options flag `ep`
 
-**OR**
+## Toggling always UV (0x02)
 
-b)  Else (implying the enterprise attestation feature is already enabled) take no action and return _CTAP2_OK_.
+To enable alwaysUv, platform sends AuthenticatorConfig with ToggleAlwaysUv(0x02) sub command:
 
-
-## Example 2 - Toggling always UV (0x02)
-
-Platform request:
-
-**Generating pinUvAuthParam**
 ```
-pinUvAuthParam = HMAC-SHA-256(sessionPuat, mergeBuffers(32x0xFF, ([0x0d, 0x02]) ) // emphasis on subcommand=0x02
-	       == bd303acf547f2fd391b8f39e719c2f14bd7e71f7b1c710f862832c74b9569d15
+pinUvAuthParam  = HMAC-SHA-256(key = puat, message = 0xff{32} || 0x0d || 0x02)
+                => 40d0d64f5030fa46d8e27c1bb358d5eb7b0da88fd4955b83ed19335bb35d886c
 ```
 
-**Generating and sending request**
-```     
-authenticatorConfig = {
-	0x01: 0x02,
-	0x03: 0x02,
-    	0x04: 'bd303acf547f2fd391b8f39e719c2f14bd7e71f7b1c710f862832c74b9569d15'
+**Generating request**
+```
+REQ: 0da30101030204582040d0d64f5030fa46d8e27c1bb358d5eb7b0da88fd4955b83ed19335bb35d886c
+
+CMD: 0x0d
+PAYLOAD: a30101030204582040d0d64f5030fa46d8e27c1bb358d5eb7b0da88fd4955b83ed19335bb35d886c
+
+DECODED:
+{
+    1: 2, // SubCommand - ToggleAlwaysUv(0x02)
+    3: 2, // PinUvAuthProtocol 2  
+    4: 40d0d64f5030fa46d8e27c1bb358d5eb7b0da88fd4955b83ed19335bb35d886c // PinUvAuthParam
 }
-
-PAYLOAD: 0da4010202f4030204784062643330336163663534376632666433393162386633396537313963326631346264376537316637623163373130663836323833326337346239353639643135
-
-REQ = authenticatorConfig command + input map
-
-CMD: 0x0D
-REQ: 0x0da4010202f4030204784062643330336163663534376632666433393162386633396537313963326631346264376537316637623163373130663836323833326337346239353639643135
 ```
 
-Upon receipt of request, authenticator will either:
+On success the authenticator will return `CTAP_SUCCESS(0x00)`
 
-a) If alwaysUv feature is disabled
+To check if alwaysUv is enabled, you can check authenticator GetInfo options flag `alwaysUv`
+    
 
-- If the makeCredUvNotRqd option ID is present and true, then disable the makeCredUvNotRqd feature and set the makeCredUvNotRqd option ID to false or absent.
-	
-- Enable the alwaysUv feature and return ```CTAP2_OK```.
-	
-**OR**
-	
-b) Else, implying alwaysUv feature is enabled
+## Minimum PIN Length (0x03)
 
-- If disabling feature supported,
-	
-	- Set the makeCredUvNotRqd option ID to its default.
-		
-	- Disable alwaysUv feature and return ```CTAP2_OK``` 
-		
--  OTHERWISE, disabling feature not supported, 
-	
-	-  return ```CTAP2_ERR_OPERATION_DENIED```
+SetMinPINLength(0x03) is a command that is use to setting minum pin length for the future change of the pin.
 
-	
+To check if this subcommand is supported, see GetInfo options `setMinPINLength` option is present.
 
-## Example 3 - Setting a Minimum PIN Length (0x03)
+There are following available sub command options
 
-subCommandParams are defined as follows (note in example 1 and 2 there were no subcommandParams). All subcommandParams are optional.
 ```
-newMinPINLength: 0x01
+newMinPINLength  : 0x01
 minPinLengthRPIDs: 0x02
-forceChangePin: 0x03
+forceChangePin   : 0x03
 ```
 
-**Define subCommandParams**
-```
-subCommandParams = { '0x01' : 16 } 
-```
-We have set newMinPINLength to an arbitrary number >= 4, in this example we have picked 16
-Setting newMinPINLength value < 4 will result in error ```CTAP2_ERR_PIN_POLICY_VIOLATION```.
+- `newMinPINLength` is used to specify the new pin length requirements that will be enforced next time user will be changing password.
+- `minPinLengthRPIDs` is used together with `MinPinLength` extension. The `MinPinLength` extension is used to allow some relying parties to obtain information regarding the current minimum pin length. Authenticator config `minPinLengthRPIDs` parameter specifies which relying parties are allowed to obtain such information.
+- `forceChangePin` forces user to change their pin code next transaction and returns `CTAP2_ERR_PIN_NOT_SET(0x35)`.
 
-**Generating pinUvAuthParam**
-```
-pinUvAuthParam = HMAC-SHA-256(sessionPuat, mergeBuffers(32x0xFF, ([0x0d, 0x03]), subCommandParams) // emphasis on subcommand = 0x03
-	       == 5996822955053057056c7a7572f3d84d60d1bea4e4c6d512146090a343d1a264
-```
+These sub command options may be combined together or used separately. All sub command options are optional.
 
-**Generating and send sending request**
+
+**Generating PinUvAuthParam**
+
+To generate PinUvAuthParam, platform first must generate sub command CBOR map, and encode it buffer. Then following previously defined structure generate message buffer and HMAC it with the corresponding PUAT
+
 ```
-authenticatorConfig = {
-	0x01 : 0x03,
-	0x02 : subCommandParams,
-	0x03 : 0x02,
-    	0x04 : '5996822955053057056c7a7572f3d84d60d1bea4e4c6d512146090a343d1a264'
+SubCommandParams = {
+    // New pin length is 6
+    1: 6,
+    
+    // These two RPIDs will have access to the MinPinLength extension
+    2: ["example.com", "enterprise.com"],
+
+    // Will force user to change pin next transaction
+    3: true
 }
 
-PAYLOAD: 0da4010202a10110030204784035393936383232393535303533303537303536633761373537326633643834643630643162656134653463366435313231343630393061333433643161323634
+SubCommandBytes = a3010602826b6578616d706c652e636f6d6e656e74657270726973652e636f6d03f5
 
-REQ = authenticatorConfig command + input map
+Message = 0xff{32} || 0x0d || 0x03 || a3010602826b6578616d706c652e636f6d6e656e74657270726973652e636f6d03f5
 
-CMD: 0x0D
-REQ: 0x0da4010202a10110030204784035393936383232393535303533303537303536633761373537326633643834643630643162656134653463366435313231343630393061333433643161323634
+PinUvAuthParam = HMAC-SHA-256(key = puat, message = Message)
+               => 450acdb5fe618880d1774295f2723cb5d0ecc0ddbd7e35a4b651b501fd1f8f65
 ```
 
-Authenticator will store newMinPINLength = 16 and return ```CTAP2_OK```.
+**Generating request**
+```
+REQ: 0da4010102a3010602826b6578616d706c652e636f6d6e656e74657270726973652e636f6d03f50302045820450acdb5fe618880d1774295f2723cb5d0ecc0ddbd7e35a4b651b501fd1f8f65
+
+CMD: 0x0d
+PAYLOAD: a4010102a3010602826b6578616d706c652e636f6d6e656e74657270726973652e636f6d03f50302045820450acdb5fe618880d1774295f2723cb5d0ecc0ddbd7e35a4b651b501fd1f8f65
+
+DECODED:
+{
+    1 : 3, // 
+    2 : {
+        1: 6,
+        2: ["example.com", "enterprise.com"],
+        3: true
+    },
+    3 : 2,
+    4 : 450acdb5fe618880d1774295f2723cb5d0ecc0ddbd7e35a4b651b501fd1f8f65
+}
+```
+
+On success the authenticator will return `CTAP_SUCCESS(0x00)`
