@@ -21,8 +21,7 @@ userVerificationOptionalWithCredentialIDList: 0x02
 userVerificationRequired: 0x03
 ```
 
-
-Example `MakeCredential(0x01)` request:
+Example `MakeCredential(0x01)` request with `CredProtect` extension:
 
 ```
 subCommand       = 0x04 
