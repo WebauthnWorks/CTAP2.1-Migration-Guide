@@ -10,6 +10,7 @@ The supported configuration options as now are:
 
 This command requires support of [PinUvAuthProtocol 2](../Protocol/PinProtocol/2.md).
 
+The platform must obtain PinUvAuthToken with `acfg(0x20)` permission flag.
 
 The specified PinUvAuthToken will be used in all future examples:
 
@@ -36,7 +37,7 @@ toggleAlwaysUv              : 0x02
 setMinPINLength             : 0x03
 ```
 
-Response only made of an status code.
+Response only contains status code.
 
 
 ## Computing PinUvAuthParam
@@ -119,7 +120,7 @@ To check if alwaysUv is enabled, you can check authenticator GetInfo options fla
 
 ## Minimum PIN Length (0x03)
 
-SetMinPINLength(0x03) is a command that is use to setting minum pin length for the future change of the pin.
+SetMinPINLength(0x03) is a command that is use to setting minimum pin length for the future change of the pin.
 
 To check if this subcommand is supported, see GetInfo options `setMinPINLength` option is present.
 
