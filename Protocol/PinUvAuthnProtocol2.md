@@ -145,8 +145,8 @@ For **PinUvAuthProtocol 2**, session encryption key eKS and mKS are derived from
 
 ```
 sK  = ee33f2cb08a46d2ddcaf03214af14c31510fcaa4452b8e6e04710fbc66727bac
-eKs = HKDF-SHA-256(salt = 32 zero bytes, IKM = sK, L = 32, info = "CTAP2 HMAC key") == 6e1db0c8ebc48dad977a81d26ca7e5bfb0243bd1a2aba6c45adc7a00729b2027
-mKs = HKDF-SHA-256(salt = 32 zero bytes, IKM = sK, L = 32, info = "CTAP2 AES key") == efe50001d97a7cf14096589e65147b108653683cc22aaf4d1f3bd91dc8e41cbd
+eKs = HKDF-SHA-256(salt = 32 zero bytes, IKM = sK, L = 32, info = "CTAP2 AES key") == 6e1db0c8ebc48dad977a81d26ca7e5bfb0243bd1a2aba6c45adc7a00729b2027
+mKs = HKDF-SHA-256(salt = 32 zero bytes, IKM = sK, L = 32, info = "CTAP2 HMAC key") == efe50001d97a7cf14096589e65147b108653683cc22aaf4d1f3bd91dc8e41cbd
 ```
 
 
