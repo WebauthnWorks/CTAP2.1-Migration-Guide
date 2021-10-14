@@ -208,7 +208,7 @@ pinUvAuthParam  = HMAC-SHA-256(key = puat, message = message)
                 = 0102a2010103192710
 	 
 payload = { 0x01: 0x01, 0x02: 0x02, 0x03: subCommandParams, 0x04: 0x02, 0x05: pinUvAuthParam }
-encoded =
+PAYLOAD: [...]
 ```
 Authenticator response:
 ```
@@ -230,6 +230,8 @@ PAYLOAD:
 0x01 : 0x01,
 0x02: 0x03
 }
+PAYLOAD: [...]
+
 CMD: 0x09
 ENC = 0x09 [...]
 ...
@@ -242,7 +244,7 @@ Platform sends enumerateEnrollments command to find all the fingerprints stored 
 
 REQ:
 ```
-msg             = 01 || 04
+message             = 01 || 04
 PinUvAuthParam  = ...
 ```
 
@@ -253,9 +255,10 @@ PAYLOAD = {
 	0x04: 0x02, 
 	0x05: PinUvAuthParam 
 }
+PAYLOAD: [...]
+
 CMD: 0x09
 ENC = 0x09 [...]
-...
 ```
 Authenticator responds with templateInfos stored 
 ```
@@ -265,8 +268,26 @@ Authenticator responds with templateInfos stored
 ## Rename Fingerprint - setFriendlyName (0x05)
 
 Platform sends setFriendlyName command to rename a fingerprint stored on authenticator.
+REQ:
 ```
-...
+message             = 01 || 05
+PinUvAuthParam  = ...
+```
+```
+PAYLOAD = { 
+	0x01: 0x01, 
+	0x02: 0x05, 
+	0x03: {
+		0x01: 0x01 // example templateId
+		0x02: 'thumbprint' // example name
+	}
+	0x04: 0x02, 
+	0x05: PinUvAuthParam 
+}
+PAYLOAD: [...]
+
+CMD: 0x09
+ENC = 0x09 [...]
 ```
 Authenticator renames fingerprint and returns `CTAP2_OK`
 
