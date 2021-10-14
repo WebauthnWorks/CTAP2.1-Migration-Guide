@@ -262,7 +262,12 @@ ENC = 0x09 [...]
 ```
 Authenticator responds with templateInfos stored 
 ```
-...
+templateInfos: [{
+	// arbitrary example templateInfo
+	0x01: 0x01,
+	0x02: 'thumbprint'
+}]
+ENC = 
 ```
 
 ## Rename Fingerprint - setFriendlyName (0x05)
