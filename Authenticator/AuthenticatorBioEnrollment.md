@@ -1,28 +1,34 @@
+
 # AuthenticatorBioEnrollment (0x09)
 
 
-This command is used by the platform to provision/enumerate/delete bio enrollments in the authenticator. It is part of the authenticator API and is new to CTAP2.1. 
 
-Authenticator must return ```bioEnroll: true``` in options object field, when platform makes authenticatorGetInfo request to authenticator. See the [authenticatorGetInfo intro](AuthenticatorGetInfo.md).
+The authenticatorBioEnrollment commands provides the platform the ability to create, delete and list bio enrollments in the authenticator. 
 
- Make sure you are familiar with pin protocols. Familiarise yourself with [obtaining pinUvAuthParam](../Protocol/PinProtocol/2.md) guide first.
+Using this API, the platform is able to:
 
-<br/>
+- Get info about fingerprint sensor
+- Create/enroll a fingerprint
+- Cancel fingerprint enrollments before they finish
+- Delete a fingerprint
+- Find all fingerprints the have been added
+- Give the fingerprint an alias
 
-- [Platform Request](#platform-request)
-	- [SubCommands](#subcommands)
-- [Authenticator Response](#authenticator-response)
-- [Obtaining pinUvAuthParam](#obtaining-pinuvauthparam)
-- [Examples](#example-1---enrolling-a-fingerprint-0x01)
+This command requires support of PinUvAuthProtocol 2
 
-<br/>
+The platform must obtain pinUvAuthToken with `be` permission flag
+
+The specified PinUvAuthToken will be used in all future examples:
+
+```SessionPUAT = 0125fecfd8bf3f679bd9ec221324baa74f3cade0314b4fba8029500a320612ad```
+
+
 
 ## Platform Request
 
-AuthenticatorBioEnrollment keys ENUM: 
+Request keys ENUM:
 
 ```
-// All fields are optional
 modality             : 0x01 
 subCommand           : 0x02 
 subCommandParams     : 0x03 
@@ -31,13 +37,10 @@ pinUvAuthParam       : 0x05
 getModality          : 0x06 
 ```
 
-The modalities supported are:
+Modalities supported:
 ```
-fingerprint          : 0x01 // optional
+fingerprint          : 0x01
 ```
-
-
-### SubCommands:
 
 Sub Commands ENUM:
 
@@ -51,18 +54,16 @@ removeEnrollment           : 0x06
 getFingerprintSensorInfo   : 0x07
 ```
 
-SubCommandParams Fields:
+Sub Command Param Keys:
 ```
-templateId 		: 0x01
+templateId 		        : 0x01
 templateFriendlyName	: 0x02
 timeoutMilliseconds 	: 0x03
 ```
 
 
-<br/><br/>
-## Authenticator Response
+Response keys ENUM:
 ```
-// All response fields are optional
 modality                                : 0x01
 fingerprintKind                         : 0x02
 maxCaptureSamplesRequiredForEnroll      : 0x03
@@ -73,13 +74,13 @@ templateInfos                           : 0x07
 maxTemplateFriendlyName                 : 0x08
 ```
 **modality:**
-The user verification modality.
+User verification modality.
 
 **fingerprintKind:**
-Indicates the type of fingerprint sensor. For touch type sensor, its value = 1. For swipe type sensor its value = 2.
+Type of fingerprint sensor. Touch type sensor = 1. Swipe type sensor = 2.
 
 **maxCaptureSamplesRequiredForEnroll:**
-Indicates the maximum good samples required for enrollment
+Maximum good samples required for enrollment
 
 **templateId:**
 Template Identifier. 
@@ -93,7 +94,8 @@ Number of more sample required for enrollment to complete
 
 **templateInfos:**
 Array of templateInfos. 
-templateInfo:
+
+**templateInfo**
 ```
 templateId              : 0x01 // required
 templateFriendlyName    : 0x02 // optional
@@ -105,7 +107,7 @@ Indicates the maximum number of bytes the authenticator will accept as a templat
 
 
 <br/><br/>
-## Obtaining pinUvAuthParam
+## Computing PinUvAuthParam
 
 Based on exchange as specified in PinProtocol, we use the below value as a PinUvAuthToken test vector for authenticatorBioEnrollment in **[Example 1](#example-1---enrolling-a-fingerprint-0x01)**
 ```
@@ -114,16 +116,17 @@ puat = 0125fecfd8bf3f679bd9ec221324baa74f3cade0314b4fba8029500a320612ad
 
 The result of calling 
 ```
-HMAC-SHA-256(key, message)
+message         = subCommand || subCommandParams
+pinUvAuthParam  = HMAC-SHA-256(key = puat, message = message)
+
 HMAC-SHA-256(pinUvAuthToken, 32x0xFF || 0x0d || subCommand || subCommandParams)
-```
+
 
 Where 32 x 0xff = 32 zero bytes = ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
 
 
 We merge the arrayBuffers using _0x0D_ as the authenticator cmd, **authenticatorBioEnrollment**, and _0x01_ as the subCommand, **toggleAlwaysUV** . SubcommandParams not defined for 0x01 subCommand.
 
-```
 sessionPuat = 0125fecfd8bf3f679bd9ec221324baa7 // key 
 
 pinUvAuthParam = HMAC-SHA-256(key = sessionPuat, message = message)
@@ -143,27 +146,13 @@ For pinUvAuthParam, PinUvAuthProtocol 1 returns first 16 bytes of the HMAC outpu
 
 **!! All examples below use exclusively PinUvAuthProtocol 2 !!**
 <br/><br/>
-## Example 1 - Enrolling a fingerprint (0x01)
+## Enrolling a fingerprint - EnrollBegin (0x01)	EnrollCaptureNextSample (0x02)
 
-- Platform checks if authenticator supports BioEnrollment API,
+- To enroll a fingerprint, platform calls EnrollBegin (0x01). Authenticator will flash, signalling user to press their fingerprint. Upon success, authenticator returns response including number of remainingSamples to capture. Platform then will continue prompting user to capture remaining samples. Authenticator subtracts 1 from remiaingSamples each response, until remainingSamples is 0.
 
-- Platform gets pinUvAuthToken from the authenticator with the [be permission](../Protocol/PinProtocol/2.md/#get-pinuvauthtoken-with-permissions)
+> Note: This is a stateful command. During enrollBegin(0x03) and EnrollCaptureNextSample(0x03) authenticator must keep a track of which RP is following next by using some sort of state(in active transaction) counter to keep a track of enumerated RPs
 
-- Platform sends authenticatorBioEnrollment command with payload to begin enrollment
 
-- Authenticator on receiving such request performs procedures described in step 5 below
-
-- Platform sends authenticatorBioEnrollment command with different payload to capture next sample, continuing enrollment in a loop till remaining samples to capture is zero or authenticator errors out with unrecoverable error or platform wants to cancel current enrollment:
-
-- Authenticator on receiving such request performs following procedures.
-<br/><br/>
-1. 
-	1.  Platform checks if authenticator supports BioEnrollment API by sending **authenticatorGetInfo (0x04)** CMD. See [authenticatorGetInfo intro](AuthenticatorGetInfo.md).
-		- Authenticator responds with cborResponseStruct containing field ```bioEnrollment: true```. 
-
-2. Platform gets pinUvAuthToken from the authenticator with the _**be**_ permission. TODO
-
-3. Platform generates pinUVAuthParam:
 ```
 puat = '0125fecfd8bf3f679bd9ec221324baa7'
 modality: 0x01 // fingerprint
@@ -199,20 +188,9 @@ CMD: 0x09
 
 REQUEST: 0x09a50101020103a103192710040205784064313665333565613535336430633933613461376361633765663338303163653162613338366533386164353537666232396236336430626565386265373963
 ```
-5. Authenticator follows process:
-	1. Authenticator cancels any unfinished ongoing enrollment.
-	
-	2. Authenticator generates templateId for new enrollment.
 
-	3. Authenticator sends the command to the sensor to capture the sample.
+5. On success the authenticator will return `CTAP_SUCCESS(0x00)` with a response struct containing `templateId(0x04)`, `lastEnrollSampleStatus(0x05)` and `remainingSamples(0x06)`.
 
-	4. Authenticator returns authenticatorBioEnrollment response with following parameters
-
-```
-templateId                : 0x04 // template identifier of the new template being enrolled.
-lastEnrollSampleStatus    : 0x05 // Status of enrollment of last sample.
-remainingSamples          : 0x06 // Number of sample remaining to complete the enrollment.
-```
 
 e.g.,
 ```
@@ -224,7 +202,7 @@ response = {
 ENCODED: a3040105000601
 ```
 
-6. Platform sends authenticatorBioEnrollment command with following parameters to continue enrollment in a loop till remainingSamples is zero or authenticator errors out with unrecoverable error or platform wants to cancel current enrollment:
+6. Platform sends authenticatorBioEnrollment cmd to continue enrollment, capturing remaining samples:
 
 	1. Platform sends authenticatorBioEnrollment command with following parameters
 	```
@@ -243,11 +221,7 @@ ENCODED: a3040105000601
 	payload = { 0x01: 0x01, 0x02: 0x02, 0x03: subCommandParams, 0x04: 0x02, 0x05: pinUvAuthParam }
 	encoded =
 	```
-	2. Authenticator on receiving such request performs following procedures.
-		- Validates parameters and pinUvAuthParam [(see specs for full reference)](https://fidoalliance.org/specs/fido-v2.1-ps-20210615/fido-client-to-authenticator-protocol-v2.1-ps-20210615.html#authenticatorBioEnrollment) -- if parameter is is invalid -- return error status code
-		- If fingerprint is already present on the sensor, authenticator waits for user to lift finger from the sensor.
-		- Authenticator sends the command to the sensor to capture the sample.
-		- Authenticator returns authenticatorBioEnrollment response with following parameters:
+	2. Authenticator response
 	```
 	response = {
 		0x05: 0x00 // good fingerprint capture
