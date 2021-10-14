@@ -7,12 +7,12 @@ The authenticatorBioEnrollment commands provides the platform the ability to cre
 
 Using this API, the platform is able to:
 
-- Get info about fingerprint sensor
 - Create/enroll a fingerprint
 - Cancel fingerprint enrollments before they finish
-- Delete a fingerprint
 - Find all fingerprints the have been added
-- Give the fingerprint an alias
+- Give the fingerprint an alias (friendlyName)
+- Delete a fingerprint
+- Get info about fingerprint sensor
 
 This command requires support of PinUvAuthProtocol 2
 
@@ -56,7 +56,7 @@ getFingerprintSensorInfo   : 0x07
 
 Sub Command Param Keys:
 ```
-templateId 		        : 0x01
+templateId 		: 0x01
 templateFriendlyName	: 0x02
 timeoutMilliseconds 	: 0x03
 ```
@@ -148,9 +148,10 @@ For pinUvAuthParam, PinUvAuthProtocol 1 returns first 16 bytes of the HMAC outpu
 <br/><br/>
 ## Enrolling a fingerprint - EnrollBegin (0x01)	EnrollCaptureNextSample (0x02)
 
-- To enroll a fingerprint, platform calls EnrollBegin (0x01). Authenticator will flash, signalling user to press their fingerprint. Upon success, authenticator returns response including number of remainingSamples to capture. Platform then will continue prompting user to capture remaining samples. Authenticator subtracts 1 from remiaingSamples each response, until remainingSamples is 0.
+- To enroll a fingerprint, platform calls EnrollBegin (0x01).
+- Upon success, authenticator returns response including number of remainingSamples to capture.
+- Platform then will continue prompting user to capture remaining samples. Authenticator subtracts 1 from remainingSamples each response, until remainingSamples is 0.
 
-> Note: This is a stateful command. During enrollBegin(0x03) and EnrollCaptureNextSample(0x03) authenticator must keep a track of which RP is following next by using some sort of state(in active transaction) counter to keep a track of enumerated RPs
 
 
 ```
@@ -195,9 +196,9 @@ REQUEST: 0x09a50101020103a103192710040205784064313665333565613535336430633933613
 e.g.,
 ```
 response = {
-	0x04    :    0x01 // arbitrary value for example
-	0x05    :    0x00 // CTAP2_ENROLL_FEEDBACK_FP_GOOD -- good fingerprint capture
-	0x06    :    0x01 // arbitrary value for example
+	0x04    :    0x01 // arbitrary example
+	0x05    :    0x00 // good fingerprint capture
+	0x06    :    0x01 // arbitrary example
 }
 ENCODED: a3040105000601
 ```
@@ -233,23 +234,53 @@ ENCODED: a3040105000601
 
 ## Cancel Enrollment cancelCurrentEnrollment (0x03)
 
+Platform sends cancelCurrentEnrollment command, stopping the process of storing the fingerprint on authenticator. 
+REQ:
+```
+...
+```
+Authenticator cancels enrollment and returns `CTAP2_OK`
 
 ## Find All Fingerprints enumerateEnrollments (0x04)
 
+Platform sends enumerateEnrollments command to find all the fingerprints stored on device.
+
+REQ:
+```
+...
+```
+Authenticator responds with templateInfos stored 
+```
+...
+```
 
 ## Rename Fingerprint With Alias setFriendlyName (0x05)
 
+Platform sends setFriendlyName command to rename a fingerprint stored on authenticator.
+```
+...
+```
+Authenticator renames fingerprint and returns `CTAP2_OK`
 
 ## Delete Fingerprint removeEnrollment (0x06)
 
+Platform sends removeEnrollment command to authenticator to delete a fingerprint that is stored on authenticator.
+```
+....
+```
+Authenticator deletes the fingerprint and returns `CTAP2_OK`
 
 ## Get Info About Fingerprint Sensor getFingerprintSensorInfo (0x07)
 
-GetFingerprintSensorInfo provides a mechanism to get information about the sensor such as the type of fingerprint (touch or swipe), the maximum number of good samples required for enrollment, and the size of a template alias name.
+Platform sends GetFingerprintSensorInfo command to get information about the sensor such as the type of fingerprint (touch or swipe), including the maximum number of good samples required for enrollment, and the size of a template alias name.
 
 1. Platform REQ
 ```
-
+...
 ```
 2. Authenticator responds with struct containing `fingerprintKind` `maxCaptureSamplesRequiredForEnroll` `maxTemplateFriendlyName`
 ```
+...
+```
+
+
