@@ -220,7 +220,7 @@ ENCODED: a205000600
 ```
 
 
-## Cancel Enrollment cancelCurrentEnrollment (0x03)
+## Cancel Enrollment - cancelCurrentEnrollment (0x03)
 
 Platform sends cancelCurrentEnrollment command, stopping the process of storing the fingerprint on authenticator. No PinUvAuthParam required.
 REQ:
@@ -236,12 +236,25 @@ ENC = 0x09 [...]
 ```
 Authenticator cancels enrollment and returns `CTAP2_OK`
 
-## Find All Fingerprints enumerateEnrollments (0x04)
+## Find All Fingerprints - enumerateEnrollments (0x04)
 
 Platform sends enumerateEnrollments command to find all the fingerprints stored on device.
 
 REQ:
 ```
+msg             = 01 || 04
+PinUvAuthParam  = ...
+```
+
+```
+PAYLOAD = { 
+	0x01: 0x01, 
+	0x02: 0x04, 
+	0x04: 0x02, 
+	0x05: PinUvAuthParam 
+}
+CMD: 0x09
+ENC = 0x09 [...]
 ...
 ```
 Authenticator responds with templateInfos stored 
@@ -249,7 +262,7 @@ Authenticator responds with templateInfos stored
 ...
 ```
 
-## Rename Fingerprint With Alias setFriendlyName (0x05)
+## Rename Fingerprint - setFriendlyName (0x05)
 
 Platform sends setFriendlyName command to rename a fingerprint stored on authenticator.
 ```
@@ -265,7 +278,7 @@ Platform sends removeEnrollment command to authenticator to delete a fingerprint
 ```
 Authenticator deletes the fingerprint and returns `CTAP2_OK`
 
-## Get Info About Fingerprint Sensor getFingerprintSensorInfo (0x07)
+## Get Info On Fingerprint Sensor - getFingerprintSensorInfo (0x07)
 
 Platform sends GetFingerprintSensorInfo command to get information about the sensor such as the type of fingerprint (touch or swipe), including the maximum number of good samples required for enrollment, and the size of a template alias name.
 
