@@ -230,3 +230,26 @@ ENCODED: a3040105000601
 	ENCODED: a205000600
 	```
 
+
+## Cancel Enrollment cancelCurrentEnrollment (0x03)
+
+
+## Find All Fingerprints enumerateEnrollments (0x04)
+
+
+## Rename Fingerprint With Alias setFriendlyName (0x05)
+
+
+## Delete Fingerprint removeEnrollment (0x06)
+
+
+## Get Info About Fingerprint Sensor getFingerprintSensorInfo (0x07)
+
+GetFingerprintSensorInfo provides a mechanism to get information about the sensor such as the type of fingerprint (touch or swipe), the maximum number of good samples required for enrollment, and the size of a template alias name.
+
+1. Platform REQ
+```
+
+```
+2. Authenticator responds with struct containing `fingerprintKind` `maxCaptureSamplesRequiredForEnroll` `maxTemplateFriendlyName`
+```
