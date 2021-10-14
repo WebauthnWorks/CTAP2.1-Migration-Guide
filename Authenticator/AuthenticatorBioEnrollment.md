@@ -110,33 +110,22 @@ Indicates the maximum number of bytes the authenticator will accept as a templat
 ## Computing PinUvAuthParam
 
 Based on exchange as specified in PinProtocol, we use the below value as a PinUvAuthToken test vector for authenticatorBioEnrollment in **[Example 1](#example-1---enrolling-a-fingerprint-0x01)**
-```
-puat = 0125fecfd8bf3f679bd9ec221324baa74f3cade0314b4fba8029500a320612ad
-```
 
-The result of calling 
+BioEnrollment specifies the following structure to compute PinUvAuthParam
 ```
 message         = subCommand || subCommandParams
 pinUvAuthParam  = HMAC-SHA-256(key = puat, message = message)
+```
+Example PinUvAuthParam for enrollBegin (0x01) subcommand (no subcommandParams)
+```
+32x0xFF = 32 zero bytes = ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
 
-HMAC-SHA-256(pinUvAuthToken, 32x0xFF || 0x0d || subCommand || subCommandParams)
+message =  32x0xFF || 0x09 || subCommand || subCommandParams)
+        => 32x0xFF || 0x09 || 0x01
 
-
-Where 32 x 0xff = 32 zero bytes = ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
-
-
-We merge the arrayBuffers using _0x0D_ as the authenticator cmd, **authenticatorBioEnrollment**, and _0x01_ as the subCommand, **toggleAlwaysUV** . SubcommandParams not defined for 0x01 subCommand.
-
-sessionPuat = 0125fecfd8bf3f679bd9ec221324baa7 // key 
-
-pinUvAuthParam = HMAC-SHA-256(key = sessionPuat, message = message)
-pinUvAuthParam = HMAC-SHA-256(key, 32 x 0xff || 0x0D || subcommand || subCommandParams)
-
-message = 32 x 0xff || 0x0D || 0x01
-
-
-pinUvAuthParam  = HMAC-SHA-256(sessionPuat, message)
-		== 66e4e667922def036d0cc065fa6429f8d94910a7848a6853c01db49d50a4c48a
+pinUvAuthParam =  HMAC-SHA-256(key = puat, message = message)
+               =  HMAC-SHA-256(key, 32 x 0xff || 0x0D || subcommand || subCommandParams)
+	       => 66e4e667922def036d0cc065fa6429f8d94910a7848a6853c01db49d50a4c48a
 ```
 
 
