@@ -118,7 +118,7 @@ pinUvAuthParam  = HMAC-SHA-256(key = puat, message = message)
 ```
 Example PinUvAuthParam for `enrollBegin (0x01)` subcommand
 ```
-subCommand = 01
+subCommand = 0x01
 subCommandParams = {
 	0x03: 10000 // 10000ms timeout as arbitrary example
 }
@@ -140,14 +140,14 @@ For pinUvAuthParam, PinUvAuthProtocol 1 returns first 16 bytes of the HMAC outpu
 **EnrollBegin (0x01)**
 - To enroll a fingerprint, platform calls EnrollBegin (0x01).
 - Upon success, authenticator returns response including number of remainingSamples to capture.
-- Platform then will continue prompting user to capture remaining samples. Authenticator subtracts 1 from remainingSamples each response, until remainingSamples is 0.
+- Platform then will continue prompting user to capture remaining samples and send EnrollCaptureNextSample (0x02) command to Authenticator. Authenticator subtracts 1 from remainingSamples each response, until remainingSamples is 0.
 
 
 
 ```
-subCommand = 01
+subCommand: 0x01
 subCommandParams = {
-	0x03: 10000 // 10000ms timeout as arbitrary example
+	0x03: 10000 // arbitrary example, ms
 }
 ENCODED: a103192710 (TODO verify values)
 
@@ -156,7 +156,7 @@ message = 0101a103192710
 pinUvAuthParam = 66e4e667922def036d0cc065fa6429f8d94910a7848a6853c01db49d50a4c48a
 ```
 
-4. Platform generates **authenticatorBioEnrollment(0x09)** calling **enrollBegin(0x01)** request
+- Platform generates **authenticatorBioEnrollment(0x09)** calling **enrollBegin(0x01)** request
 ```
 payload = { modality, subCommand, subCommandParams, pinUvAuthProtocol=2, pinUvAuthParam }
 payload = { 
@@ -175,7 +175,7 @@ CMD: 0x09
 REQUEST: 0x09a50101020103a103192710040205784064313665333565613535336430633933613461376361633765663338303163653162613338366533386164353537666232396236336430626565386265373963
 ```
 
-5. On success the authenticator will return `CTAP_SUCCESS(0x00)` with a response struct containing `templateId(0x04)`, `lastEnrollSampleStatus(0x05)` and `remainingSamples(0x06)`.
+- On success the authenticator will return `CTAP_SUCCESS(0x00)` with a response struct containing `templateId(0x04)`, `lastEnrollSampleStatus(0x05)` and `remainingSamples(0x06)`.
 
 
 e.g.,
@@ -192,18 +192,21 @@ ENCODED: a3040105000601
 - Platform sends EnrollCaptureNextSample cmd to continue enrollment, capturing remaining samples:
 
 ```
-modality: 0x01 // fingerprint
-subCommand: 0x02 // subCommand is now enrollCaptureNextSample
+modality: 0x01
+subCommand: 0x02 // enrollCaptureNextSample
+
 subCommandParams = {
-	0x01: 0x01 // taken from templatedId in response
-	0x03: 10000 // 10000ms timeout subCommandParam_bytes = CBOR encoding of subCommandParams ??????????? 
+	0x01: 0x01 // from above templateId response
+	0x03: 10000 // arbitrary timeout
 }
-subCommandParamBytes (encoded) = a2010103192710
+ENCODED = a2010103192710
 
-pinUvAuthParam = generateHMACSHA256(key=puat, msg) // puat=0125fecfd8bf3f679bd9ec221324baa7
-	   msg = 0x01 || 0x02 || subCommandParamBytes
-pinUvAuthParam (encoded) = 0102a2010103192710 
-
+msg = 0x01 || 0x02 || subCommandParam
+message         = 01 || subCommand || subCommandParams
+pinUvAuthParam  = HMAC-SHA-256(key = puat, message = message)
+pinUvAuthParam  = HMAC-SHA-256(key = puat, message = message)
+                = 0102a2010103192710
+	 
 payload = { 0x01: 0x01, 0x02: 0x02, 0x03: subCommandParams, 0x04: 0x02, 0x05: pinUvAuthParam }
 encoded =
 ```
@@ -211,7 +214,7 @@ Authenticator response:
 ```
 response = {
 	0x05: 0x00 // good fingerprint capture
-	0x06: 0x00 // in step 5. the response contained 0x05: 0x01. As authenticator captured the next sample, remaining samples has gone from 0 -> 1
+	0x06: 0x00 // RemainingSamples changed from 1 -> 0
 }
 ENCODED: a205000600
 ```
@@ -219,9 +222,16 @@ ENCODED: a205000600
 
 ## Cancel Enrollment cancelCurrentEnrollment (0x03)
 
-Platform sends cancelCurrentEnrollment command, stopping the process of storing the fingerprint on authenticator. 
+Platform sends cancelCurrentEnrollment command, stopping the process of storing the fingerprint on authenticator. No PinUvAuthParam required.
 REQ:
 ```
+PAYLOAD:
+{
+0x01 : 0x01,
+0x02: 0x03
+}
+CMD: 0x09
+ENC = 0x09 [...]
 ...
 ```
 Authenticator cancels enrollment and returns `CTAP2_OK`
@@ -259,13 +269,27 @@ Authenticator deletes the fingerprint and returns `CTAP2_OK`
 
 Platform sends GetFingerprintSensorInfo command to get information about the sensor such as the type of fingerprint (touch or swipe), including the maximum number of good samples required for enrollment, and the size of a template alias name.
 
-1. Platform REQ
+1. REQ:
 ```
+PAYLOAD:
+{
+0x01 : 0x01,
+0x02: 0x07
+}
+CMD: 0x09
+ENC = 0x09 [...]
 ...
 ```
+
+Authenticator cancels enrollment and returns `CTAP2_OK`
 2. Authenticator responds with struct containing `fingerprintKind` `maxCaptureSamplesRequiredForEnroll` `maxTemplateFriendlyName`
 ```
-...
+RES: 
+{
+0x02: 1, // touch
+0x03: 3, // arbitrary example
+0x08: 64, // arbitrary example
+}
 ```
 
 
