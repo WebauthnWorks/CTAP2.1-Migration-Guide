@@ -137,7 +137,7 @@ For pinUvAuthParam, PinUvAuthProtocol 1 returns first 16 bytes of the HMAC outpu
 **!! All examples below use exclusively PinUvAuthProtocol 2 !!**
 <br/><br/>
 ## Enrolling a fingerprint - EnrollBegin (0x01)	EnrollCaptureNextSample (0x02)
-
+**EnrollBegin (0x01)**
 - To enroll a fingerprint, platform calls EnrollBegin (0x01).
 - Upon success, authenticator returns response including number of remainingSamples to capture.
 - Platform then will continue prompting user to capture remaining samples. Authenticator subtracts 1 from remainingSamples each response, until remainingSamples is 0.
@@ -188,33 +188,33 @@ response = {
 ENCODED: a3040105000601
 ```
 
-6. Platform sends authenticatorBioEnrollment cmd to continue enrollment, capturing remaining samples:
+**EnrollCaptureNextSample (0x02)**
+- Platform sends EnrollCaptureNextSample cmd to continue enrollment, capturing remaining samples:
 
-	1. Platform sends authenticatorBioEnrollment command with following parameters
-	```
-	modality: 0x01 // fingerprint
-	subCommand: 0x02 // subCommand is now enrollCaptureNextSample
-	subCommandParams = {
-		0x01: 0x01 // taken from templatedId in response
-		0x03: 10000 // 10000ms timeout subCommandParam_bytes = CBOR encoding of subCommandParams ??????????? 
-	}
-	subCommandParamBytes (encoded) = a2010103192710
-	
-	pinUvAuthParam = generateHMACSHA256(key=puat, msg) // puat=0125fecfd8bf3f679bd9ec221324baa7
-		   msg = 0x01 || 0x02 || subCommandParamBytes
-	pinUvAuthParam (encoded) = 0102a2010103192710 
-	
-	payload = { 0x01: 0x01, 0x02: 0x02, 0x03: subCommandParams, 0x04: 0x02, 0x05: pinUvAuthParam }
-	encoded =
-	```
-	2. Authenticator response
-	```
-	response = {
-		0x05: 0x00 // good fingerprint capture
-		0x06: 0x00 // in step 5. the response contained 0x05: 0x01. As authenticator captured the next sample, remaining samples has gone from 0 -> 1
-	}
-	ENCODED: a205000600
-	```
+```
+modality: 0x01 // fingerprint
+subCommand: 0x02 // subCommand is now enrollCaptureNextSample
+subCommandParams = {
+	0x01: 0x01 // taken from templatedId in response
+	0x03: 10000 // 10000ms timeout subCommandParam_bytes = CBOR encoding of subCommandParams ??????????? 
+}
+subCommandParamBytes (encoded) = a2010103192710
+
+pinUvAuthParam = generateHMACSHA256(key=puat, msg) // puat=0125fecfd8bf3f679bd9ec221324baa7
+	   msg = 0x01 || 0x02 || subCommandParamBytes
+pinUvAuthParam (encoded) = 0102a2010103192710 
+
+payload = { 0x01: 0x01, 0x02: 0x02, 0x03: subCommandParams, 0x04: 0x02, 0x05: pinUvAuthParam }
+encoded =
+```
+Authenticator response:
+```
+response = {
+	0x05: 0x00 // good fingerprint capture
+	0x06: 0x00 // in step 5. the response contained 0x05: 0x01. As authenticator captured the next sample, remaining samples has gone from 0 -> 1
+}
+ENCODED: a205000600
+```
 
 
 ## Cancel Enrollment cancelCurrentEnrollment (0x03)
