@@ -295,7 +295,28 @@ Authenticator renames fingerprint and returns `CTAP2_OK`
 
 Platform sends removeEnrollment command to authenticator to delete a fingerprint that is stored on authenticator.
 ```
-....
+subCommandParams: {
+	0x01: 0x01 // arbitrary templateId
+}
+= [ ... ]
+message             = 01 || 06 || subCommandParams
+PinUvAuthParam      = ...
+```
+
+```
+PAYLOAD = { 
+	0x01: 0x01, 
+	0x02: 0x06, 
+	0x03: {
+		0x01: 0x01 // example templateId
+	}
+	0x04: 0x02, 
+	0x05: PinUvAuthParam 
+}
+PAYLOAD: [...]
+
+CMD: 0x09
+ENC = 0x09 [...]
 ```
 Authenticator deletes the fingerprint and returns `CTAP2_OK`
 
