@@ -341,8 +341,7 @@ ENC = 0x09 [...]
 ...
 ```
 
-Authenticator cancels enrollment and returns `CTAP2_OK`
-2. Authenticator responds with struct containing `fingerprintKind` `maxCaptureSamplesRequiredForEnroll` `maxTemplateFriendlyName`
+Authenticator cancels enrollment and returns `CTAP2_OK` with a response struct containing `fingerprintKind (0x02)` `maxCaptureSamplesRequiredForEnroll (0x03)` `maxTemplateFriendlyName (0x08)`
 ```
 RES: 
 {
