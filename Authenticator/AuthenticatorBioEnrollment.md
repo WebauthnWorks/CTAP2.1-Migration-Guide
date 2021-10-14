@@ -116,7 +116,7 @@ BioEnrollment specifies the following structure to compute PinUvAuthParam
 message         = 01 || subCommand || subCommandParams
 pinUvAuthParam  = HMAC-SHA-256(key = puat, message = message)
 ```
-Example PinUvAuthParam for enrollBegin (0x01) subcommand (no subcommandParams)
+Example PinUvAuthParam for `enrollBegin (0x01)` subcommand
 ```
 subCommand = 01
 subCommandParams = {
