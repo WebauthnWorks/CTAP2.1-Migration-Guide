@@ -113,19 +113,20 @@ Based on exchange as specified in PinProtocol, we use the below value as a PinUv
 
 BioEnrollment specifies the following structure to compute PinUvAuthParam
 ```
-message         = subCommand || subCommandParams
+message         = 01 || subCommand || subCommandParams
 pinUvAuthParam  = HMAC-SHA-256(key = puat, message = message)
 ```
 Example PinUvAuthParam for enrollBegin (0x01) subcommand (no subcommandParams)
 ```
-32x0xFF = 32 zero bytes = ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+subCommand = 01
+subCommandParams = {
+	0x03: 10000 // 10000ms timeout as arbitrary example
+}
+ENCODED: a103192710 (TODO verify values)
 
-message =  32x0xFF || 0x09 || subCommand || subCommandParams)
-        => 32x0xFF || 0x09 || 0x01
+message = 0101a103192710
 
-pinUvAuthParam =  HMAC-SHA-256(key = puat, message = message)
-               =  HMAC-SHA-256(key, 32 x 0xff || 0x0D || subcommand || subCommandParams)
-	       => 66e4e667922def036d0cc065fa6429f8d94910a7848a6853c01db49d50a4c48a
+pinUvAuthParam = 66e4e667922def036d0cc065fa6429f8d94910a7848a6853c01db49d50a4c48a
 ```
 
 
@@ -144,20 +145,15 @@ For pinUvAuthParam, PinUvAuthProtocol 1 returns first 16 bytes of the HMAC outpu
 
 
 ```
-puat = '0125fecfd8bf3f679bd9ec221324baa7'
-modality: 0x01 // fingerprint
-subCommand: 0x01 // enroll begin
+subCommand = 01
 subCommandParams = {
-	0x03: 10000 // 10000ms timeout subCommandParam_bytes = CBOR encoding of subCommandParams ??????????? 
+	0x03: 10000 // 10000ms timeout as arbitrary example
 }
-ENCODED: "a103192710" 
+ENCODED: a103192710 (TODO verify values)
 
-pinUvAuthParam = generateHMACSHA256(key=puat, msg)
+message = 0101a103192710
 
-msg = modality || subCommand || subCommandParam_bytes;	
-msg = 0x01 || 0x01 || subCommandParamBytes ); // 0101a103192710
-
-pinUvAuthParam = 'd16e35ea553d0c93a4a7cac7ef3801ce1ba386e38ad557fb29b63d0bee8be79c'
+pinUvAuthParam = 66e4e667922def036d0cc065fa6429f8d94910a7848a6853c01db49d50a4c48a
 ```
 
 4. Platform generates **authenticatorBioEnrollment(0x09)** calling **enrollBegin(0x01)** request
