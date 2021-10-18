@@ -6,9 +6,9 @@ This extension is only applicable during the credential creation `MakeCredential
 
 An enterprise attestation capable authenticator MAY support either or both:
 
-- Vendor-facilitated enterprise attestation (enterpriseAttestation = 1)
+- Vendor-facilitated enterprise attestation, enterpriseAttestation = 1
 
-- Platform-managed enterprise attestation (enterpriseAttestation = 2)
+- Platform-managed enterprise attestation, enterpriseAttestation = 2
 
 **Note:** Authenticators wishing to support only vendor-facilitated enterprise attestation MAY treat enterpriseAttestation = 2 the same as enterpriseAttestation = 1.
 
@@ -44,3 +44,5 @@ DECODED:
     10: 2 // platform-managed enterprise attestation
 }
 ```
+
+The device then responds with the `CTAP_SUCCESS(0x00)` and attestation response.
