@@ -4,14 +4,16 @@ An enterprise attestation is an attestation that may include uniquely identifyin
 
 An enterprise attestation capable authenticator MAY support either or both:
 
-- Vendor-facilitated enterprise attestation
+- Vendor-facilitated enterprise attestation (enterpriseAttestation = 1)
 
-- Platform-managed enterprise attestation 
+- Platform-managed enterprise attestation (enterpriseAttestation = 2)
+
+**Note:** Authenticators wishing to support only vendor-facilitated enterprise attestation MAY treat enterpriseAttestation = 2 the same as enterpriseAttestation = 1.
 
 Example: Platform enterprise attestation
 
 ```
-REQ:
+REQ: 0x01 ...
 
 CMD: 0x01
 PAYLOAD: ...
