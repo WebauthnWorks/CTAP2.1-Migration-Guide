@@ -2,6 +2,8 @@
 
 An enterprise attestation is an attestation that may include uniquely identifying information. 
 
+This extension is only applicable during the credential creation `MakeCredential(0x01) `
+
 An enterprise attestation capable authenticator MAY support either or both:
 
 - Vendor-facilitated enterprise attestation (enterpriseAttestation = 1)
@@ -10,7 +12,7 @@ An enterprise attestation capable authenticator MAY support either or both:
 
 **Note:** Authenticators wishing to support only vendor-facilitated enterprise attestation MAY treat enterpriseAttestation = 2 the same as enterpriseAttestation = 1.
 
-Example: Platform enterprise attestation
+Example `MakeCredential(0x01)` request with `platform-managed enterprise attestation` extension:
 
 ```
 REQ: 0x01 ...
@@ -37,8 +39,8 @@ DECODED:
             type: "public-key"
         }
     ],
-	8: 06e0e04ebbd0a1c73cdfd1d06a39dd4f65e8d6047fbd3981f1b477fcbba8810b, // PinUvAuthParam
+    8: 06e0e04ebbd0a1c73cdfd1d06a39dd4f65e8d6047fbd3981f1b477fcbba8810b, // PinUvAuthParam
     9: 2 // PinUvAuthProtocol
-	10: 2 // platform-managed enterprise attestation
+    10: 2 // platform-managed enterprise attestation
 }
 ```
