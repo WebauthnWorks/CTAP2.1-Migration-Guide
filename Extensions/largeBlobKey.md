@@ -40,4 +40,4 @@ DECODED:
 }
 ```
 
-The device then responds with the `CTAP_SUCCESS(0x00)`, and the makeCredentialResponse with largeBlobKey (0x05) set to generated 32 byte largeBlobKey
+The device then responds with the `CTAP_SUCCESS(0x00)`, and the makeCredentialResponse with largeBlobKey (0x05) set to value of the generated 32 byte key
