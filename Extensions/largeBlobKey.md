@@ -33,11 +33,11 @@ DECODED:
         }
     ],
     6: {
-        2263726564426c6f62223a22666f6f22        // "credBlob":"foo"
+        226c61726765426c6f624b6579223a74727565        // "largeBlobKey":true
     },
     8: 06e0e04ebbd0a1c73cdfd1d06a39dd4f65e8d6047fbd3981f1b477fcbba8810b, // PinUvAuthParam
     9: 2 // PinUvAuthProtocol
 }
 ```
 
-The device then responds with the `CTAP_SUCCESS(0x00)` and attestation response.
+The device then responds with the `CTAP_SUCCESS(0x00)`, and the makeCredentialResponse with largeBlobKey (0x05) set to generated 32 byte largeBlobKey
