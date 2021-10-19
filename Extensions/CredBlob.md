@@ -8,6 +8,18 @@ This extension is only applicable with `authenticatorMakeCredential` or `authent
 Example `MakeCredential(0x01)` request with `credBlob` extension:
 
 ```
+subCommand       = 0x04 
+subCommandParams = {
+    0x01: a379a6f6eeafb9a55e378c118034e2751e682fab9f2d30ab13d2125586ce1947 // rpIDHash of example.com
+} 
+                 = a1015820a379a6f6eeafb9a55e378c118034e2751e682fab9f2d30ab13d2125586ce1947
+
+message = 0x04 || a1015820a379a6f6eeafb9a55e378c118034e2751e682fab9f2d30ab13d2125586ce1947
+
+pinUvAuthParam  = HMAC-SHA-256(key = puat, message = message)
+                => 340ff740ea8c0daf48c5df402c65735315d296cc1982cd1fa184918bf7407c8b
+```
+```
 REQ: 0x01 ...
 
 CMD: 0x01
@@ -33,9 +45,9 @@ DECODED:
         }
     ],
     6: {
-        2263726564426c6f62223a22666f6f22        // "credBlob":"foo"
+        credBlob:"foo" // 2263726564426c6f62223a22666f6f22
     },
-    8: 06e0e04ebbd0a1c73cdfd1d06a39dd4f65e8d6047fbd3981f1b477fcbba8810b, // PinUvAuthParam
+    8: 340ff740ea8c0daf48c5df402c65735315d296cc1982cd1fa184918bf7407c8b, // PinUvAuthParam
     9: 2 // PinUvAuthProtocol
 }
 ```
