@@ -45,4 +45,4 @@ DECODED:
 }
 ```
 
-The device then responds with the `CTAP_SUCCESS(0x00)` and attestation response.
+The device then responds with the `CTAP_SUCCESS(0x00)`, attestation response, and epAtt (0x04) in response set to TRUE.
