@@ -40,4 +40,6 @@ DECODED:
 }
 ```
 
-The device then responds with the `CTAP_SUCCESS(0x00)` and attestation response.
+The device then responds with the `CTAP_SUCCESS(0x00)` and makeCredential response, WITH credBlob = true in extensions field
+### elaborate
+
