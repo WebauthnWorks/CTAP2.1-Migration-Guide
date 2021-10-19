@@ -1,6 +1,6 @@
 # CredBlob Extension
 
-This extension enables RPs to provide a small amount of extra credential configuration information to the authenticator when a credential is made.
+This extension enables RPs to provide a small amount of extra credential configuration information (credBlob value) to the authenticator when a credential is made.
 
 This extension is only applicable with `authenticatorMakeCredential` or `authenticatorGetAssertion` 
 
@@ -32,9 +32,12 @@ DECODED:
             type: "public-key"
         }
     ],
+    6: {
+        // "credBlob": Byte String containing the credBlob value
+        // credBlob : /b 'example'
+    },
     8: 06e0e04ebbd0a1c73cdfd1d06a39dd4f65e8d6047fbd3981f1b477fcbba8810b, // PinUvAuthParam
     9: 2 // PinUvAuthProtocol
-    10: 2 // platform-managed enterprise attestation
 }
 ```
 
