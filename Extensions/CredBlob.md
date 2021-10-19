@@ -33,8 +33,7 @@ DECODED:
         }
     ],
     6: {
-        // "credBlob": Byte String containing the credBlob value
-        // credBlob : /b 'example'
+        2263726564426c6f62223a22666f6f22        // "credBlob":"foo"
     },
     8: 06e0e04ebbd0a1c73cdfd1d06a39dd4f65e8d6047fbd3981f1b477fcbba8810b, // PinUvAuthParam
     9: 2 // PinUvAuthProtocol
