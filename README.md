@@ -6,7 +6,7 @@ The order of implementation:
 - [x] [Authenticator Config](./Protocol/AuthenticatorConfig.md)
 - [x] [Extension: CredProtect](./Extensions/CredProtect.md)
 - [x] [Credential Management](./Protocol/CredentialManagement.md)
-- [ ] [Authenticator Selection](./Protocol/AuthenticatorSelection.md)
+- [x] [Authenticator Selection](./Protocol/AuthenticatorSelection.md)
 - [ ] [Enterprise Attestation](./Extension/EnterpriseAttestation.md)
 - [ ] [Large Blobs](./Extensions/LargeBlobs.md)
 - [ ] [Extension: Large Blobs Key](./Extensions/LargeBlobsKey.md)
