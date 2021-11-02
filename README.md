@@ -8,7 +8,7 @@ The order of implementation:
 - [x] [Credential Management](./Protocol/CredentialManagement.md)
 - [x] [Authenticator Selection](./Protocol/AuthenticatorSelection.md)
 - [ ] [Enterprise Attestation](./Extension/EnterpriseAttestation.md)
-- [ ] [Large Blobs](./Extensions/LargeBlobs.md)
+- [x] [Large Blobs](./Protocol/LargeBlobs.md)
 - [ ] [Extension: Large Blobs Key](./Extensions/LargeBlobsKey.md)
 - [ ] [Extension: CredentialBlob](./Extensions/CredentialBlob.md)
 - [ ] [U2F/FIDO2 Credential reuse](./Protocol/U2FFIDO2CredentialReuse.md)
