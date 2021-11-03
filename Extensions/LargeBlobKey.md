@@ -2,6 +2,8 @@
 
 LargeBlobKey extension allows authenticator to generate an opaque random byte array associated with the credential. This byte array then can be used together with the LargeBlobs to encrypt/decrypt data.
 
+The key MUST not be reused from othere extensions such as [Hmac-Secret](../HmacSecret.md)
+
 ## Create/MakeCredential
 
 To enable extension the Platform will send MakeCredential with extensions map containing `largeBlobKey` set to true.
@@ -68,4 +70,4 @@ GetAssertion_Result
 
 ## Credential Management API
 
-The LargeBlobKey can be accessed as well via [CredManAPI](../Protocol/CredentialManagement.md)
+The LargeBlobKey can be accessed as well via [CredManAPI](../Protocol/CredentialManagement.md) credential enumeration response `largeBlobKey(0x0B)`.
