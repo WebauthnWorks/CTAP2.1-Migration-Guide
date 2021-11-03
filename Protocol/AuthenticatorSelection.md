@@ -10,7 +10,6 @@ During the device configuration, user may have multiple authenticators plugged i
 REQ: 0x0B
 ```
 
-
 On success the authenticator must return `CTAP_SUCCESS(0x00)`.
 
 On timeout the authenticator will return `CTAP2_ERR_USER_ACTION_TIMEOUT(0x00)`.

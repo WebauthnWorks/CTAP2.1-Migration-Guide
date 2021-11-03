@@ -8,7 +8,7 @@ The supported configuration options as now are:
 - ToggleAlwaysUv(0x02) - "Always UV" is a features that forces authenticator to fail any authenticated request unless explicit user verification, via pin or biometrics is done.
 - SetMinPINLength(0x03) - sets minimum pin length for the authenticator
 
-This command requires support of [PinUvAuthProtocol 2](../Protocol/PinProtocol/2.md).
+This command requires support of [PinUvAuthProtocol 2](../PinUvAuthnProtocol2.md).
 
 The platform must obtain PinUvAuthToken with `acfg(0x20)` permission flag.
 
@@ -183,4 +183,4 @@ DECODED:
 }
 ```
 
-On success the authenticator will return `CTAP_SUCCESS(0x00)`
+On success the authenticator shall return `CTAP_SUCCESS(0x00)`

@@ -1,8 +1,6 @@
 
 # AuthenticatorBioEnrollment (0x09)
 
-
-
 The authenticatorBioEnrollment commands provides the platform the ability to create, delete and list bio enrollments in the authenticator. 
 
 Using this API, the platform is able to:
