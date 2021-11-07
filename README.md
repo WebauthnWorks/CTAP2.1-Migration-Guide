@@ -10,7 +10,7 @@ The order of implementation:
 - [ ] [Enterprise Attestation](./Extension/EnterpriseAttestation.md)
 - [x] [Large Blobs](./Protocol/LargeBlobs.md)
 - [x] [Extension: Large Blobs Key](./Extensions/LargeBlobKey.md)
-- [ ] [Extension: CredentialBlob](./Extensions/CredentialBlob.md)
+- [x] [Extension: CredentialBlob](./Extensions/CredentialBlob.md)
 - [ ] [U2F/FIDO2 Credential reuse](./Protocol/U2FFIDO2CredentialReuse.md)
 - [ ] [Biometric Enrolment](./Protocol/BioEnrol.md)
 - [ ] [Extension: Update HMAC Secret](./Extension/HmacSecret.md)
