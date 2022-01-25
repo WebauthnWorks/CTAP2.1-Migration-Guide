@@ -9,7 +9,7 @@ The order of implementation:
 - [x] [Authenticator Selection](./Protocol/AuthenticatorSelection.md)
 - [x] [Large Blobs](./Protocol/LargeBlobs.md)
 - [x] [Extension: Large Blobs Key](./Extensions/LargeBlobKey.md)
-- [x] [Extension: CredentialBlob](./Extensions/CredentialBlob.md)
+- [x] [Extension: CredentialBlob](./Extensions/CredBlob.md)
 - [ ] [U2F/FIDO2 Credential reuse](./Protocol/U2FFIDO2CredentialReuse.md)
 - [ ] [Extension: Update HMAC Secret](./Extension/HmacSecret.md)
 - [ ] [Enterprise Attestation](./Extension/EnterpriseAttestation.md)
