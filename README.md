@@ -12,5 +12,5 @@ The order of implementation:
 - [x] [Extension: CredentialBlob](./Extensions/CredBlob.md)
 - [ ] [U2F/FIDO2 Credential reuse](./Protocol/U2FFIDO2CredentialReuse.md)
 - [ ] [Extension: Update HMAC Secret](./Extension/HmacSecret.md)
-- [ ] [Enterprise Attestation](./Extension/EnterpriseAttestation.md)
+- [x] [Enterprise Attestation](./Options/EnterpriseAttestation.md)
 - [ ] [Biometric Enrolment](./Protocol/BioEnrol.md)
