@@ -11,7 +11,7 @@ Using this API, the platform is able to:
  - Delete credential `DeleteCredential(0x06)`
 
 
-This command requires support of [PinUvAuthProtocol 2](../Protocol/PinProtocol/2.md).
+This command requires support of [PinUvAuthProtocol 2](../PinUvAuthnProtocol2.md).
 
 The platform must obtain PinUvAuthToken with `cm(0x04)` permission flag.
 
