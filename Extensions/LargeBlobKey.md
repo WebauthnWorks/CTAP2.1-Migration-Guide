@@ -1,8 +1,14 @@
 # Extension: LargeBlobKey
 
-LargeBlobKey extension allows authenticator to generate an opaque random byte array associated with the credential. This byte array then can be used together with the LargeBlobs to encrypt/decrypt data.
+LargeBlobKey extension allows authenticator to generate an opaque random, 32 byte array associated with the credential. LargeBlobsKey can be used together with the LargeBlobs to encrypt/decrypt data.
 
-The key MUST not be reused from othere extensions such as [Hmac-Secret](../HmacSecret.md)
+The key MUST not be reused from other extensions such as [Hmac-Secret](../HmacSecret.md)
+
+## Feature detection
+
+Authenticator advertises support for this extension by returning `largeBlobKey` in the `GetInfo.extensions(0x02)`.
+
+Authenticator that supports `largeBlobKey` must also support `LargeBlobs` option.
 
 ## Create/MakeCredential
 

@@ -6,6 +6,12 @@ Credential Protection extension provides enterprise platform ability to enforce 
 
 This extension is only applicable during the credential creation `MakeCredential(0x01)`
 
+## Feature detection
+
+Authenticator advertises support for this extension by returning `credProtect` in the `GetInfo.extensions(0x02)`.
+
+## Operation
+
 There are three modes for credentials:
 
 - User Verification Optional - DEFAULT VALUE IF CREDPROTECT IS MISSING. Platform may request assertion for a credential, with UP false, and UV false, or in a silent mode. This applicable for both, roaming credential (with credentialIDl), and for discoverable(resident) credential. 
