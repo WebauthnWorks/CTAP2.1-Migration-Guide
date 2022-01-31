@@ -66,4 +66,4 @@ MakeCredential_Result
 
 ## Diagram
 
-![Enterprise Attestation Diagram](./diagrams/EnterpriseAttestation.drawio.png)
+![Enterprise Attestation Diagram](../diagrams/EnterpriseAttestation.drawio.png)
